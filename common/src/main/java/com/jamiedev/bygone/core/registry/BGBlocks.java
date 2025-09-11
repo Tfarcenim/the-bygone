@@ -58,10 +58,10 @@ Blocks ref;
             new SlabBlock(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BROWN).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.STONE).ignitedByLava()));
 
     public static final Supplier<Block> POLISHED_BYSTONE_STAIRS = registerBlock("polished_bystone_stairs", () ->
-            new StairBlock(BGBlocks.POLISHED_BYSTONE.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.QUARTZ_STAIRS).strength(2.0f)));
+            new StairBlock(BGBlocks.POLISHED_BYSTONE.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.QUARTZ_STAIRS).strength(2.0f)));
 
     public static final Supplier<Block> POLISHED_BYSTONE_WALL = registerBlock("polished_bystone_wall", () ->
-            new WallBlock(BlockBehaviour.Properties.ofFullCopy(BGBlocks.POLISHED_BYSTONE.get()).strength(2.0f)));
+            new WallBlock(BlockBehaviour.Properties.copy(BGBlocks.POLISHED_BYSTONE.get()).strength(2.0f)));
 
     public static final Supplier<Block> POLISHED_BYSLATE = registerBlock("polished_byslate", () ->
             new Block(BlockBehaviour.Properties.of().mapColor(MapColor.DEEPSLATE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(3.0F, 6.0F).sound(SoundType.DEEPSLATE)));
@@ -70,10 +70,10 @@ Blocks ref;
             new SlabBlock(BlockBehaviour.Properties.of().mapColor(MapColor.DEEPSLATE).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.STONE).ignitedByLava()));
 
     public static final Supplier<Block> POLISHED_BYSLATE_STAIRS = registerBlock("polished_byslate_stairs", () ->
-            new StairBlock(BGBlocks.POLISHED_BYSLATE.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.QUARTZ_STAIRS).strength(2.0f)));
+            new StairBlock(BGBlocks.POLISHED_BYSLATE.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.QUARTZ_STAIRS).strength(2.0f)));
 
     public static final Supplier<Block> POLISHED_BYSLATE_WALL = registerBlock("polished_byslate_wall", () ->
-            new WallBlock(BlockBehaviour.Properties.ofFullCopy(BGBlocks.POLISHED_BYSLATE.get()).strength(2.0f)));
+            new WallBlock(BlockBehaviour.Properties.copy(BGBlocks.POLISHED_BYSLATE.get()).strength(2.0f)));
 
     public static final Supplier<Block> POLISHED_BYSTONE_BRICK = registerBlock("polished_bystone_bricks", () ->
             new Block(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BROWN).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.8F)));
@@ -82,10 +82,10 @@ Blocks ref;
             new SlabBlock(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BROWN).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.STONE).ignitedByLava()));
 
     public static final Supplier<Block> POLISHED_BYSTONE_BRICK_STAIRS = registerBlock("polished_bystone_bricks_stairs", () ->
-            new StairBlock(BGBlocks.POLISHED_BYSTONE_BRICK.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.QUARTZ_STAIRS).strength(2.0f)));
+            new StairBlock(BGBlocks.POLISHED_BYSTONE_BRICK.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.QUARTZ_STAIRS).strength(2.0f)));
 
     public static final Supplier<Block> POLISHED_BYSTONE_BRICK_WALL = registerBlock("polished_bystone_bricks_wall", () ->
-            new WallBlock(BlockBehaviour.Properties.ofFullCopy(BGBlocks.POLISHED_BYSTONE_BRICK.get()).strength(2.0f)));
+            new WallBlock(BlockBehaviour.Properties.copy(BGBlocks.POLISHED_BYSTONE_BRICK.get()).strength(2.0f)));
 
     public static final Supplier<Block> POLISHED_BYSLATE_BRICK = registerBlock("polished_byslate_bricks", () ->
             new Block(BlockBehaviour.Properties.of().mapColor(MapColor.DEEPSLATE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(3.0F, 6.0F).sound(SoundType.DEEPSLATE)));
@@ -94,10 +94,10 @@ Blocks ref;
             new SlabBlock(BlockBehaviour.Properties.of().mapColor(MapColor.DEEPSLATE).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.STONE).ignitedByLava()));
 
     public static final Supplier<Block> POLISHED_BYSLATE_BRICK_STAIRS = registerBlock("polished_byslate_bricks_stairs", () ->
-            new StairBlock(BGBlocks.POLISHED_BYSLATE_BRICK.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.QUARTZ_STAIRS).strength(2.0f)));
+            new StairBlock(BGBlocks.POLISHED_BYSLATE_BRICK.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.QUARTZ_STAIRS).strength(2.0f)));
 
     public static final Supplier<Block> POLISHED_BYSLATE_BRICK_WALL = registerBlock("polished_byslate_bricks_wall", () ->
-            new WallBlock(BlockBehaviour.Properties.ofFullCopy(BGBlocks.POLISHED_BYSLATE_BRICK.get()).strength(2.0f)));
+            new WallBlock(BlockBehaviour.Properties.copy(BGBlocks.POLISHED_BYSLATE_BRICK.get()).strength(2.0f)));
 
     public static final Supplier<Block> CHISELED_POLISHED_BYSTONE = registerBlock("chiseled_polished_bystone", () ->
             new Block(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BROWN).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.8F)));
@@ -114,7 +114,7 @@ Blocks ref;
 
 
     public static final Supplier<Block> BYGONE_PORTAL =  registerBlockWithoutBlockItem("bygone_portal", () ->
-            new BygonePortalBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.NETHER_PORTAL).lightLevel((state) -> 6).noLootTable().noCollission().strength(-1.0f,3600000.0f)) );
+            new BygonePortalBlock(BlockBehaviour.Properties.copy(Blocks.NETHER_PORTAL).lightLevel((state) -> 6).noLootTable().noCollission().strength(-1.0f,3600000.0f)) );
 
     public static final Supplier<Block> BYGONE_PORTAL_FRAME = registerBlockWithoutBlockItem("bygone_portal_frame", () ->
             new BygonePortalFrameBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1000000.8F)));
@@ -149,24 +149,24 @@ Blocks ref;
     public static final Supplier<Block> COBBLED_BYSTONE = registerBlock("cobbled_bystone", () ->
             new Block(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BROWN).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.4F)));
     public static final Supplier<Block> COBBLED_BYSTONE_STAIRS = registerBlock("cobbled_bystone_stairs", () ->
-            new StairBlock(BGBlocks.COBBLED_BYSTONE.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.QUARTZ_STAIRS).strength(2.0f)));
+            new StairBlock(BGBlocks.COBBLED_BYSTONE.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.QUARTZ_STAIRS).strength(2.0f)));
 
     public static final Supplier<Block> COBBLED_BYSTONE_SLAB = registerBlock("cobbled_bystone_slab", () ->
             new SlabBlock(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BROWN).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.STONE).ignitedByLava()));
 
     public static final Supplier<Block> COBBLED_BYSTONE_WALL = registerBlock("cobbled_bystone_wall", () ->
-            new WallBlock(BlockBehaviour.Properties.ofFullCopy(BGBlocks.COBBLED_BYSTONE.get()).strength(2.0f)));
+            new WallBlock(BlockBehaviour.Properties.copy(BGBlocks.COBBLED_BYSTONE.get()).strength(2.0f)));
     public static final Supplier<Block> COBBLED_BYSLATE = registerBlock("cobbled_byslate", () ->
             new Block(BlockBehaviour.Properties.of().mapColor(MapColor.DEEPSLATE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.0F, 2.0F).sound(SoundType.DEEPSLATE)));
 
     public static final Supplier<Block> COBBLED_BYSLATE_STAIRS = registerBlock("cobbled_byslate_stairs", () ->
-            new StairBlock(BGBlocks.COBBLED_BYSLATE.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.QUARTZ_STAIRS).strength(2.0f)));
+            new StairBlock(BGBlocks.COBBLED_BYSLATE.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.QUARTZ_STAIRS).strength(2.0f)));
 
     public static final Supplier<Block> COBBLED_BYSLATE_SLAB = registerBlock("cobbled_byslate_slab", () ->
-            new SlabBlock(BlockBehaviour.Properties.ofFullCopy(BGBlocks.COBBLED_BYSLATE.get()).strength(2.0f)));
+            new SlabBlock(BlockBehaviour.Properties.copy(BGBlocks.COBBLED_BYSLATE.get()).strength(2.0f)));
 
     public static final Supplier<Block> COBBLED_BYSLATE_WALL = registerBlock("cobbled_byslate_wall", () ->
-            new WallBlock(BlockBehaviour.Properties.ofFullCopy(BGBlocks.COBBLED_BYSLATE.get()).strength(2.0f)));
+            new WallBlock(BlockBehaviour.Properties.copy(BGBlocks.COBBLED_BYSLATE.get()).strength(2.0f)));
     
     public static final Supplier<Block> CLOUD = registerBlock("cloud", () ->
             new HalfTransparentBlock(BlockBehaviour.Properties.of().mapColor(MapColor.QUARTZ).strength(0.001F).friction(0.989F)
@@ -248,13 +248,13 @@ Blocks ref;
     public static final Supplier<Block> CLAYSTONE_BRICKS = registerBlock("claystone_bricks", () -> new Block(BlockBehaviour.Properties.ofLegacyCopy(DIRT).strength(1.0F, 3.0F).sound(SoundType.PACKED_MUD)));
 
     public static final Supplier<Block> CLAYSTONE_BRICKS_STAIRS = registerBlock("claystone_bricks_stairs", () ->
-            new StairBlock(BGBlocks.CLAYSTONE_BRICKS.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.QUARTZ_STAIRS).strength(2.0f)));
+            new StairBlock(BGBlocks.CLAYSTONE_BRICKS.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.QUARTZ_STAIRS).strength(2.0f)));
 
     public static final Supplier<Block> CLAYSTONE_BRICKS_SLAB = registerBlock("claystone_bricks_slab", () ->
-            new SlabBlock(BlockBehaviour.Properties.ofFullCopy(BGBlocks.CLAYSTONE_BRICKS.get()).strength(2.0f)));
+            new SlabBlock(BlockBehaviour.Properties.copy(BGBlocks.CLAYSTONE_BRICKS.get()).strength(2.0f)));
 
     public static final Supplier<Block> CLAYSTONE_BRICKS_WALL = registerBlock("claystone_bricks_wall", () ->
-            new WallBlock(BlockBehaviour.Properties.ofFullCopy(BGBlocks.CLAYSTONE_BRICKS.get()).strength(2.0f)));
+            new WallBlock(BlockBehaviour.Properties.copy(BGBlocks.CLAYSTONE_BRICKS.get()).strength(2.0f)));
 
     public static final Supplier<Block> MOSSY_CLAYSTONE = registerBlock("mossy_claystone", () -> new MossyClaystoneBlock(BlockBehaviour.Properties.of().mapColor(MapColor.GRASS).randomTicks().strength(0.6F).sound(SoundType.GRASS)));
     public static final Supplier<Block> GRASSY_CLAYSTONE = registerBlockWithoutBlockItem("grassy_claystone", () -> new MossyClaystoneBlock(BlockBehaviour.Properties.of().mapColor(MapColor.GRASS).randomTicks().strength(0.6F).sound(SoundType.GRASS)));
@@ -264,57 +264,57 @@ Blocks ref;
     public static final Supplier<Block> ANCIENT_VINE = registerBlock("ancient_vines", () ->
             new VineBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).replaceable().noCollission().randomTicks().strength(0.2F).sound(SoundType.VINE).ignitedByLava().pushReaction(PushReaction.DESTROY)));
 
-    public static final Supplier<Block> ANCIENT_SAPLING = registerBlock("ancient_sapling", () -> new AncientSaplingBlock(BGTreeGrowers.ANCIENT_TREE, BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_SAPLING)));
+    public static final Supplier<Block> ANCIENT_SAPLING = registerBlock("ancient_sapling", () -> new AncientSaplingBlock(BGTreeGrowers.ANCIENT_TREE, BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING)));
     public static final Supplier<Block> ANCIENT_LOG = registerBlock("ancient_log", () ->
-            new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LOG).strength(2.0f)));
+            new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG).strength(2.0f)));
     public static final Supplier<Block> ANCIENT_LEAVES = registerBlock("ancient_leaves", () ->
-            new AncientLeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES)));
+            new AncientLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)));
     public static final Supplier<Block> ANCIENT_WOOD = registerBlock("ancient_wood", () ->
-            new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_WOOD).strength(2.0f)));
+            new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WOOD).strength(2.0f)));
 
     public static final Supplier<Block> STRIPPED_ANCIENT_LOG = registerBlock("stripped_ancient_log", () ->
-            new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STRIPPED_OAK_LOG).strength(2.0f)));
+            new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_OAK_LOG).strength(2.0f)));
 
     public static final Supplier<Block> STRIPPED_ANCIENT_WOOD = registerBlock("stripped_ancient_wood", () ->
-            new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STRIPPED_OAK_WOOD).strength(2.0f)));
+            new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_OAK_WOOD).strength(2.0f)));
 
     public static final Supplier<Block> ANCIENT_PLANKS = registerBlock("ancient_planks", () ->
-            new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS).strength(2.0f)));
+            new Block(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).strength(2.0f)));
 
     public static final Supplier<Block> ANCIENT_STAIRS = registerBlock("ancient_stairs", () ->
-            new StairBlock(ANCIENT_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_STAIRS).strength(2.0f)));
+            new StairBlock(ANCIENT_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.OAK_STAIRS).strength(2.0f)));
 
     public static final Supplier<Block> ANCIENT_SLAB = registerBlock("ancient_slab", () ->
-            new SlabBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_SLAB).strength(2.0f)));
+            new SlabBlock(BlockBehaviour.Properties.copy(Blocks.OAK_SLAB).strength(2.0f)));
 
     public static final Supplier<Block> ANCIENT_FENCE = registerBlock("ancient_fence", () ->
-            new FenceBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_FENCE).strength(2.0f)));
+            new FenceBlock(BlockBehaviour.Properties.copy(Blocks.OAK_FENCE).strength(2.0f)));
 
     public static final Supplier<Block> ANCIENT_FENCE_GATE = registerBlock("ancient_fence_gate", () ->
-            new FenceGateBlock(JamiesModWoodType.ANCIENT, BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_FENCE_GATE).strength(2.0f)));
+            new FenceGateBlock(JamiesModWoodType.ANCIENT, BlockBehaviour.Properties.copy(Blocks.OAK_FENCE_GATE).strength(2.0f)));
 
     public static final Supplier<Block> ANCIENT_DOOR = registerBlock("ancient_door", () ->
-            new DoorBlock(JamiesModBlockSetType.ANCIENT, BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_DOOR).strength(2.0f)));
+            new DoorBlock(JamiesModBlockSetType.ANCIENT, BlockBehaviour.Properties.copy(Blocks.OAK_DOOR).strength(2.0f)));
 
     public static final Supplier<Block> ANCIENT_TRAPDOOR = registerBlock("ancient_trapdoor", () ->
-            new TrapDoorBlock(JamiesModBlockSetType.ANCIENT, BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_TRAPDOOR).strength(2.0f)));
+            new TrapDoorBlock(JamiesModBlockSetType.ANCIENT, BlockBehaviour.Properties.copy(Blocks.OAK_TRAPDOOR).strength(2.0f)));
 
     public static final Supplier<Block> ANCIENT_PRESSURE_PLATE = registerBlock("ancient_pressure_plate", () ->
-            new PressurePlateBlock(JamiesModBlockSetType.ANCIENT, BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PRESSURE_PLATE)));
+            new PressurePlateBlock(JamiesModBlockSetType.ANCIENT, BlockBehaviour.Properties.copy(Blocks.OAK_PRESSURE_PLATE)));
     public static final Supplier<Block> ANCIENT_BUTTON = registerBlock("ancient_button", () ->
-            new ButtonBlock(JamiesModBlockSetType.ANCIENT, 30, BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_BUTTON)));
+            new ButtonBlock(JamiesModBlockSetType.ANCIENT, 30, BlockBehaviour.Properties.copy(Blocks.OAK_BUTTON)));
 
     public static final Supplier<Block> ANCIENT_SIGN = registerBlockWithoutBlockItem("ancient_sign", () ->
-            new StandingSignBlock(JamiesModWoodType.ANCIENT, BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_SIGN).strength(1.0f).forceSolidOn()));
+            new StandingSignBlock(JamiesModWoodType.ANCIENT, BlockBehaviour.Properties.copy(Blocks.OAK_SIGN).strength(1.0f).forceSolidOn()));
 
     public static final Supplier<Block> ANCIENT_WALL_SIGN = registerBlockWithoutBlockItem("ancient_wall_sign", () ->
-            new WallSignBlock(JamiesModWoodType.ANCIENT, BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_WALL_SIGN).strength(1.0f).dropsLike(BGBlocks.ANCIENT_SIGN.get()).forceSolidOn()));
+            new WallSignBlock(JamiesModWoodType.ANCIENT, BlockBehaviour.Properties.copy(Blocks.OAK_WALL_SIGN).strength(1.0f).dropsLike(BGBlocks.ANCIENT_SIGN.get()).forceSolidOn()));
 
     public static final Supplier<Block> ANCIENT_HANGING_SIGN = registerBlockWithoutBlockItem("ancient_hanging_sign", () ->
-            new CeilingHangingSignBlock(JamiesModWoodType.ANCIENT, BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_HANGING_SIGN).strength(1.0f).forceSolidOn()));
+            new CeilingHangingSignBlock(JamiesModWoodType.ANCIENT, BlockBehaviour.Properties.copy(Blocks.OAK_HANGING_SIGN).strength(1.0f).forceSolidOn()));
 
     public static final Supplier<Block> ANCIENT_WALL_HANGING_SIGN = registerBlockWithoutBlockItem("ancient_wall_hanging_sign", () ->
-            new WallHangingSignBlock(JamiesModWoodType.ANCIENT, BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_WALL_HANGING_SIGN).strength(1.0f).dropsLike(ANCIENT_HANGING_SIGN.get()).forceSolidOn()));
+            new WallHangingSignBlock(JamiesModWoodType.ANCIENT, BlockBehaviour.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN).strength(1.0f).dropsLike(ANCIENT_HANGING_SIGN.get()).forceSolidOn()));
 
     public static final Supplier<Block> ALPHA_MOSS_CARPET = registerBlock("alpha_moss_carpet", () ->
             new CarpetBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GREEN).strength(0.1F).sound(SoundType.MOSS_CARPET).pushReaction(PushReaction.DESTROY)));
@@ -348,9 +348,9 @@ Blocks ref;
                         return 4;
                     })));
     public static final Supplier<Block> VERDIGRIS_BLOCK = registerBlock("verdigris_block", () ->
-            new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.NETHERITE_BLOCK).mapColor(MapColor.TERRACOTTA_GREEN).strength(20.0F, 600.0F)));
+            new Block(BlockBehaviour.Properties.copy(Blocks.NETHERITE_BLOCK).mapColor(MapColor.TERRACOTTA_GREEN).strength(20.0F, 600.0F)));
     public static final Supplier<Block> VERDIGRIS_SCRAP_BLOCK = registerBlock("verdigris_scrap_block", () ->
-            new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.ANCIENT_DEBRIS).mapColor(MapColor.TERRACOTTA_GREEN).strength(20.0F, 600.0F)));
+            new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.ANCIENT_DEBRIS).mapColor(MapColor.TERRACOTTA_GREEN).strength(20.0F, 600.0F)));
 
     public static final Supplier<Block> MALACHITE = registerBlock("malachite", () ->
             new Block(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_GREEN).sound(SoundType.AMETHYST).instrument(NoteBlockInstrument.XYLOPHONE).requiresCorrectToolForDrops()
@@ -365,25 +365,25 @@ Blocks ref;
             new Block(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_GREEN).sound(SoundType.AMETHYST).instrument(NoteBlockInstrument.XYLOPHONE).requiresCorrectToolForDrops()
                     .strength(0.8F)));
     public static final Supplier<Block> MALACHITE_DOOR = registerBlock("malachite_door", () ->
-            new DoorBlock(JamiesModBlockSetType.ANCIENT, BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_DOOR).sound(SoundType.AMETHYST).strength(2.0f)));
+            new DoorBlock(JamiesModBlockSetType.ANCIENT, BlockBehaviour.Properties.copy(Blocks.OAK_DOOR).sound(SoundType.AMETHYST).strength(2.0f)));
 
     public static final Supplier<Block> MALACHITE_STAIRS = registerBlock("malachite_stairs", () ->
-            new StairBlock(BGBlocks.MALACHITE.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.QUARTZ_STAIRS).strength(2.0f)));
+            new StairBlock(BGBlocks.MALACHITE.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.QUARTZ_STAIRS).strength(2.0f)));
 
     public static final Supplier<Block> MALACHITE_SLAB = registerBlock("malachite_slab", () ->
-            new SlabBlock(BlockBehaviour.Properties.ofFullCopy(BGBlocks.MALACHITE.get()).strength(2.0f)));
+            new SlabBlock(BlockBehaviour.Properties.copy(BGBlocks.MALACHITE.get()).strength(2.0f)));
 
     public static final Supplier<Block> MALACHITE_WALL = registerBlock("malachite_wall", () ->
-            new WallBlock(BlockBehaviour.Properties.ofFullCopy(BGBlocks.MALACHITE.get()).strength(2.0f)));
+            new WallBlock(BlockBehaviour.Properties.copy(BGBlocks.MALACHITE.get()).strength(2.0f)));
 
     public static final Supplier<Block> MALACHITE_TILE_STAIRS = registerBlock("malachite_tile_stairs", () ->
-            new StairBlock(BGBlocks.MALACHITE.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.QUARTZ_STAIRS).strength(2.0f)));
+            new StairBlock(BGBlocks.MALACHITE.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.QUARTZ_STAIRS).strength(2.0f)));
 
     public static final Supplier<Block> MALACHITE_TILE_SLAB = registerBlock("malachite_tile_slab", () ->
-            new SlabBlock(BlockBehaviour.Properties.ofFullCopy(BGBlocks.MALACHITE.get()).strength(2.0f)));
+            new SlabBlock(BlockBehaviour.Properties.copy(BGBlocks.MALACHITE.get()).strength(2.0f)));
 
     public static final Supplier<Block> MALACHITE_TILE_WALL = registerBlock("malachite_tile_wall", () ->
-            new WallBlock(BlockBehaviour.Properties.ofFullCopy(BGBlocks.MALACHITE.get()).strength(2.0f)));
+            new WallBlock(BlockBehaviour.Properties.copy(BGBlocks.MALACHITE.get()).strength(2.0f)));
 
     public static final Supplier<Block> PRIMORDIAL_VENT = registerBlock("primordial_vent", () ->
                                     new PrimordialVentBlock(true, BlockBehaviour.Properties.of()
@@ -484,27 +484,27 @@ Blocks ref;
                     .sound(SoundType.STONE)));
 
     public static final Supplier<Block> SMOOTH_AMBER_SANDSTONE_STAIRS = registerBlock("smooth_amber_sandstone_stairs", () ->
-            new StairBlock(BGBlocks.SMOOTH_AMBER_SANDSTONE.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.QUARTZ_STAIRS).strength(2.0f)));
+            new StairBlock(BGBlocks.SMOOTH_AMBER_SANDSTONE.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.QUARTZ_STAIRS).strength(2.0f)));
 
     public static final Supplier<Block> SMOOTH_AMBER_SANDSTONE_SLAB = registerBlock("smooth_amber_sandstone_slab", () ->
-            new SlabBlock(BlockBehaviour.Properties.ofFullCopy(BGBlocks.SMOOTH_AMBER_SANDSTONE.get()).strength(2.0f)));
+            new SlabBlock(BlockBehaviour.Properties.copy(BGBlocks.SMOOTH_AMBER_SANDSTONE.get()).strength(2.0f)));
 
     public static final Supplier<Block> CUT_AMBER_SANDSTONE = registerBlock("cut_amber_sandstone", () ->
             new Block(BlockBehaviour.Properties.of().mapColor(MapColor.RAW_IRON).strength(0.99F)
                     .sound(SoundType.STONE)));
 
     public static final Supplier<Block> CUT_AMBER_SANDSTONE_SLAB = registerBlock("cut_amber_sandstone_slab", () ->
-            new SlabBlock(BlockBehaviour.Properties.ofFullCopy(BGBlocks.CUT_AMBER_SANDSTONE.get()).strength(2.0f)));
+            new SlabBlock(BlockBehaviour.Properties.copy(BGBlocks.CUT_AMBER_SANDSTONE.get()).strength(2.0f)));
 
 
     public static final Supplier<Block> AMBER_SANDSTONE_STAIRS = registerBlock("amber_sandstone_stairs", () ->
-            new StairBlock(BGBlocks.AMBER_SANDSTONE.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.QUARTZ_STAIRS).strength(2.0f)));
+            new StairBlock(BGBlocks.AMBER_SANDSTONE.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.QUARTZ_STAIRS).strength(2.0f)));
 
     public static final Supplier<Block> AMBER_SANDSTONE_SLAB = registerBlock("amber_sandstone_slab", () ->
-            new SlabBlock(BlockBehaviour.Properties.ofFullCopy(BGBlocks.AMBER_SANDSTONE.get()).strength(2.0f)));
+            new SlabBlock(BlockBehaviour.Properties.copy(BGBlocks.AMBER_SANDSTONE.get()).strength(2.0f)));
 
     public static final Supplier<Block> AMBER_SANDSTONE_WALL = registerBlock("amber_sandstone_wall", () ->
-            new WallBlock(BlockBehaviour.Properties.ofFullCopy(BGBlocks.AMBER_SANDSTONE.get()).strength(2.0f)));
+            new WallBlock(BlockBehaviour.Properties.copy(BGBlocks.AMBER_SANDSTONE.get()).strength(2.0f)));
 
 
     public static final Supplier<Block> AMBER_CLUMP = registerBlock("amber_clump", () ->
@@ -606,7 +606,7 @@ Blocks ref;
 // Shelf Hollows blocksets
 
     public static final Supplier<Block> PROTOTAXITE_STEM = registerBlock("prototaxite_stem", () ->
-            new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LOG).strength(2.0f)));
+            new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG).strength(2.0f)));
 
     public static final Supplier<Block> SHELF_MYCELIUM = registerBlock("shelf_mycelium", () -> new ShelfMyceliumBlock(BlockBehaviour.Properties.of().mapColor(MapColor.GRASS).randomTicks().strength(0.6F).sound(SoundType.GRASS)));
     public static final Supplier<Block> SHELF_MOLD_BLOCK = registerBlock("shelf_mold_block", () -> new ShelfMoldBlock(BlockBehaviour.Properties.of().mapColor(MapColor.GRASS).randomTicks().strength(0.6F).sound(SoundType.GRASS)));
@@ -637,13 +637,13 @@ Blocks ref;
             }), 0));
 
     public static final Supplier<Block> ORANGE_FUNGAL_STAIRS = registerBlock("orange_fungal_stairs", () ->
-            new StairBlock(BGBlocks.ORANGE_FUNGAL_BRICKS.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.QUARTZ_STAIRS).strength(2.0f)));
+            new StairBlock(BGBlocks.ORANGE_FUNGAL_BRICKS.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.QUARTZ_STAIRS).strength(2.0f)));
 
     public static final Supplier<Block> ORANGE_FUNGAL_SLAB = registerBlock("orange_fungal_slab", () ->
-            new SlabBlock(BlockBehaviour.Properties.ofFullCopy(BGBlocks.ORANGE_FUNGAL_BRICKS.get()).strength(2.0f)));
+            new SlabBlock(BlockBehaviour.Properties.copy(BGBlocks.ORANGE_FUNGAL_BRICKS.get()).strength(2.0f)));
 
     public static final Supplier<Block> ORANGE_FUNGAL_WALL = registerBlock("orange_fungal_wall", () ->
-            new WallBlock(BlockBehaviour.Properties.ofFullCopy(BGBlocks.ORANGE_FUNGAL_BRICKS.get()).strength(2.0f)));
+            new WallBlock(BlockBehaviour.Properties.copy(BGBlocks.ORANGE_FUNGAL_BRICKS.get()).strength(2.0f)));
 
     public static final Supplier<Block> PINK_FUNGAL_BRICKS = registerBlock("pink_fungal_bricks", () -> new ShelfMushroomBlock(
             BlockBehaviour.Properties.of().sound(SoundType.WOOD).mapColor(MapColor.COLOR_ORANGE).forceSolidOn().instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F,
@@ -652,13 +652,13 @@ Blocks ref;
             }), 1));
 
     public static final Supplier<Block> PINK_FUNGAL_STAIRS = registerBlock("pink_fungal_stairs", () ->
-            new StairBlock(BGBlocks.PINK_FUNGAL_BRICKS.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.QUARTZ_STAIRS).strength(2.0f)));
+            new StairBlock(BGBlocks.PINK_FUNGAL_BRICKS.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.QUARTZ_STAIRS).strength(2.0f)));
 
     public static final Supplier<Block> PINK_FUNGAL_SLAB = registerBlock("pink_fungal_slab", () ->
-            new SlabBlock(BlockBehaviour.Properties.ofFullCopy(BGBlocks.PINK_FUNGAL_BRICKS.get()).strength(2.0f)));
+            new SlabBlock(BlockBehaviour.Properties.copy(BGBlocks.PINK_FUNGAL_BRICKS.get()).strength(2.0f)));
 
     public static final Supplier<Block> PINK_FUNGAL_WALL = registerBlock("pink_fungal_wall", () ->
-            new WallBlock(BlockBehaviour.Properties.ofFullCopy(BGBlocks.PINK_FUNGAL_BRICKS.get()).strength(2.0f)));
+            new WallBlock(BlockBehaviour.Properties.copy(BGBlocks.PINK_FUNGAL_BRICKS.get()).strength(2.0f)));
 
     public static final Supplier<Block> PURPLE_FUNGAL_BRICKS = registerBlock("purple_fungal_bricks", () -> new ShelfMushroomBlock(
             BlockBehaviour.Properties.of().sound(SoundType.WOOD).mapColor(MapColor.COLOR_ORANGE).forceSolidOn().instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F,
@@ -667,13 +667,13 @@ Blocks ref;
             }), 2));
 
     public static final Supplier<Block> PURPLE_FUNGAL_STAIRS = registerBlock("purple_fungal_stairs", () ->
-            new StairBlock(BGBlocks.PURPLE_FUNGAL_BRICKS.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.QUARTZ_STAIRS).strength(2.0f)));
+            new StairBlock(BGBlocks.PURPLE_FUNGAL_BRICKS.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.QUARTZ_STAIRS).strength(2.0f)));
 
     public static final Supplier<Block> PURPLE_FUNGAL_SLAB = registerBlock("purple_fungal_slab", () ->
-            new SlabBlock(BlockBehaviour.Properties.ofFullCopy(BGBlocks.PURPLE_FUNGAL_BRICKS.get()).strength(2.0f)));
+            new SlabBlock(BlockBehaviour.Properties.copy(BGBlocks.PURPLE_FUNGAL_BRICKS.get()).strength(2.0f)));
 
     public static final Supplier<Block> PURPLE_FUNGAL_WALL = registerBlock("purple_fungal_wall", () ->
-            new WallBlock(BlockBehaviour.Properties.ofFullCopy(BGBlocks.PURPLE_FUNGAL_BRICKS.get()).strength(2.0f)));
+            new WallBlock(BlockBehaviour.Properties.copy(BGBlocks.PURPLE_FUNGAL_BRICKS.get()).strength(2.0f)));
 
     public static Supplier<Block> SHELF_ROOTS = registerBlock("shelf_roots", () -> new RootsBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_CYAN).replaceable().noCollission().instabreak().sound(SoundType.ROOTS).offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.DESTROY)));
     public static Supplier<Block> SHELF_FUNGUS = registerBlock("shelf_fungus", () -> new FungusBlock(TreeFeatures.WARPED_FUNGUS_PLANTED, SHELF_MYCELIUM.get(), BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_CYAN).instabreak().noCollission().sound(SoundType.FUNGUS).pushReaction(PushReaction.DESTROY)));
