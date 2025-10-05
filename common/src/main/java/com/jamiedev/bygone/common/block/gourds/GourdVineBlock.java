@@ -29,15 +29,10 @@ import java.util.List;
 import java.util.Set;
 
 public class GourdVineBlock extends GrowingPlantHeadBlock {
-    public static final MapCodec<GourdVineBlock> CODEC = simpleCodec(GourdVineBlock::new);
     protected static final VoxelShape SHAPE = Block.box(4.0, 0.0, 4.0, 12.0, 16.0, 12.0);
     private final double growPerTickProbability;
     public static final IntegerProperty GOURD_TYPE;
 
-    @Override
-    public MapCodec<GourdVineBlock> codec() {
-        return CODEC;
-    }
 
     public GourdVineBlock(BlockBehaviour.Properties settings) {
         super(settings, Direction.DOWN, SHAPE, false, 0.1);
@@ -67,7 +62,7 @@ public class GourdVineBlock extends GrowingPlantHeadBlock {
     }
 
     @Override
-    protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         // Going to keep this for now just in case
         /*if (state.getValue(AGE) < 25 && random.nextDouble() < this.growPerTickProbability) {
             if (random.nextInt(0, 6) == 1){

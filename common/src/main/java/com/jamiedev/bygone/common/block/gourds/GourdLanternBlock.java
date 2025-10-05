@@ -36,7 +36,6 @@ import java.util.List;
 import java.util.Set;
 
 public class GourdLanternBlock extends GrowingPlantBodyBlock implements BonemealableBlock {
-    public static final MapCodec<GourdLanternBlock> CODEC = simpleCodec(GourdLanternBlock::new);
     public static final BooleanProperty HANGING;
     public static final BooleanProperty WATERLOGGED;
     protected static final VoxelShape STANDING_SHAPE;
@@ -70,21 +69,17 @@ public class GourdLanternBlock extends GrowingPlantBodyBlock implements Bonemeal
 
     CocoaBlock ref1;
 
-    @Override
-    public MapCodec<GourdLanternBlock> codec() {
-        return CODEC;
-    }
 
     public GourdLanternBlock(BlockBehaviour.Properties settings) {
         super(settings, Direction.DOWN, HANGING_SHAPE, false);
         this.registerDefaultState(this.stateDefinition.any().setValue(HANGING, false).setValue(WATERLOGGED, false).setValue(AGE, 0).setValue(GROW_VINE, true));
     }
 
-    protected boolean isRandomlyTicking(BlockState state) {
+    public boolean isRandomlyTicking(BlockState state) {
         return (Integer)state.getValue(AGE) < 2;
     }
 
-    protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (level.random.nextInt(5) == 0) {
             int i = (Integer)state.getValue(AGE);
             if (i < 2) {
@@ -121,11 +116,11 @@ public class GourdLanternBlock extends GrowingPlantBodyBlock implements Bonemeal
     }
 
    @Override
-   protected void onProjectileHit(Level level, BlockState state, BlockHitResult hit, Projectile projectile) {
+   public void onProjectileHit(Level level, BlockState state, BlockHitResult hit, Projectile projectile) {
        if (!level.isClientSide) {
            BlockPos blockpos = hit.getBlockPos();
            if (projectile.mayInteract(level, blockpos)
-                   && projectile.mayBreak(level)
+                  // && projectile.mayBreak(level)
                    && projectile instanceof Projectile
                    && projectile.getDeltaMovement().length() > 0.6) {
                spawnFallingGourd(state, (ServerLevel) level, blockpos);
@@ -134,7 +129,7 @@ public class GourdLanternBlock extends GrowingPlantBodyBlock implements Bonemeal
    }
 
     @Override
-    protected void tick(BlockState state, ServerLevel world, BlockPos pos, @NotNull RandomSource random) {
+    public void tick(BlockState state, ServerLevel world, BlockPos pos, @NotNull RandomSource random) {
         if (!state.canSurvive(world, pos)) {
             spawnFallingGourd(state, world, pos);
         }
@@ -153,13 +148,13 @@ public class GourdLanternBlock extends GrowingPlantBodyBlock implements Bonemeal
 
 
     @Override
-    protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         return level.getBlockState(pos.above()).isFaceSturdy(level, pos.above(), Direction.DOWN)
                 || (level.getBlockState(pos.below()).isFaceSturdy(level, pos.below(), Direction.UP) && this.isFullyGrown(state));
     }
 
     @Override
-    protected VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         int i = state.getValue(AGE);
         return state.getValue(HANGING) ? HANGING_AGING_SHAPE[i] : STANDING_AGING_SHAPE[i];
     }
@@ -182,17 +177,17 @@ public class GourdLanternBlock extends GrowingPlantBodyBlock implements Bonemeal
     }
 
     @Override
-    protected FluidState getFluidState(BlockState state) {
+    public FluidState getFluidState(BlockState state) {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Override
-    protected boolean isPathfindable(BlockState state, PathComputationType type) {
+    public boolean isPathfindable(BlockState state, BlockGetter getter, BlockPos pos, PathComputationType type) {
         return false;
     }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(BlockGetter getter, BlockPos pos, BlockState state) {
         return new ItemStack(this.getBodyBlock());
     }
 

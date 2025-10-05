@@ -26,14 +26,8 @@ import java.util.function.ToIntFunction;
 public class AmberClumpBlock extends MultifaceBlock implements SimpleWaterloggedBlock
 {
 
-    VineBlock ref;
-    public static final MapCodec<AmberClumpBlock> CODEC = simpleCodec(AmberClumpBlock::new);
     private static final BooleanProperty WATERLOGGED;
     private final MultifaceSpreader spreader = new MultifaceSpreader(this);
-
-    public MapCodec<AmberClumpBlock> codec() {
-        return CODEC;
-    }
 
     public AmberClumpBlock(BlockBehaviour.Properties properties) {
         super(properties);
@@ -49,7 +43,7 @@ public class AmberClumpBlock extends MultifaceBlock implements SimpleWaterlogged
         builder.add(new Property[]{WATERLOGGED});
     }
 
-    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         if ((Boolean)state.getValue(WATERLOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
@@ -57,15 +51,15 @@ public class AmberClumpBlock extends MultifaceBlock implements SimpleWaterlogged
         return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
     }
 
-    protected boolean canBeReplaced(BlockState state, BlockPlaceContext useContext) {
+    public boolean canBeReplaced(BlockState state, BlockPlaceContext useContext) {
         return !useContext.getItemInHand().is(Items.GLOW_LICHEN) || super.canBeReplaced(state, useContext);
     }
 
-    protected FluidState getFluidState(BlockState state) {
+    public FluidState getFluidState(BlockState state) {
         return (Boolean)state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
-    protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+    public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
         return state.getFluidState().isEmpty();
     }
 

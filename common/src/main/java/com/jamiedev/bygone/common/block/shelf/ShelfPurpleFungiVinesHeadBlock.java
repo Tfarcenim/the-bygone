@@ -1,12 +1,12 @@
 package com.jamiedev.bygone.common.block.shelf;
 
 import com.jamiedev.bygone.core.registry.BGBlocks;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -17,13 +17,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import org.jetbrains.annotations.NotNull;
 
 public class ShelfPurpleFungiVinesHeadBlock extends GrowingPlantHeadBlock implements BonemealableBlock, ShelfVines {
-    public static final MapCodec<ShelfPurpleFungiVinesHeadBlock> CODEC = simpleCodec(ShelfPurpleFungiVinesHeadBlock::new);
     private static final float GROW_CHANCE = 0.11F;
 
-    @Override
-    public MapCodec<ShelfPurpleFungiVinesHeadBlock> codec() {
-        return CODEC;
-    }
 
     public ShelfPurpleFungiVinesHeadBlock(Properties settings) {
         super(settings, Direction.DOWN, SHAPE, false, 0.1);
@@ -46,7 +41,7 @@ public class ShelfPurpleFungiVinesHeadBlock extends GrowingPlantHeadBlock implem
     }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader world, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState) {
         return new ItemStack(BGBlocks.PURPLE_FUNGI_VINES_PLANT.get());
     }
 
@@ -57,7 +52,7 @@ public class ShelfPurpleFungiVinesHeadBlock extends GrowingPlantHeadBlock implem
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state) {
+    public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state, boolean b) {
         return false;
     }
 

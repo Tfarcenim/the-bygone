@@ -16,18 +16,11 @@ import net.minecraft.world.phys.Vec3;
 public class ShelfMushroomBlock extends Block
 {
     public int variation;
-    BedBlock ref;
-
-    public static final MapCodec<ShelfMushroomBlock> CODEC = simpleCodec(ShelfMushroomBlock::new);
 
     public ShelfMushroomBlock(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
-    @Override
-    public MapCodec<ShelfMushroomBlock> codec() {
-        return CODEC;
-    }
 
     public ShelfMushroomBlock(BlockBehaviour.Properties settings, int variation) {
         super(settings);

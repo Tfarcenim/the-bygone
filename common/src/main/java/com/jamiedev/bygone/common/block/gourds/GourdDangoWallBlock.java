@@ -2,7 +2,6 @@ package com.jamiedev.bygone.common.block.gourds;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import com.mojang.serialization.MapCodec;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -21,21 +20,17 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
 public class GourdDangoWallBlock extends GourdDangoBlock {
 
-    public static MapCodec<GourdDangoWallBlock> CODEC;
     public static final DirectionProperty FACING;
     protected static final float field_31285 = 2.5F;
     private static final Map<Direction, VoxelShape> BOUNDING_SHAPES;
 
-    @Override
-    public MapCodec<GourdDangoWallBlock> codec() {
-        return CODEC;
-    }
 
     public GourdDangoWallBlock(BlockBehaviour.Properties settings) {
         super(settings);
@@ -48,7 +43,7 @@ public class GourdDangoWallBlock extends GourdDangoBlock {
     }
 
     @Override
-    protected VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return getBoundingShape(state);
     }
 
@@ -57,7 +52,7 @@ public class GourdDangoWallBlock extends GourdDangoBlock {
     }
 
     @Override
-    protected boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
+    public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
         return canPlaceAt(world, pos, state.getValue(FACING));
     }
 
@@ -92,18 +87,18 @@ public class GourdDangoWallBlock extends GourdDangoBlock {
     }
 
     @Override
-    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         return direction.getOpposite() == state.getValue(FACING) && !state.canSurvive(world, pos) ? Blocks.AIR.defaultBlockState() : state;
     }
 
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rotation) {
+    public BlockState rotate(BlockState state, Rotation rotation) {
         return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
     }
 
     @Override
-    protected BlockState mirror(BlockState state, Mirror mirror) {
+    public @NotNull BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 

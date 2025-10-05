@@ -52,8 +52,7 @@ import java.util.stream.Stream;
 
 
 public class AmphoraBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
-    public static final MapCodec<AmphoraBlock> CODEC = simpleCodec(AmphoraBlock::new);
-    public static final ResourceLocation SHERDS_DYNAMIC_DROP_ID = ResourceLocation.withDefaultNamespace("sherds");
+    public static final ResourceLocation SHERDS_DYNAMIC_DROP_ID = new ResourceLocation("minecraft", "sherds");
     private static final VoxelShape BOUNDING_BOX = Block.box(5.0, 0.0, 5.0, 11.0, 27.0, 11.0);
 
     public static final BooleanProperty CRACKED;
@@ -76,9 +75,6 @@ public class AmphoraBlock extends BaseEntityBlock implements SimpleWaterloggedBl
                     Block.box(12.0, 2.0, 8.0, 16.0, 12.0, 8.0))
     };
 
-    public MapCodec<AmphoraBlock> codec() {
-        return CODEC;
-    }
 
     public AmphoraBlock(BlockBehaviour.Properties properties) {
         super(properties);
@@ -91,11 +87,11 @@ public class AmphoraBlock extends BaseEntityBlock implements SimpleWaterloggedBl
 
     @Deprecated
     @Override
-    protected BlockState mirror(BlockState state, Mirror mirror) {
+    public BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
-    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         if (state.getValue(WATERLOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
@@ -109,7 +105,7 @@ public class AmphoraBlock extends BaseEntityBlock implements SimpleWaterloggedBl
     }
 
     @Override
-    protected RenderShape getRenderShape(BlockState state) {
+    public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
 
@@ -159,10 +155,10 @@ public class AmphoraBlock extends BaseEntityBlock implements SimpleWaterloggedBl
     }
 
 
-    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+    public InteractionResult use(BlockState blockState, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult blockHitResult) {
         BlockEntity var7 = level.getBlockEntity(pos);
         if (var7 instanceof AmphoraBlockEntity AmphoraBlockEntity) {
-            level.playSound(null, pos, SoundEvents.DECORATED_POT_INSERT_FAIL, SoundSource.BLOCKS, 1.0F, 1.0F);
+           // level.playSound(null, pos, SoundEvents.DECORATED_POT_INSERT_FAIL, SoundSource.BLOCKS, 1.0F, 1.0F);
             AmphoraBlockEntity.wobble(com.jamiedev.bygone.common.block.entity.AmphoraBlockEntity.WobbleStyle.NEGATIVE);
             level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
             return InteractionResult.SUCCESS;
@@ -172,11 +168,11 @@ public class AmphoraBlock extends BaseEntityBlock implements SimpleWaterloggedBl
 
     }
 
-    protected boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
+    protected boolean isPathfindable(BlockState state, BlockGetter getter, BlockPos pos, PathComputationType type) {
         return false;
     }
 
-    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         int i = state.getValue(WATER_LEVEL);
         return BOUNDING_BOX;
     }
@@ -190,12 +186,12 @@ public class AmphoraBlock extends BaseEntityBlock implements SimpleWaterloggedBl
         return new AmphoraBlockEntity(pos, state);
     }
 
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
         Containers.dropContentsOnDestroy(state, newState, level, pos);
         super.onRemove(state, level, pos, newState, movedByPiston);
     }
 
-    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
+    public List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
         BlockEntity blockEntity = params.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
         if (blockEntity instanceof AmphoraBlockEntity AmphoraBlockEntity) {
             params.withDynamicDrop(SHERDS_DYNAMIC_DROP_ID, (consumer) -> {
@@ -215,7 +211,6 @@ public class AmphoraBlock extends BaseEntityBlock implements SimpleWaterloggedBl
             blockState = state.setValue(CRACKED, true);
             level.setBlock(pos, blockState, 4);
         }
-
         return super.playerWillDestroy(level, pos, blockState, player);
     }
 

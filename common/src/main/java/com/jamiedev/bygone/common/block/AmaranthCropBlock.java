@@ -24,21 +24,17 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 //todo, support forge events
 public class AmaranthCropBlock extends BushBlock implements BonemealableBlock {
-    public static final MapCodec<AmaranthCropBlock> CODEC = simpleCodec(AmaranthCropBlock::new);
     public static final int MAX_AGE = 7;
     public static final IntegerProperty AGE;
     private static final VoxelShape[] SHAPE_BY_AGE;
 
-    public MapCodec<? extends AmaranthCropBlock> codec() {
-        return CODEC;
-    }
 
     public AmaranthCropBlock(BlockBehaviour.Properties properties) {
         super(properties);
         this.registerDefaultState((BlockState)((BlockState)this.stateDefinition.any()).setValue(this.getAgeProperty(), 0));
     }
 
-    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPE_BY_AGE[this.getAge(state)];
     }
 
@@ -66,11 +62,11 @@ public class AmaranthCropBlock extends BushBlock implements BonemealableBlock {
         return this.getAge(state) >= this.getMaxAge();
     }
 
-    protected boolean isRandomlyTicking(BlockState state) {
+    public boolean isRandomlyTicking(BlockState state) {
         return !this.isMaxAge(state);
     }
 
-    protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (level.getRawBrightness(pos, 0) <= 12) {
             int i = this.getAge(state);
             if (i < this.getMaxAge()) {
@@ -138,7 +134,7 @@ public class AmaranthCropBlock extends BushBlock implements BonemealableBlock {
         return f;
     }
 
-    protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         return hasSufficientLight(level, pos) && super.canSurvive(state, level, pos);
     }
 
@@ -146,7 +142,7 @@ public class AmaranthCropBlock extends BushBlock implements BonemealableBlock {
         return level.getRawBrightness(pos, 0) <= 11;
     }
 
-    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+    public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
         if (entity instanceof Ravager && level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
             level.destroyBlock(pos, true, entity);
         }
@@ -158,11 +154,11 @@ public class AmaranthCropBlock extends BushBlock implements BonemealableBlock {
         return BGItems.AMARANTH_SEEDS.get();
     }
 
-    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState) {
         return new ItemStack(this.getBaseSeedId());
     }
 
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, boolean b) {
         return !this.isMaxAge(state);
     }
 

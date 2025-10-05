@@ -2,10 +2,7 @@ package com.jamiedev.bygone.common.block.cogs;
 
 import com.google.common.collect.ImmutableMap;
 import com.jamiedev.bygone.Bygone;
-import com.jamiedev.bygone.core.registry.BGBlocks;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -27,6 +24,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.ticks.TickPriority;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -34,12 +32,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class BaseVerdigrisCogBlock extends PoweredBlock {
-    public static final MapCodec<PoweredBlock> CODEC = RecordCodecBuilder.mapCodec(
-            p_309135_ -> p_309135_.group(
-                            VerdigrisStage.CODEC.fieldOf("verdigris_stage").forGetter(poweredBlock -> ((BaseVerdigrisCogBlock) poweredBlock).verdigrisStage), propertiesCodec()
-                    )
-                    .apply(p_309135_, BaseVerdigrisCogBlock::new)
-    );
     public static final BooleanProperty UP;
     public static final BooleanProperty NORTH;
     public static final BooleanProperty EAST;
@@ -58,9 +50,6 @@ public class BaseVerdigrisCogBlock extends PoweredBlock {
     public static final IntegerProperty DELAY;
     public static final BooleanProperty POWERED;
 
-    public MapCodec<PoweredBlock> codec() {
-        return CODEC;
-    }
 
     public BaseVerdigrisCogBlock(VerdigrisStage stage, BlockBehaviour.Properties properties) {
         super(properties);
@@ -80,7 +69,7 @@ public class BaseVerdigrisCogBlock extends PoweredBlock {
     }
 
     @Override
-    protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+    public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         super.tick(state, level, pos, random);
         var newState = verdigrisStage.shouldPower ? state.setValue(POWERED, !state.getValue(POWERED)) : state.setValue(POWERED, false);
         level.setBlockAndUpdate(pos, newState);
@@ -96,13 +85,13 @@ public class BaseVerdigrisCogBlock extends PoweredBlock {
         VerdigrisStage verdigrisStage = ((BaseVerdigrisCogBlock) oldState.getBlock()).verdigrisStage;
         if (verdigrisStage == verdigrisStage.last())
             return oldState;
-        var nextBlock = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID, verdigrisStage.next().stage.toLowerCase() + "_verdigris_cog"));
+        var nextBlock = BuiltInRegistries.BLOCK.get(new ResourceLocation(Bygone.MOD_ID, verdigrisStage.next().stage.toLowerCase() + "_verdigris_cog"));
         level.scheduleTick(pos, nextBlock, 1, TickPriority.VERY_HIGH);
         return nextBlock.withPropertiesOf(oldState);
     }
 
     @Override
-    protected int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
+    public int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
         if (blockState.getValue(POWERED) && (side == Direction.UP || side == Direction.DOWN))
             return super.getSignal(blockState, blockAccess, pos, side);
         else
@@ -134,16 +123,16 @@ public class BaseVerdigrisCogBlock extends PoweredBlock {
         return voxelshape.isEmpty() ? Shapes.block() : voxelshape;
     }
 
-    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return (VoxelShape) this.shapesCache.get(state);
     }
 
-    protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+    public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
         return true;
     }
 
     @Override
-    protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         Direction direction = state.getValue(FACING);
         return this.hasFaces(this.getUpdatedState(state, level, pos));
     }
@@ -217,7 +206,7 @@ public class BaseVerdigrisCogBlock extends PoweredBlock {
     }
 
     @Override
-    protected BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
+    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
         if (facing == Direction.DOWN) {
             return super.updateShape(state, facing, facingState, level, currentPos, facingPos);
         } else {
@@ -227,7 +216,7 @@ public class BaseVerdigrisCogBlock extends PoweredBlock {
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
         super.neighborChanged(state, level, pos, neighborBlock, neighborPos, movedByPiston);
         if (level.isClientSide())
             return;
@@ -262,7 +251,7 @@ public class BaseVerdigrisCogBlock extends PoweredBlock {
         return Math.max(level.getControlInputSignal(pos.relative(direction2), direction2, bl), level.getControlInputSignal(pos.relative(direction3), direction3, bl));
     }
 
-    protected boolean isSignalSource(BlockState state) {
+    public boolean isSignalSource(BlockState state) {
         return true;
     }
 
@@ -319,7 +308,7 @@ public class BaseVerdigrisCogBlock extends PoweredBlock {
      * @deprecated
      */
     @Deprecated
-    protected BlockState rotate(BlockState state, Rotation rotate) {
+    public @NotNull BlockState rotate(BlockState state, Rotation rotate) {
         switch (rotate) {
             case CLOCKWISE_180 -> {
                 return state.setValue(NORTH, state.getValue(SOUTH)).setValue(EAST, state.getValue(WEST)).setValue(SOUTH, state.getValue(NORTH)).setValue(WEST, state.getValue(EAST));
@@ -340,7 +329,7 @@ public class BaseVerdigrisCogBlock extends PoweredBlock {
      * @deprecated
      */
     @Deprecated
-    protected BlockState mirror(BlockState state, Mirror mirror) {
+    public BlockState mirror(BlockState state, Mirror mirror) {
         switch (mirror) {
             case LEFT_RIGHT -> {
                 return state.setValue(NORTH, state.getValue(SOUTH)).setValue(SOUTH, state.getValue(NORTH));

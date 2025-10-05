@@ -28,14 +28,9 @@ import java.util.Map;
 
 public class ShelfFungiWallFanBlock extends ShelfFungiFanBlock
 {
-    public static final MapCodec<ShelfFungiWallFanBlock> CODEC = simpleCodec(ShelfFungiWallFanBlock::new);
     public static final DirectionProperty FACING;
     private static final Map<Direction, VoxelShape> FACING_TO_SHAPE;
 
-    @Override
-    public MapCodec<? extends ShelfFungiWallFanBlock> codec() {
-        return CODEC;
-    }
 
     public ShelfFungiWallFanBlock(BlockBehaviour.Properties settings) {
         super(settings);
@@ -43,17 +38,17 @@ public class ShelfFungiWallFanBlock extends ShelfFungiFanBlock
     }
 
     @Override
-    protected VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return FACING_TO_SHAPE.get(state.getValue(FACING));
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rotation) {
+    public BlockState rotate(BlockState state, Rotation rotation) {
         return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
     }
 
     @Override
-    protected BlockState mirror(BlockState state, Mirror mirror) {
+    public BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
@@ -63,12 +58,12 @@ public class ShelfFungiWallFanBlock extends ShelfFungiFanBlock
     }
 
     @Override
-    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         return direction.getOpposite() == state.getValue(FACING) && !state.canSurvive(world, pos) ? Blocks.AIR.defaultBlockState() : state;
     }
 
     @Override
-    protected boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
+    public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
         Direction direction = state.getValue(FACING);
         BlockPos blockPos = pos.relative(direction.getOpposite());
         BlockState blockState = world.getBlockState(blockPos);
