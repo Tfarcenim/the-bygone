@@ -4,7 +4,6 @@ import com.jamiedev.bygone.core.registry.BGBlocks;
 import com.jamiedev.bygone.core.registry.BGSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -12,7 +11,6 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.DamageTypeTags;
-import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.util.ByIdMap;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -28,14 +26,13 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.FlyingAnimal;
-import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.monster.Stray;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.pathfinder.PathType;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
@@ -66,11 +63,11 @@ public class WraithEntity extends Monster implements RangedAttackMob, FlyingAnim
         this.xpReward = 5;
         this.moveControl = new FlyingMoveControl(this, 35, false);
         this.setNoGravity(true);
-        this.setPathfindingMalus(PathType.DANGER_FIRE, -1.0F);
-        this.setPathfindingMalus(PathType.DAMAGE_FIRE, -1.0F);
-        this.setPathfindingMalus(PathType.WATER, -1.0F);
-        this.setPathfindingMalus(PathType.WATER, -1.0F);
-        this.setPathfindingMalus(PathType.FENCE, -1.0F);
+        this.setPathfindingMalus(BlockPathTypes.DANGER_FIRE, -1.0F);
+        this.setPathfindingMalus(BlockPathTypes.DAMAGE_FIRE, -1.0F);
+        this.setPathfindingMalus(BlockPathTypes.WATER, -1.0F);
+        this.setPathfindingMalus(BlockPathTypes.WATER, -1.0F);
+        this.setPathfindingMalus(BlockPathTypes.FENCE, -1.0F);
         this.currentSpell = WraithSpell.NONE;
     }
 
@@ -138,10 +135,10 @@ public class WraithEntity extends Monster implements RangedAttackMob, FlyingAnim
         
     }
 
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        super.defineSynchedData(builder);
-        builder.define(DATA_SPELL_CASTING_ID, (byte)0);
-        builder.define(DATA_PREPARE_TELEPORT, false);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        entityData.define(DATA_SPELL_CASTING_ID, (byte)0);
+        entityData.define(DATA_PREPARE_TELEPORT, false);
     }
 
     public void readAdditionalSaveData(CompoundTag compound) {
@@ -177,15 +174,6 @@ public class WraithEntity extends Monster implements RangedAttackMob, FlyingAnim
     @Override
     protected SoundEvent getDeathSound() {
         return BGSoundEvents.WRAITH_DEATH_ADDITIONS_EVENT;
-    }
-
-    @Override
-    public void playAttackSound() {
-        this.playSound(BGSoundEvents.WRAITH_ATTACK_ADDITIONS_EVENT, 1.0F, 1.0F);
-    }
-
-    SoundEvent getStepSound() {
-        return BGSoundEvents.WRAITH_FLY_ADDITIONS_EVENT;
     }
 
     public boolean isCastingSpell() {
@@ -327,7 +315,7 @@ public class WraithEntity extends Monster implements RangedAttackMob, FlyingAnim
             return super.hurt(source, 0);
         }
 
-        if (source.isDirect()) {
+        if (!source.isIndirect()) {
             this.withinRangeToTeleportTick = Math.max(this.withinRangeToTeleportTick - 10, 0);
         }
 
@@ -371,11 +359,6 @@ public class WraithEntity extends Monster implements RangedAttackMob, FlyingAnim
 
             super.travel(travelVector);
         }
-    }
-
-    @Override
-    protected double getDefaultGravity() {
-        return 0.0;
     }
 
     static class WraithWanderGoal extends WaterAvoidingRandomFlyingGoal {

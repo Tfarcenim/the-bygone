@@ -35,7 +35,7 @@ public class ScuttleSpikeModel extends Model
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack matrices, VertexConsumer vertices, int light, int overlay, int color) {
-		this.body.render(matrices, vertices, light, overlay, color);
+	public void renderToBuffer(PoseStack matrices, VertexConsumer vertices, int light, int overlay, float r,float g,float b,float a) {
+		this.body.render(matrices, vertices, light, overlay, r,g,b,a);
 	}
 }

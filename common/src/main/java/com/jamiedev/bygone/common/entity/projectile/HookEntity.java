@@ -26,7 +26,9 @@ import org.jetbrains.annotations.Nullable;
 public class HookEntity extends AbstractArrow
 {
 
-    FishingHook ref;
+    /**
+     * @see FishingHook
+     */
 
     @javax.annotation.Nullable
     private BlockState lastState;
@@ -46,7 +48,7 @@ public class HookEntity extends AbstractArrow
     }
 
     @Override
-    protected ItemStack getDefaultPickupItem() {
+    protected ItemStack getPickupItem() {
         return BGItems.HOOK.get().getDefaultInstance();
     }
 
@@ -84,9 +86,11 @@ public class HookEntity extends AbstractArrow
     }
 
     @Override
-    public boolean canUsePortal(boolean allowVehicles) {
+    public boolean canChangeDimensions() {
         return false;
     }
+
+
 
     @Override
     protected @NotNull SoundEvent getDefaultHitGroundSoundEvent() {
@@ -98,7 +102,7 @@ public class HookEntity extends AbstractArrow
         if (this.noPhysics) {
             return false;
         } else {
-            float f = this.getDimensions(this.getPose()).width() * 0.8F;
+            float f = this.getDimensions(this.getPose()).width * 0.8F;
             AABB box = AABB.ofSize(this.getEyePosition(), f, 1.0E-6, f);
            // this.playSound(BGSoundEvents.HOOK_HIT_ADDITIONS_EVENT, 0.25F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.4F);
             return BlockPos.betweenClosedStream(box).anyMatch((pos) -> {

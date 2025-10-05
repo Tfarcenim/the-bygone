@@ -1,18 +1,14 @@
 package com.jamiedev.bygone.common.entity;
 
 import com.google.common.collect.ImmutableList;
-import com.jamiedev.bygone.common.entity.ai.HydropusBrain;
 import com.jamiedev.bygone.common.entity.ai.NectaurBrain;
 import com.jamiedev.bygone.common.entity.projectile.NectaurPetalEntity;
-import com.jamiedev.bygone.common.entity.projectile.ScuttleSpikeEntity;
 import com.jamiedev.bygone.core.registry.BGEntityTypes;
 import com.jamiedev.bygone.core.registry.BGMemoryModuleTypes;
 import com.jamiedev.bygone.core.registry.BGSoundEvents;
 import com.mojang.serialization.Dynamic;
-import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
-import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -20,6 +16,7 @@ import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -32,24 +29,15 @@ import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.monster.ZombifiedPiglin;
-import net.minecraft.world.entity.monster.piglin.PiglinBruteAi;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.entity.projectile.ThrownPotion;
-import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.LingeringPotionItem;
-import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Random;
 import java.util.UUID;
 
 public class NectaurEntity extends Animal implements NeutralMob, RangedAttackMob {
@@ -142,7 +130,7 @@ public class NectaurEntity extends Animal implements NeutralMob, RangedAttackMob
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (source.getEntity() instanceof LivingEntity entity && source.isDirect() && entity.getMainHandItem().isEmpty()) {
+        if (source.getEntity() instanceof LivingEntity entity && !source.isIndirect() && entity.getMainHandItem().isEmpty()) {
             entity.hurt(damageSources().generic(), 1.0F);
         }
         else if (source.getEntity() instanceof NectaurEntity) {
@@ -153,7 +141,8 @@ public class NectaurEntity extends Animal implements NeutralMob, RangedAttackMob
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData,
+                                        @Nullable CompoundTag dataTag) {
         if (spawnType == MobSpawnType.NATURAL) {
             Level world = level.getLevel();
             float randomSpawns = this.random.nextFloat();
@@ -193,11 +182,12 @@ public class NectaurEntity extends Animal implements NeutralMob, RangedAttackMob
             }
         }
 
-        return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
+        return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData,dataTag);
     }
 
     public boolean canBeAffected(MobEffectInstance potioneffect) {
-        return (!potioneffect.is(MobEffects.MOVEMENT_SLOWDOWN) && !potioneffect.is(MobEffects.POISON)) && super.canBeAffected(potioneffect);
+        MobEffect effect = potioneffect.getEffect();
+        return effect != MobEffects.MOVEMENT_SLOWDOWN && effect !=MobEffects.POISON && super.canBeAffected(potioneffect);
     }
 
     @Override
@@ -288,10 +278,10 @@ public class NectaurEntity extends Animal implements NeutralMob, RangedAttackMob
         if (target.getRandom().nextInt(3) == 1)
         {
             ItemStack itemstack1 = new ItemStack(Items.ARROW);
-            itemstack1.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.SLOWNESS));
+            PotionUtils.setPotion(itemstack1,Potions.SLOWNESS);
             this.lookAt(this, 100, 100);
             this.yBodyRot = yBodyRotO;
-            NectaurPetalEntity glass = new NectaurPetalEntity(this.level(), this, itemstack1);
+            NectaurPetalEntity glass = new NectaurPetalEntity(this.level(), this);
             double xDistance = target.getX() - this.getX();
             double yDistance = target.getY(0.3333333333333333D) - glass.getY();
             double zDistance = target.getZ() - this.getZ();
@@ -303,10 +293,10 @@ public class NectaurEntity extends Animal implements NeutralMob, RangedAttackMob
         if (target.getRandom().nextInt(10) == 1)
         {
             ItemStack itemstack1 = new ItemStack(Items.ARROW);
-            itemstack1.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.STRONG_SLOWNESS));
+            PotionUtils.setPotion(itemstack1,Potions.STRONG_SLOWNESS);
             this.lookAt(this, 100, 100);
             this.yBodyRot = yBodyRotO;
-            NectaurPetalEntity glass = new NectaurPetalEntity(this.level(), this, itemstack1);
+            NectaurPetalEntity glass = new NectaurPetalEntity(this.level(), this);
             double xDistance = target.getX() - this.getX();
             double yDistance = target.getY(0.3333333333333333D) - glass.getY();
             double zDistance = target.getZ() - this.getZ();
@@ -318,10 +308,10 @@ public class NectaurEntity extends Animal implements NeutralMob, RangedAttackMob
         if (target.getRandom().nextInt(25) == 1)
         {
             ItemStack itemstack1 = new ItemStack(Items.ARROW);
-            itemstack1.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.STRONG_POISON));
+            PotionUtils.setPotion(itemstack1,Potions.STRONG_POISON);
             this.lookAt(this, 100, 100);
             this.yBodyRot = yBodyRotO;
-            NectaurPetalEntity glass = new NectaurPetalEntity(this.level(), this, itemstack1);
+            NectaurPetalEntity glass = new NectaurPetalEntity(this.level(), this);
             double xDistance = target.getX() - this.getX();
             double yDistance = target.getY(0.3333333333333333D) - glass.getY();
             double zDistance = target.getZ() - this.getZ();
@@ -333,10 +323,10 @@ public class NectaurEntity extends Animal implements NeutralMob, RangedAttackMob
         else
         {
             ItemStack itemstack1 = new ItemStack(Items.ARROW);
-            itemstack1.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.POISON));
+            PotionUtils.setPotion(itemstack1,Potions.POISON);
             this.lookAt(this, 100, 100);
             this.yBodyRot = yBodyRotO;
-            NectaurPetalEntity glass = new NectaurPetalEntity(this.level(), this, itemstack1);
+            NectaurPetalEntity glass = new NectaurPetalEntity(this.level(), this);
             double xDistance = target.getX() - this.getX();
             double yDistance = target.getY(0.3333333333333333D) - glass.getY();
             double zDistance = target.getZ() - this.getZ();

@@ -228,14 +228,14 @@ public class BygoneClient {
 
         ItemProperties.register(
                 BGItems.ECHO_GONG.get(),
-                ResourceLocation.withDefaultNamespace("tooting"),
+                new ResourceLocation("tooting"),
                 (p_234978_, p_234979_, p_234980_, p_234981_) -> p_234980_ != null
                         && p_234980_.isUsingItem() && p_234980_.getUseItem() == p_234978_ ? 1.0F : 0.0F
         );
 
         ItemProperties.register(
                 BGItems.MALICIOUS_WAR_HORN.get(),
-                ResourceLocation.withDefaultNamespace("tooting"),
+                new ResourceLocation("tooting"),
                 (p_234978_, p_234979_, p_234980_, p_234981_) -> p_234980_ != null
                         && p_234980_.isUsingItem() && p_234980_.getUseItem() == p_234978_ ? 1.0F : 0.0F
         );

@@ -1,72 +1,73 @@
 package com.jamiedev.bygone.core.registry;
 
 import java.util.EnumMap;
-import java.util.List;
 import java.util.function.Supplier;
 
-import com.jamiedev.bygone.Bygone;
 import net.minecraft.Util;
-import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.item.AnimalArmorItem;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.crafting.Ingredient;
 
 public class BGArmorMaterials
 {
-    public static Holder<ArmorMaterial> SCALE = register("scale", Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
+    public static ArmorMaterial SCALE = new BGArmorMaterial("scale", 25,Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
         map.put(ArmorItem.Type.BOOTS, 3);
         map.put(ArmorItem.Type.LEGGINGS, 6);
         map.put(ArmorItem.Type.CHESTPLATE, 8);
         map.put(ArmorItem.Type.HELMET, 3);
-        map.put(ArmorItem.Type.BODY, 11);
+      //  map.put(ArmorItem.Type.BODY, 11);
     }), 9, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.0F, 0.3F, () -> Ingredient.of(BGItems.SCALE.get()));
 
 
-    public static Holder<ArmorMaterial> BIG_BEAK = register("big_beak", Util.make(new EnumMap(AnimalArmorItem.BodyType.class), map -> {
-        map.put(AnimalArmorItem.BodyType.EQUESTRIAN, 1);
-    }), 9, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.0F, 0.3F, () -> Ingredient.of(BGItems.SCALE.get()));
+    public record BGArmorMaterial(String name, int durabilityMultiplier, EnumMap<ArmorItem.Type, Integer> protectionFunctionForType, int enchantmentValue, SoundEvent sound, float toughness,
+                                  float knockbackResistance, Supplier<Ingredient> repairIngredient) implements ArmorMaterial{
 
-    private static Holder<ArmorMaterial> register(
-            String id,
-            EnumMap<ArmorItem.Type, Integer> defense,
-            int enchantability,
-            Holder<SoundEvent> equipSound,
-            float toughness,
-            float knockbackResistance,
-            Supplier<Ingredient> repairIngredient
-    ) {
-        List<ArmorMaterial.Layer> list = List.of(new ArmorMaterial.Layer(ResourceLocation.tryParse(Bygone.MOD_ID + ":" + id)));
-        return register(id, defense, enchantability, equipSound, toughness, knockbackResistance, repairIngredient, list);
-    }
 
-    private static Holder<ArmorMaterial> register(
-            String id,
-            EnumMap<ArmorItem.Type, Integer> defense,
-            int enchantability,
-            Holder<SoundEvent> equipSound,
-            float toughness,
-            float knockbackResistance,
-            Supplier<Ingredient> repairIngredient,
-            List<ArmorMaterial.Layer> layers
-    ) {
-        EnumMap<ArmorItem.Type, Integer> enumMap = new EnumMap<>(ArmorItem.Type.class);
+        private static final EnumMap<ArmorItem.Type, Integer> HEALTH_FUNCTION_FOR_TYPE = Util.make(new EnumMap<>(ArmorItem.Type.class), (p_266653_) -> {
+            p_266653_.put(ArmorItem.Type.BOOTS, 13);
+            p_266653_.put(ArmorItem.Type.LEGGINGS, 15);
+            p_266653_.put(ArmorItem.Type.CHESTPLATE, 16);
+            p_266653_.put(ArmorItem.Type.HELMET, 11);
+        });
 
-        for (ArmorItem.Type type : ArmorItem.Type.values()) {
-            enumMap.put(type, defense.get(type));
+
+        public int getDurabilityForType(ArmorItem.Type type) {
+            return HEALTH_FUNCTION_FOR_TYPE.get(type) * this.durabilityMultiplier;
         }
 
-        return Registry.registerForHolder(
-                BuiltInRegistries.ARMOR_MATERIAL,
-                ResourceLocation.tryParse(Bygone.MOD_ID + ":" + id),
-                new ArmorMaterial(enumMap, enchantability, equipSound, repairIngredient, layers, toughness, knockbackResistance)
-        );
+        public int getDefenseForType(ArmorItem.Type type) {
+            return this.protectionFunctionForType.get(type);
+        }
+
+        public int getEnchantmentValue() {
+            return this.enchantmentValue;
+        }
+
+        public SoundEvent getEquipSound() {
+            return this.sound;
+        }
+
+        public Ingredient getRepairIngredient() {
+            return this.repairIngredient.get();
+        }
+
+        public String getName() {
+            return this.name;
+        }
+
+        public float getToughness() {
+            return this.toughness;
+        }
+
+        public float getKnockbackResistance() {
+            return this.knockbackResistance;
+        }
+
+        public String getSerializedName() {
+            return this.name;
+        }
+
     }
-
-
 }

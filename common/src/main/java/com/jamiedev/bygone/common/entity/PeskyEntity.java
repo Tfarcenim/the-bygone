@@ -28,7 +28,7 @@ public class PeskyEntity extends Monster
 
     public PeskyEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
-        this.setSpeedModifier((double)0.1F);
+        this.setSpeedModifier(0.1F);
     }
 
     public void setSpeedModifier(double speedModifier) {
@@ -38,14 +38,14 @@ public class PeskyEntity extends Monster
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, (double)6.0F)
-                .add(Attributes.MOVEMENT_SPEED, (double)0.3F)
-                .add(Attributes.KNOCKBACK_RESISTANCE, (double)1.0F).add(Attributes.ATTACK_DAMAGE, (double)5.0F).add(Attributes.STEP_HEIGHT, (double)3.0F);
+                .add(Attributes.MAX_HEALTH, 6.0F)
+                .add(Attributes.MOVEMENT_SPEED, 0.3F)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 1.0F).add(Attributes.ATTACK_DAMAGE, 5.0F);
     }
 
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, (double)1.0F, true));
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0F, true));
         this.goalSelector.addGoal(3, new ClimbOnTopOfPowderSnowGoal(this, this.level()));
         this.goalSelector.addGoal(4, new AvoidBlockGoal(this, 16, 1.4, 2.6, (pos) -> {
             BlockState state = this.level().getBlockState(pos);
@@ -63,11 +63,11 @@ public class PeskyEntity extends Monster
                 return state.getValue(PlagaCropBlock.AGE) < 5;
             } else return false;
         }));
-        this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, NectaurEntity.class, 6.0F, (double)1.0F, 1.2));
+        this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, NectaurEntity.class, 6.0F, 1.0F, 1.2));
         this.goalSelector.addGoal(6, new RandomStrollGoal(this, 1.0, 10));
         this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 10.0F));
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this, new Class[0]));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
 

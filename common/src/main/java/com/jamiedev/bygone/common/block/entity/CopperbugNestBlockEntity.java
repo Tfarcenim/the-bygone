@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.jamiedev.bygone.common.block.CopperbugNestBlock;
 import com.jamiedev.bygone.common.entity.CopperbugEntity;
 import com.jamiedev.bygone.core.registry.BGBlockEntities;
-import com.jamiedev.bygone.core.registry.BGDataComponentTypes;
 import com.jamiedev.bygone.core.registry.BGEntityTypes;
 import com.jamiedev.bygone.core.init.JamiesModTag;
 import com.mojang.logging.LogUtils;
@@ -13,21 +12,16 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.NbtUtils;
-import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.VisibleForDebug;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.FireBlock;
@@ -156,7 +150,7 @@ public class CopperbugNestBlockEntity  extends BlockEntity
                 }
 
                 BlockPos blockPos = this.getBlockPos();
-                this.level.playSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), SoundEvents.COPPER_BULB_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
+                this.level.playSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), SoundEvents.BEEHIVE_ENTER, SoundSource.BLOCKS, 1.0F, 1.0F);
                 this.level.gameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Context.of(entity, this.getBlockState()));
             }
 
@@ -256,15 +250,15 @@ public class CopperbugNestBlockEntity  extends BlockEntity
             double d = (double)pos.getX() + 0.5;
             double e = pos.getY();
             double f = (double)pos.getZ() + 0.5;
-            world.playSound(null, d, e, f, SoundEvents.COPPER_GRATE_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
+            world.playSound(null, d, e, f, SoundEvents.BEEHIVE_EXIT, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
 
       //  DebugInfoSender.sendBeehiveDebugData(world, pos, state, blockEntity);
     }
 
     @Override
-    protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider registryLookup) {
-        super.loadAdditional(nbt, registryLookup);
+    public void load(CompoundTag nbt) {
+        super.load(nbt);
         this.copperbugs.clear();
         if (nbt.contains("copperbugs")) {
             CopperbugNestBlockEntity.CopperbugData.LIST_CODEC.parse(NbtOps.INSTANCE, nbt.get("copperbugs")).resultOrPartial((string) -> {
@@ -274,37 +268,17 @@ public class CopperbugNestBlockEntity  extends BlockEntity
             });
         }
 
-        this.flowerPos = NbtUtils.readBlockPos(nbt, "flower_pos").orElse(null);
+        this.flowerPos = NbtUtils.readBlockPos(nbt.getCompound("flower_pos"));
     }
 
     @Override
-    protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registryLookup) {
-        super.saveAdditional(nbt, registryLookup);
+    protected void saveAdditional(CompoundTag nbt) {
+        super.saveAdditional(nbt);
         nbt.put("copperbugs", CopperbugData.LIST_CODEC.encodeStart(NbtOps.INSTANCE, this.createCopperbugsData()).getOrThrow());
         if (this.hasCopperBlockPos()) {
             nbt.put("flower_pos", NbtUtils.writeBlockPos(this.flowerPos));
         }
 
-    }
-
-    @Override
-    protected void applyImplicitComponents(BlockEntity.DataComponentInput components) {
-        super.applyImplicitComponents(components);
-        this.copperbugs.clear();
-        List<CopperbugNestBlockEntity.CopperbugData> list = components.getOrDefault(BGDataComponentTypes.COPPERBUGS, List.of());
-        list.forEach(this::addCopperbug);
-    }
-
-    @Override
-    protected void collectImplicitComponents(DataComponentMap.Builder componentMapBuilder) {
-        super.collectImplicitComponents(componentMapBuilder);
-        componentMapBuilder.set(BGDataComponentTypes.COPPERBUGS, this.createCopperbugsData());
-    }
-
-    @Override
-    public void removeComponentsFromTag(CompoundTag nbt) {
-        super.removeComponentsFromTag(nbt);
-        nbt.remove("copperbugs");
     }
 
     private List<CopperbugNestBlockEntity.CopperbugData> createCopperbugsData() {

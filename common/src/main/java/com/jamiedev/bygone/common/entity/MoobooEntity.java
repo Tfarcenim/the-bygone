@@ -55,9 +55,9 @@ public class MoobooEntity extends Cow
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        super.defineSynchedData(builder);
-        builder.define(DATA_RENDER, false);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        entityData.define(DATA_RENDER, false);
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.jamiedev.bygone.common.block.entity;
 
 import com.jamiedev.bygone.core.registry.BGBlockEntities;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -22,11 +22,11 @@ public class CasterBlockEntity extends BlockEntity /*implements CasterComponent*
         this(BGBlockEntities.CASTER.get(), pos, state);
     }
 
-    public void writeSyncPacket(RegistryFriendlyByteBuf buf, ServerPlayer recipient) {
+    public void writeSyncPacket(FriendlyByteBuf buf, ServerPlayer recipient) {
         buf.writeBoolean(onCooldown);
     }
 
-    public void applySyncPacket(RegistryFriendlyByteBuf buf) {
+    public void applySyncPacket(FriendlyByteBuf buf) {
         onCooldown = buf.readBoolean();
     }
 }

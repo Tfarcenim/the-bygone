@@ -30,12 +30,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class BygonePortalBlock extends CustomPortalBlock
 {
     EndPortalBlock ref;
-    public static final MapCodec<BygonePortalBlock> CODEC = BlockBehaviour.simpleCodec(BygonePortalBlock::new);
 
-    @Override
-    public MapCodec<BygonePortalBlock> codec() {
-        return CODEC;
-    }
     protected static final VoxelShape SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
     public BygonePortalBlock(BlockBehaviour.Properties settings) {
         super(settings);
@@ -51,12 +46,12 @@ public class BygonePortalBlock extends CustomPortalBlock
     }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader world, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    protected boolean canBeReplaced(BlockState state, Fluid fluid) {
+    public boolean canBeReplaced(BlockState state, Fluid fluid) {
         return false;
     }
 

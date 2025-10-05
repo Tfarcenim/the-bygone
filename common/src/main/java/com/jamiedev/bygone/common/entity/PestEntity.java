@@ -26,6 +26,8 @@ import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
@@ -49,7 +51,7 @@ public class PestEntity extends Animal
 
     public PestEntity(EntityType<? extends PestEntity> entityType, Level level) {
         super(BGEntityTypes.PEST.get(), level);
-        this.setSpeedModifier((double)0.1F);;
+        this.setSpeedModifier(0.1F);
     }
 
     public void setSpeedModifier(double speedModifier) {
@@ -59,9 +61,9 @@ public class PestEntity extends Animal
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, (double)6.0F)
-                .add(Attributes.MOVEMENT_SPEED, (double)0.3F)
-                .add(Attributes.KNOCKBACK_RESISTANCE, (double)1.0F).add(Attributes.ATTACK_DAMAGE, (double)5.0F).add(Attributes.STEP_HEIGHT, (double)3.0F);
+                .add(Attributes.MAX_HEALTH, 6)
+                .add(Attributes.MOVEMENT_SPEED, 0.3)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 1).add(Attributes.ATTACK_DAMAGE,5);
     }
 
     public void addAdditionalSaveData(CompoundTag compound) {
@@ -95,10 +97,10 @@ public class PestEntity extends Animal
                 return state.getValue(PlagaCropBlock.AGE) < 5;
             } else return false;
         }));
-        this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Wolf.class, 6.0F, (double)1.0F, 1.2));
+        this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Wolf.class, 6.0F, 1.0F, 1.2));
 
-        this.goalSelector.addGoal(2, new BreedGoal(this, 0.8));
-        this.goalSelector.addGoal(3, new TemptGoal(this, (double)1.0F, (p_335873_) -> p_335873_.is(ItemTags.ARMOR_ENCHANTABLE), false));
+        this.goalSelector.addGoal(2, new BreedGoal(this, 0.8));//todo
+        this.goalSelector.addGoal(3, new TemptGoal(this, (double)1.0F, Ingredient.of(Items.NETHERITE_HELMET) /*(p_335873_) -> p_335873_.is(ItemTags.ARMOR_ENCHANTABLE)*/, false));
         this.goalSelector.addGoal(4, new PestEntity.PestAvoidEntityGoal<>(this, NectaurEntity.class, 4.0F, 1.1, 1.5));
         this.goalSelector.addGoal(4, new PestEntity.PestAvoidEntityGoal<>(this, Player.class, 8.0F, 1.2, 2.3));
         this.goalSelector.addGoal(4, new PestEntity.PestAvoidEntityGoal<>(this, BigBeakEntity.class, 16.0F, 0.8, 1.12));
@@ -174,7 +176,7 @@ public class PestEntity extends Animal
         private boolean canRaid;
 
         public RaidGardenGoal(PestEntity pest) {
-            super(pest, (double)0.7F, 64);
+            super(pest, 0.7F, 64);
             this.pest = pest;
         }
 
@@ -193,19 +195,19 @@ public class PestEntity extends Animal
 
         public void tick() {
             super.tick();
-            this.pest.getLookControl().setLookAt((double)this.blockPos.getX() + (double)0.5F, (double)(this.blockPos.getY() + 1), (double)this.blockPos.getZ() + (double)0.5F, 10.0F, (float)this.pest.getMaxHeadXRot());
+            this.pest.getLookControl().setLookAt((double)this.blockPos.getX() + (double)0.5F, this.blockPos.getY() + 1, (double)this.blockPos.getZ() + (double)0.5F, 10.0F, (float)this.pest.getMaxHeadXRot());
             if (this.isReachedTarget()) {
                 Level level = this.pest.level();
                 BlockPos blockpos = this.blockPos.above();
                 BlockState blockstate = level.getBlockState(blockpos);
                 Block block = blockstate.getBlock();
                 if (this.canRaid && block instanceof CropBlock) {
-                    int i = (Integer)blockstate.getValue(CropBlock.AGE);
+                    int i = blockstate.getValue(CropBlock.AGE);
                     if (i == 0) {
                         level.setBlock(blockpos, Blocks.AIR.defaultBlockState(), 2);
                         level.destroyBlock(blockpos, true, this.pest);
                     } else {
-                        level.setBlock(blockpos, (BlockState)blockstate.setValue(CropBlock.AGE, i - 1), 2);
+                        level.setBlock(blockpos, blockstate.setValue(CropBlock.AGE, i - 1), 2);
                         level.gameEvent(GameEvent.BLOCK_CHANGE, blockpos, GameEvent.Context.of(this.pest));
                         level.levelEvent(2001, blockpos, Block.getId(blockstate));
                     }
@@ -213,12 +215,12 @@ public class PestEntity extends Animal
                     this.pest.moreCropTicks = 40;
                 }
                 if (this.canRaid && block instanceof AmaranthCropBlock) {
-                    int i = (Integer)blockstate.getValue(AmaranthCropBlock.AGE);
+                    int i = blockstate.getValue(AmaranthCropBlock.AGE);
                     if (i == 0) {
                         level.setBlock(blockpos, Blocks.AIR.defaultBlockState(), 2);
                         level.destroyBlock(blockpos, true, this.pest);
                     } else {
-                        level.setBlock(blockpos, (BlockState)blockstate.setValue(AmaranthCropBlock.AGE, i - 1), 2);
+                        level.setBlock(blockpos, blockstate.setValue(AmaranthCropBlock.AGE, i - 1), 2);
                         level.gameEvent(GameEvent.BLOCK_CHANGE, blockpos, GameEvent.Context.of(this.pest));
                         level.levelEvent(2001, blockpos, Block.getId(blockstate));
                     }

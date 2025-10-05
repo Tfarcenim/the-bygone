@@ -116,13 +116,13 @@ public class HookItem extends Item
         if (user instanceof Player player) {
             if (((PlayerWithHook) player).bygone$getHook() != null) return;
 
-            int useTime = this.getUseDuration(stack, user) - remainingUseTicks;
+            int useTime = this.getUseDuration(stack) - remainingUseTicks;
             if (useTime < 0) return;
 
             float powerForTime = getPullProgress(useTime);
             if (powerForTime >= 0.1D) {
                 if (!world.isClientSide) {
-                    stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(user.getUsedItemHand()));
+                    stack.hurtAndBreak(1, player, LivingEntity.getEquipmentSlotForItem(user.getUsedItemHand()));
                     HookEntity hook = new HookEntity(world, player);
                     this.shoot(user, hook, powerForTime *  15.0F);
                     if(world.addFreshEntity(hook)){
@@ -151,7 +151,7 @@ public class HookItem extends Item
     }
 
     @Override
-    public int getUseDuration(ItemStack stack, LivingEntity user) {
+    public int getUseDuration(ItemStack stack) {
         return 72000;
     }
 

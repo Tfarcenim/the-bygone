@@ -9,7 +9,6 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.data.worldgen.DimensionTypes;
 import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -20,11 +19,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.TickRateManager;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.flag.FeatureFlagSet;
-import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -32,13 +29,10 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkSource;
-import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.entity.LevelEntityGetter;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.saveddata.maps.MapId;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraft.world.level.storage.ServerLevelData;
 import net.minecraft.world.level.storage.WritableLevelData;
@@ -47,7 +41,6 @@ import net.minecraft.world.scores.Scoreboard;
 import net.minecraft.world.ticks.LevelTickAccess;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -166,12 +159,7 @@ public abstract class ServerLevelMixin extends Level {
             if (flag == $this.isRaining()) {
                 for (ServerPlayer player : $this.getServer().getPlayerList().getPlayers()) {
 
-                    getLevel().addParticle(new ParticleOptions() {
-                        @Override
-                        public ParticleType<?> getType() {
-                            return BGParticleTypes.UPSIDEDOWN;
-                        }
-                    }, true, player.getRandom().nextFloat(), player.getRandom().nextFloat(), player.getRandom().nextFloat(), 0, 5, 0);
+                    getLevel().addParticle(ParticleTypes.POOF, true, player.getRandom().nextFloat(), player.getRandom().nextFloat(), player.getRandom().nextFloat(), 0, 5, 0);
                    // getLevel().sendParticles(player, BGParticleTypes.UPSIDEDOWN, true, (double) player.getRandom().nextFloat(), (double) player.getRandom().nextFloat(), (double) player.getRandom().nextFloat(), 8, (double) 0, (double) 0, (double) 0, 5.0);
               }
             }
@@ -199,22 +187,7 @@ public abstract class ServerLevelMixin extends Level {
     public @Nullable Entity getEntity(int i) {
         return null;
     }
-    @Shadow
-    public TickRateManager tickRateManager() {
-        return null;
-    }
-    @Shadow
-    public @Nullable MapItemSavedData getMapData(MapId mapId) {
-        return null;
-    }
-    @Shadow
-    public void setMapData(MapId mapId, MapItemSavedData mapItemSavedData) {
 
-    }
-    @Shadow
-    public MapId getFreeMapId() {
-        return null;
-    }
     @Shadow
     public void destroyBlockProgress(int i, BlockPos blockPos, int i1) {
 
@@ -231,10 +204,7 @@ public abstract class ServerLevelMixin extends Level {
     protected LevelEntityGetter<Entity> getEntities() {
         return null;
     }
-    @Shadow
-    public PotionBrewing potionBrewing() {
-        return null;
-    }
+
     @Shadow
     public LevelTickAccess<Block> getBlockTicks() {
         return null;
@@ -251,10 +221,7 @@ public abstract class ServerLevelMixin extends Level {
     public void levelEvent(@Nullable Player player, int i, BlockPos blockPos, int i1) {
 
     }
-    @Shadow
-    public void gameEvent(Holder<GameEvent> holder, Vec3 vec3, GameEvent.Context context) {
 
-    }
     @Shadow
     public float getShade(Direction direction, boolean b) {
         return 0;

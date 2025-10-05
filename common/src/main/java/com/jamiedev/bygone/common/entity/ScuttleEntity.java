@@ -93,9 +93,9 @@ public class ScuttleEntity extends WaterAnimal implements RangedAttackMob
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        super.defineSynchedData(builder);
-        builder.define(TARGET_ID, 0);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        entityData.define(TARGET_ID, 0);
     }
 
 
@@ -110,7 +110,7 @@ public class ScuttleEntity extends WaterAnimal implements RangedAttackMob
     public void performRangedAttack(LivingEntity target, float pullProgress) {
         this.lookAt(this, 100, 100);
         this.yBodyRot = yBodyRotO;
-        ScuttleSpikeEntity glass = new ScuttleSpikeEntity(this.level(), this, new ItemStack(Items.TRIDENT));
+        ScuttleSpikeEntity glass = new ScuttleSpikeEntity(this.level(), this);
         double xDistance = target.getX() - this.getX();
         double yDistance = target.getY(0.3333333333333333D) - glass.getY();
         double zDistance = target.getZ() - this.getZ();
@@ -135,7 +135,7 @@ public class ScuttleEntity extends WaterAnimal implements RangedAttackMob
             ServerLevel serverWorld2 = (ServerLevel)var7;
             target.setDeltaMovement(target.getDeltaMovement().add(0.0D, 0.4F, 0.0D));
             DamageSource damageSource = this.damageSources().mobAttack(this);
-            EnchantmentHelper.doPostAttackEffects(serverWorld2, target, damageSource);
+          //  EnchantmentHelper.doPostAttackEffects(serverWorld2, target, damageSource);
 
         }
 

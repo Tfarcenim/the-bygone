@@ -84,13 +84,13 @@ public class MoobooModel<T extends Entity> extends EntityModel<T> {
 
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-       head.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        body.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        leg1.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        leg2.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        leg3.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        leg4.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float r,float g,float b,float a) {
+       head.render(poseStack, vertexConsumer, packedLight, packedOverlay, r,g,b,a);
+        body.render(poseStack, vertexConsumer, packedLight, packedOverlay, r,g,b,a);
+        leg1.render(poseStack, vertexConsumer, packedLight, packedOverlay, r,g,b,a);
+        leg2.render(poseStack, vertexConsumer, packedLight, packedOverlay, r,g,b,a);
+        leg3.render(poseStack, vertexConsumer, packedLight, packedOverlay, r,g,b,a);
+        leg4.render(poseStack, vertexConsumer, packedLight, packedOverlay, r,g,b,a);
     }
 
     @Override

@@ -66,8 +66,8 @@ public class LithyModel<T extends Entity> extends HierarchicalModel<T> {
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-		root.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float r,float g,float b,float a) {
+		root.render(poseStack, vertexConsumer, packedLight, packedOverlay, r,g,b,a);
 	}
 
 	@Override

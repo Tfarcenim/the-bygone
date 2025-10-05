@@ -72,15 +72,6 @@ public class HydropusEntity extends Animal implements NeutralMob {
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {
-        if (spawnType == MobSpawnType.STRUCTURE){
-            // Need to ask if they are immediately hostile
-        }
-
-        return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
-    }
-
-    @Override
     public boolean isFood(ItemStack itemStack) {
         return false;
     }

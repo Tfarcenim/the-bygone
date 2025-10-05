@@ -149,9 +149,9 @@ public class ScuttleModel extends HierarchicalModel<ScuttleEntity> {
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, int color)  {
-		body.render(matrices, vertexConsumer, light, overlay, color);
-		//tail3.render(matrices, vertexConsumer, light, overlay, color);
+	public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float r,float g,float b,float a)  {
+		body.render(matrices, vertexConsumer, light, overlay, r,g,b,a);
+		//tail3.render(matrices, vertexConsumer, light, overlay, r,g,b,a);
 
 	}
 }

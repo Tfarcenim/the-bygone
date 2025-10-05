@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static com.jamiedev.bygone.Bygone.MAP_HEIGHT;
+import static com.jamiedev.bygone.core.registry.BGDataComponents.MAP_HEIGHT;
 
 @Mixin(MapItem.class)
 /*

@@ -81,8 +81,8 @@ public class WhiskbillModel<T extends WhiskbillEntity> extends HierarchicalModel
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-		root.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float r,float g,float b,float a) {
+		root.render(poseStack, vertexConsumer, packedLight, packedOverlay, r,g,b,a);
 		//Do not render children of "root", root.render() already does that.
 	}
 

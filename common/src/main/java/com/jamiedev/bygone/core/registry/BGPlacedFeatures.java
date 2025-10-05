@@ -4,7 +4,7 @@ import com.jamiedev.bygone.Bygone;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.valueproviders.ClampedNormalInt;
@@ -30,7 +30,7 @@ public class BGPlacedFeatures
     public static final ResourceKey<PlacedFeature> POINTED_AMBER = PlacementUtils.createKey("pointed_amber");
     public static final ResourceKey<PlacedFeature> AMBER_CLUSTER = PlacementUtils.createKey("amber_cluster");
 
-    public static void bootstrap(BootstrapContext<PlacedFeature> featureRegisterable) {
+    public static void bootstrap(BootstapContext<PlacedFeature> featureRegisterable) {
         HolderGetter<ConfiguredFeature<?, ?>> holderGetter = featureRegisterable.lookup(Registries.CONFIGURED_FEATURE);
         Holder<ConfiguredFeature<?, ?>> registryEntry4 = holderGetter.getOrThrow(BGConfiguredFeatures.AMBER_CLUSTER);
         Holder<ConfiguredFeature<?, ?>> registryEntry6 = holderGetter.getOrThrow(BGConfiguredFeatures.POINTED_AMBER);

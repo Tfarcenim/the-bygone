@@ -9,9 +9,9 @@ import java.util.function.Supplier;
 
 public class BGMobEffects {
     
-    public static Supplier<Holder<MobEffect>> UPDRAFT = () -> {
-        MobEffect effect = BuiltInRegistries.MOB_EFFECT.get(ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID, "updraft"));
-        return BuiltInRegistries.MOB_EFFECT.wrapAsHolder(effect);
+    public static Supplier<MobEffect> UPDRAFT = () -> {
+        MobEffect effect = BuiltInRegistries.MOB_EFFECT.get(Bygone.id("updraft"));
+        return effect;
     };
     
     public static void init() {

@@ -4,6 +4,7 @@ import com.jamiedev.bygone.common.entity.ai.LubberNavigation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -83,9 +84,9 @@ public class LubberEntity  extends Monster implements RangedAttackMob
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        super.defineSynchedData(builder);
-        builder.define(LUBBER_FLAGS, (byte)0);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        entityData.define(LUBBER_FLAGS, (byte)0);
     }
 
     @Override
@@ -136,7 +137,7 @@ public class LubberEntity  extends Monster implements RangedAttackMob
 
     @Override
     public boolean canBeAffected(MobEffectInstance effect) {
-        return !effect.is(MobEffects.POISON) && super.canBeAffected(effect);
+        return effect.getEffect() != MobEffects.POISON && super.canBeAffected(effect);
     }
 
     public boolean isClimbingWall() {
@@ -156,14 +157,14 @@ public class LubberEntity  extends Monster implements RangedAttackMob
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData) {
-        SpawnGroupData entityData1 = super.finalizeSpawn(world, difficulty, spawnReason, entityData);
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData, @Nullable CompoundTag dataTag) {
+        SpawnGroupData entityData1 = super.finalizeSpawn(world, difficulty, spawnReason, entityData,dataTag);
         RandomSource random = this.getRandom();
         if (random.nextInt(100) == 0) {
             Skeleton skeletonEntity = EntityType.SKELETON.create(this.level());
             if (skeletonEntity != null) {
                 skeletonEntity.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
-                skeletonEntity.finalizeSpawn(world, difficulty, spawnReason, null);
+                skeletonEntity.finalizeSpawn(world, difficulty, spawnReason, null,null);
                 skeletonEntity.startRiding(this);
             }
         }
@@ -176,7 +177,7 @@ public class LubberEntity  extends Monster implements RangedAttackMob
         }
 
         if (entityData1 instanceof LubberEntity.LubberData spiderData) {
-            Holder<MobEffect> registryEntry = spiderData.effect;
+            MobEffect registryEntry = spiderData.effect;
             if (registryEntry != null) {
                 this.addEffect(new MobEffectInstance(registryEntry, -1));
             }
@@ -185,10 +186,10 @@ public class LubberEntity  extends Monster implements RangedAttackMob
         return entityData1;
     }
 
-    @Override
-    public Vec3 getVehicleAttachmentPoint(Entity vehicle) {
-        return vehicle.getBbWidth() <= this.getBbWidth() ? new Vec3(0.0, 0.3125 * (double)this.getScale(), 0.0) : super.getVehicleAttachmentPoint(vehicle);
-    }
+   // @Override
+   // public Vec3 getVehicleAttachmentPoint(Entity vehicle) {
+   //     return vehicle.getBbWidth() <= this.getBbWidth() ? new Vec3(0.0, 0.3125 * (double)this.getScale(), 0.0) : super.getVehicleAttachmentPoint(vehicle);
+   // }
 
     static {
         LUBBER_FLAGS = SynchedEntityData.defineId(LubberEntity.class, EntityDataSerializers.BYTE);
@@ -230,7 +231,7 @@ public class LubberEntity  extends Monster implements RangedAttackMob
 
     public static class LubberData implements SpawnGroupData {
         @Nullable
-        public Holder<MobEffect> effect;
+        public MobEffect effect;
 
         public LubberData() {
         }

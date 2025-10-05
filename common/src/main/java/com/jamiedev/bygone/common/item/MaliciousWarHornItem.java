@@ -46,7 +46,7 @@ public class MaliciousWarHornItem extends Item {
         ItemStack itemStack = player.getItemInHand(hand);
         
         if (!level.isClientSide) {
-            WarHornData data = itemStack.getOrDefault(BGDataComponents.WAR_HORN_DATA.value(), WarHornData.EMPTY);
+            WarHornData data = BGDataComponents.getWarHornData(itemStack,true);
             
             if (data.cooldownSeconds() <= 0) {
                 player.startUsingItem(hand);
@@ -74,7 +74,7 @@ public class MaliciousWarHornItem extends Item {
             spawnHornParticles(level, player);
             
             WarHornData data = releaseVexes(stack, level, player);
-            stack.set(BGDataComponents.WAR_HORN_DATA.value(), data);
+            BGDataComponents.setWarHornData(stack, data);
             
             player.awardStat(Stats.ITEM_USED.get(this));
             player.getCooldowns().addCooldown(this, 20);
@@ -85,7 +85,7 @@ public class MaliciousWarHornItem extends Item {
     
     private WarHornData releaseVexes(ItemStack stack, Level level, Player player) {
         if (!(level instanceof ServerLevel serverLevel)) {
-            return stack.getOrDefault(BGDataComponents.WAR_HORN_DATA.value(), WarHornData.EMPTY);
+            return BGDataComponents.getWarHornData(stack,true);
         }
         
         Set<UUID> vexIds = new HashSet<>();
@@ -137,7 +137,7 @@ public class MaliciousWarHornItem extends Item {
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         if (!level.isClientSide && entity instanceof Player && level.getGameTime() % 20 == 0) {
-            WarHornData data = stack.getOrDefault(BGDataComponents.WAR_HORN_DATA.value(), WarHornData.EMPTY);
+            WarHornData data = BGDataComponents.getWarHornData(stack,true);
             
             boolean needsUpdate = false;
             int newCooldown = Math.max(0, data.cooldownSeconds() - 1);
@@ -163,13 +163,13 @@ public class MaliciousWarHornItem extends Item {
             
             if (needsUpdate) {
                 WarHornData newData = new WarHornData(activeVexes, newCooldown, newVexTime);
-                stack.set(BGDataComponents.WAR_HORN_DATA.value(), newData);
+                BGDataComponents.setWarHornData(stack,newData);
             }
         }
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+    public void appendHoverText(ItemStack stack, Level context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
         
         tooltipComponents.add(Component.translatable("item.bygone.malicious_war_horn.desc1")
@@ -177,7 +177,7 @@ public class MaliciousWarHornItem extends Item {
         tooltipComponents.add(Component.translatable("item.bygone.malicious_war_horn.desc2")
             .withStyle(ChatFormatting.GRAY));
         
-        WarHornData data = stack.getOrDefault(BGDataComponents.WAR_HORN_DATA.value(), WarHornData.EMPTY);
+        WarHornData data = BGDataComponents.getWarHornData(stack,true);
         
         if (!data.activeVexes().isEmpty()) {
             tooltipComponents.add(Component.translatable("item.bygone.malicious_war_horn.vexes_active", data.activeVexes().size())
@@ -194,7 +194,7 @@ public class MaliciousWarHornItem extends Item {
     }
     
     @Override
-    public int getUseDuration(ItemStack stack, LivingEntity entity) {
+    public int getUseDuration(ItemStack stack) {
         return USE_DURATION;
     }
     
@@ -205,13 +205,13 @@ public class MaliciousWarHornItem extends Item {
     
     @Override
     public boolean isFoil(ItemStack stack) {
-        WarHornData data = stack.getOrDefault(BGDataComponents.WAR_HORN_DATA.value(), WarHornData.EMPTY);
+        WarHornData data = BGDataComponents.getWarHornData(stack,true);
         return !data.activeVexes().isEmpty();
     }
     
     public static void onVexDeath(Vex vex, ItemStack hornStack) {
         if (hornStack.getItem() instanceof MaliciousWarHornItem) {
-            WarHornData data = hornStack.getOrDefault(BGDataComponents.WAR_HORN_DATA.value(), WarHornData.EMPTY);
+            WarHornData data = BGDataComponents.getWarHornData(hornStack,true);
             
             if (data.activeVexes().contains(vex.getUUID())) {
                 List<UUID> newVexes = new ArrayList<>(data.activeVexes());
@@ -223,7 +223,7 @@ public class MaliciousWarHornItem extends Item {
                     data.vexTimeLeft()
                 );
                 
-                hornStack.set(BGDataComponents.WAR_HORN_DATA.value(), newData);
+                BGDataComponents.setWarHornData(hornStack, newData);
             }
         }
     }

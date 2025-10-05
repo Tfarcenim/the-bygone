@@ -60,8 +60,4 @@ public class BGDataComponentTypes
         Bygone.LOGGER.info("Registering {} components", Bygone.MOD_ID);
 
     }
-    
-    public record EchoGongData(int charge) {
-        public static final EchoGongData EMPTY = new EchoGongData(0);
-    }
 }

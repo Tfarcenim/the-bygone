@@ -64,9 +64,9 @@ public class TrilobiteModel<E extends Entity> extends EntityModel<E> {
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-		Head.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-		Midbody.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-		Tail.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float r,float g,float b,float a) {
+		Head.render(poseStack, vertexConsumer, packedLight, packedOverlay, r,g,b,a);
+		Midbody.render(poseStack, vertexConsumer, packedLight, packedOverlay, r,g,b,a);
+		Tail.render(poseStack, vertexConsumer, packedLight, packedOverlay, r,g,b,a);
 	}
 }

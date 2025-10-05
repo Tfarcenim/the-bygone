@@ -75,12 +75,12 @@ public class CoelacanthModel<E extends Entity> extends HierarchicalModel<E> {
 
 
 	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-		Fish.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-		midbody.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-		tail.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-		head.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-		lowerbody.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float r,float g,float b,float a) {
+		Fish.render(poseStack, vertexConsumer, packedLight, packedOverlay, r,g,b,a);
+		midbody.render(poseStack, vertexConsumer, packedLight, packedOverlay, r,g,b,a);
+		tail.render(poseStack, vertexConsumer, packedLight, packedOverlay, r,g,b,a);
+		head.render(poseStack, vertexConsumer, packedLight, packedOverlay, r,g,b,a);
+		lowerbody.render(poseStack, vertexConsumer, packedLight, packedOverlay, r,g,b,a);
 	}
 
 	@Override

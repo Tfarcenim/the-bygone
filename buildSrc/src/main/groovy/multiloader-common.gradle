@@ -48,6 +48,11 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    maven {
+        name = "AzureDoom Mods"
+        url = "https://maven.azuredoom.com/mods"
+    }
+
 }
 
 // Declare capabilities on the outgoing configurations.

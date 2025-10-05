@@ -45,12 +45,12 @@ public class DuckieModel<T extends Entity> extends AgeableListModel<T> {
 		return LayerDefinition.create(modelData, 64, 64);
 	}
 	@Override
-	public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, int color) {
-		head.render(matrices, vertexConsumer, light, overlay, color);
-		body.render(matrices, vertexConsumer, light, overlay, color);
-		wing_left.render(matrices, vertexConsumer, light, overlay, color);
-		wing_right.render(matrices, vertexConsumer, light, overlay, color);
-		tail.render(matrices, vertexConsumer, light, overlay, color);
+	public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float r,float g,float b,float a) {
+		head.render(matrices, vertexConsumer, light, overlay, r,g,b,a);
+		body.render(matrices, vertexConsumer, light, overlay, r,g,b,a);
+		wing_left.render(matrices, vertexConsumer, light, overlay, r,g,b,a);
+		wing_right.render(matrices, vertexConsumer, light, overlay, r,g,b,a);
+		tail.render(matrices, vertexConsumer, light, overlay, r,g,b,a);
 	}
 
 	@Override

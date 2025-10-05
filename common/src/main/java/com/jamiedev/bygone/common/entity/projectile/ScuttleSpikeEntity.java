@@ -3,6 +3,9 @@ package com.jamiedev.bygone.common.entity.projectile;
 import com.google.common.base.MoreObjects;
 import com.jamiedev.bygone.core.registry.BGEntityTypes;
 import com.jamiedev.bygone.core.registry.BGItems;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.LightningBolt;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -35,17 +38,12 @@ public class ScuttleSpikeEntity  extends AbstractArrow
         super(entityType, world);
     }
 
-    public ScuttleSpikeEntity(Level world, LivingEntity owner, ItemStack stack) {
-        super(BGEntityTypes.SCUTTLE_SPIKE.get(), owner, world, stack, null);
+    public ScuttleSpikeEntity(Level world, LivingEntity owner) {
+        super(BGEntityTypes.SCUTTLE_SPIKE.get(), owner, world);
     }
 
-    public ScuttleSpikeEntity(Level world, double x, double y, double z, ItemStack stack) {
-        super(BGEntityTypes.SCUTTLE_SPIKE.get(), x, y, z, world, stack, stack);
-    }
-
-    @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        super.defineSynchedData(builder);
+    public ScuttleSpikeEntity(Level world, double x, double y, double z) {
+        super(BGEntityTypes.SCUTTLE_SPIKE.get(), x, y, z, world);
     }
 
     @Override
@@ -71,44 +69,32 @@ public class ScuttleSpikeEntity  extends AbstractArrow
     protected void onHitEntity(EntityHitResult entityHitResult) {
         Entity entity = entityHitResult.getEntity();
         float f = 8.0F;
-        Entity entity2 = this.getOwner();
-        DamageSource damageSource = this.damageSources().trident(this, entity2 == null ? this : entity2);
-        Level var7 = this.level();
-        if (var7 instanceof ServerLevel serverWorld) {
-            f = EnchantmentHelper.modifyDamage(serverWorld, Objects.requireNonNull(this.getWeaponItem()), entity, damageSource, f);
-        }
 
+
+        Entity entity1 = this.getOwner();
+        DamageSource damagesource = this.damageSources().trident(this, (Entity)(entity1 == null ? this : entity1));
         this.dealtDamage = true;
-        if (entity.hurt(damageSource, f)) {
+        SoundEvent soundevent = SoundEvents.TRIDENT_HIT;
+        if (entity.hurt(damagesource, f)) {
             if (entity.getType() == EntityType.ENDERMAN) {
                 return;
             }
 
-            var7 = this.level();
-            if (var7 instanceof ServerLevel serverWorld) {
-                serverWorld = (ServerLevel)var7;
-                EnchantmentHelper.doPostAttackEffectsWithItemSource(serverWorld, entity, damageSource, this.getWeaponItem());
-            }
+            if (entity instanceof LivingEntity) {
+                LivingEntity livingentity1 = (LivingEntity)entity;
+                if (entity1 instanceof LivingEntity) {
+                    EnchantmentHelper.doPostHurtEffects(livingentity1, entity1);
+                    EnchantmentHelper.doPostDamageEffects((LivingEntity)entity1, livingentity1);
+                }
 
-            if (entity instanceof LivingEntity livingEntity) {
-                this.doKnockback(livingEntity, damageSource);
-                this.doPostHurtEffects(livingEntity);
-                livingEntity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 200), MoreObjects.firstNonNull(entity2, this));
+                this.doPostHurtEffects(livingentity1);
             }
         }
 
-        this.setDeltaMovement(this.getDeltaMovement().multiply(-0.01, -0.1, -0.01));
-        this.playSound(SoundEvents.GLOW_INK_SAC_USE, 1.0F, 1.0F);
-    }
+        this.setDeltaMovement(this.getDeltaMovement().multiply(-0.01D, -0.1D, -0.01D));
+        float f1 = 1.0F;
 
-    @Override
-    protected void hitBlockEnchantmentEffects(ServerLevel world, BlockHitResult blockHitResult, ItemStack weaponStack) {
-        this.kill();
-    }
-
-    @Override
-    public ItemStack getWeaponItem() {
-        return this.getPickupItemStackOrigin();
+        this.playSound(soundevent, f1, 1.0F);
     }
 
     @Override
@@ -117,7 +103,7 @@ public class ScuttleSpikeEntity  extends AbstractArrow
     }
 
     @Override
-    protected ItemStack getDefaultPickupItem() {
+    protected ItemStack getPickupItem() {
         return new  ItemStack(BGItems.SCUTTLE_SPIKE.get());
     }
 

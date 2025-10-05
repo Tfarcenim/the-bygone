@@ -1,8 +1,8 @@
 package com.jamiedev.bygone.common.entity;
 
 import com.jamiedev.bygone.core.registry.BGSoundEvents;
-import net.minecraft.world.entity.monster.ZombifiedPiglin;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import org.jetbrains.annotations.NotNull;
 import com.google.common.collect.Lists;
 import com.jamiedev.bygone.common.block.entity.CopperbugNestBlockEntity;
@@ -73,7 +73,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.pathfinder.Path;
-import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -96,8 +95,6 @@ public class CopperbugEntity extends Animal implements NeutralMob
     @Nullable
     private UUID angryAt;
 
-    CopperbugEntity ref;
-
     int ticksSinceScraping;
     private int cannotEnterNestTicks;
     private int copperUpdatedSinceScraping;
@@ -116,7 +113,7 @@ public class CopperbugEntity extends Animal implements NeutralMob
 
     public CopperbugEntity(EntityType<? extends Animal> entityType, Level world) {
         super(entityType, world);
-        this.setPathfindingMalus(PathType.WATER, 0.0F);
+        this.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
         this.ticksUntilCanScraping = Mth.nextInt(this.random, 20, 60);
     }
 
@@ -130,9 +127,7 @@ public class CopperbugEntity extends Animal implements NeutralMob
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new EnterNestGoal());
         this.goalSelector.addGoal(1, new CopperbugEntity.AttackGoal());
-        this.goalSelector.addGoal(1, new PanicGoal(this, 2.0, (polarBear) -> {
-            return polarBear.isBaby() ? DamageTypeTags.PANIC_CAUSES : DamageTypeTags.PANIC_ENVIRONMENTAL_CAUSES;
-        }));
+        this.goalSelector.addGoal(1, new PanicGoal(this, 2.0));
         this.goalSelector.addGoal(4, new FollowParentGoal(this, 1.25));
         this.scrapeGoal = new ScrapeGoal(this);
         this.goalSelector.addGoal(4, this.scrapeGoal);
@@ -155,8 +150,8 @@ public class CopperbugEntity extends Animal implements NeutralMob
 
     @Override
     public void readAdditionalSaveData(CompoundTag nbt) {
-        this.nestPos = NbtUtils.readBlockPos(nbt, "nest_pos").orElse(null);
-        this.copperPos = NbtUtils.readBlockPos(nbt, "copper_pos").orElse(null);
+        this.nestPos = NbtUtils.readBlockPos(nbt.getCompound("nest_pos"));
+        this.copperPos = NbtUtils.readBlockPos(nbt.getCompound("copper_pos"));
         super.readAdditionalSaveData(nbt);
         this.setHasOxidization(nbt.getBoolean("HasOxidization"));
         this.ticksSinceScraping = nbt.getInt("TicksSinceScraping");
@@ -193,10 +188,10 @@ public class CopperbugEntity extends Animal implements NeutralMob
 
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        super.defineSynchedData(builder);
-        builder.define(COPPERBUG_FLAGS, (byte)0);
-        builder.define(WARNING, false);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        entityData.define(COPPERBUG_FLAGS, (byte)0);
+        entityData.define(WARNING, false);
     }
 
     @Override
@@ -260,16 +255,15 @@ public class CopperbugEntity extends Animal implements NeutralMob
     }
 
     @Override
-    public EntityDimensions getDefaultDimensions(Pose pose) {
+    public EntityDimensions getDimensions(Pose pose) {
         if (this.warningAnimationProgress > 0.0F) {
             float f = this.warningAnimationProgress / 6.0F;
             float g = 1.0F + f;
-            return super.getDefaultDimensions(pose).scale(1.0F, g);
+            return super.getDimensions(pose).scale(1.0F, g);
         } else {
-            return super.getDefaultDimensions(pose);
+            return super.getDimensions(pose);
         }
     }
-
 
     @Override
     public boolean isFood(ItemStack stack) {
@@ -348,7 +342,7 @@ public class CopperbugEntity extends Animal implements NeutralMob
 
     protected void playWarningSound() {
         if (this.warningSoundCooldown <= 0) {
-            this.makeSound(BGSoundEvents.COPPERBUG_HURT_ADDITIONS_EVENT);
+            this.playSound(BGSoundEvents.COPPERBUG_HURT_ADDITIONS_EVENT);
             this.warningSoundCooldown = 40;
         }
 
@@ -385,7 +379,7 @@ public class CopperbugEntity extends Animal implements NeutralMob
     }
 
     @Override
-    public boolean canBeLeashed() {
+    public boolean canBeLeashed(Player player) {
         return false;
     }
 
@@ -559,8 +553,9 @@ public class CopperbugEntity extends Animal implements NeutralMob
         }
 
         @Override
-        protected void checkAndPerformAttack(LivingEntity target) {
-            if (this.canPerformAttack(target)) {
+        protected void checkAndPerformAttack(LivingEntity target, double distToEnemySq) {
+            double d0 = this.getAttackReachSqr(target);
+            if (distToEnemySq <= d0 ) {
                 this.resetAttackCooldown();
                 this.mob.doHurtTarget(target);
                 CopperbugEntity.this.setWarning(false);
@@ -1033,7 +1028,7 @@ public class CopperbugEntity extends Animal implements NeutralMob
 
         private boolean startMovingToFar(BlockPos pos) {
             CopperbugEntity.this.navigation.setMaxVisitedNodesMultiplier(10.0F);
-            CopperbugEntity.this.navigation.moveTo(pos.getX(), pos.getY(), pos.getZ(), 2, 1.0);
+            CopperbugEntity.this.navigation.moveTo(pos.getX(), pos.getY(), pos.getZ(), 2);
             return CopperbugEntity.this.navigation.getPath() != null && CopperbugEntity.this.navigation.getPath().canReach();
         }
 

@@ -1,7 +1,7 @@
-package com.example.examplemod.platform;
+package com.jamiedev.bygone.platform;
 
-import com.example.examplemod.Constants;
-import com.example.examplemod.platform.services.IPlatformHelper;
+import com.jamiedev.bygone.Constants;
+import com.jamiedev.bygone.platform.services.IPlatformHelper;
 
 import java.util.ServiceLoader;
 

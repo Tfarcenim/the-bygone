@@ -78,15 +78,15 @@ public class PestModel<T extends Entity> extends EntityModel<T> {
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-		head.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-		body.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-		leftFrontLeg.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-		leftMiddleHindLeg.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-		leftHindLeg.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-		rightFrontLeg.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-		rightMiddleHindLeg.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-		rightHindLeg.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float r,float g,float b,float a) {
+		head.render(poseStack, vertexConsumer, packedLight, packedOverlay, r,g,b,a);
+		body.render(poseStack, vertexConsumer, packedLight, packedOverlay, r,g,b,a);
+		leftFrontLeg.render(poseStack, vertexConsumer, packedLight, packedOverlay, r,g,b,a);
+		leftMiddleHindLeg.render(poseStack, vertexConsumer, packedLight, packedOverlay, r,g,b,a);
+		leftHindLeg.render(poseStack, vertexConsumer, packedLight, packedOverlay, r,g,b,a);
+		rightFrontLeg.render(poseStack, vertexConsumer, packedLight, packedOverlay, r,g,b,a);
+		rightMiddleHindLeg.render(poseStack, vertexConsumer, packedLight, packedOverlay, r,g,b,a);
+		rightHindLeg.render(poseStack, vertexConsumer, packedLight, packedOverlay, r,g,b,a);
 	}
 	
 	@Override

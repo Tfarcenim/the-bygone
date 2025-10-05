@@ -72,14 +72,14 @@ public class LithyEntity extends PathfinderMob {
         super(entityType, level);
     }
 
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        super.defineSynchedData(builder);
-        builder.define(DATA_FLAGS_ID, (byte)0);
-        builder.define(DATA_TRIPPED, false);
-        builder.define(DATA_JUMP_UP, false);
-        builder.define(DATA_TRIPPED_TICK, 0);
-        builder.define(DATA_TRIP_COOLDOWN, 1200 + this.random.nextInt(0, 200));
-        builder.define(DATA_TRIPWIRE_TRIP_COOLDOWN, 0);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        entityData.define(DATA_FLAGS_ID, (byte)0);
+        entityData.define(DATA_TRIPPED, false);
+        entityData.define(DATA_JUMP_UP, false);
+        entityData.define(DATA_TRIPPED_TICK, 0);
+        entityData.define(DATA_TRIP_COOLDOWN, 1200 + this.random.nextInt(0, 200));
+        entityData.define(DATA_TRIPWIRE_TRIP_COOLDOWN, 0);
     }
 
     @Override
@@ -105,20 +105,19 @@ public class LithyEntity extends PathfinderMob {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, (double)5.0F)
-                .add(Attributes.MOVEMENT_SPEED, (double)0.25F)
-                .add(Attributes.KNOCKBACK_RESISTANCE, (double)1.0F)
-                .add(Attributes.ATTACK_DAMAGE, (double)15.0F)
-                .add(Attributes.STEP_HEIGHT, (double)1.0F);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 5)
+                .add(Attributes.MOVEMENT_SPEED, 0.25)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 1)
+                .add(Attributes.ATTACK_DAMAGE, 15);
     }
 
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
-        this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, WraithEntity.class, 6.0F, (double)1.0F, 1.2));
+        this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, WraithEntity.class, 6.0F, 1.0F, 1.2));
         this.goalSelector.addGoal(4, new LeapAtTargetGoal(this, 0.4F));
-        this.goalSelector.addGoal(5, new LithyEntity.LithyMeleeAttackGoal(this, (double)1.0F, true));
-        this.goalSelector.addGoal(6, new LithyEntity.LithyFollowMobGoal(this, (double)1.4F, 3.0F, 10.0F));
-        this.goalSelector.addGoal(6, new LithyEntity.LithyFollowPlayerGoal(this, (double)1.4F, 3.0F, 10.0F));
+        this.goalSelector.addGoal(5, new LithyEntity.LithyMeleeAttackGoal(this, 1.0F, true));
+        this.goalSelector.addGoal(6, new LithyEntity.LithyFollowMobGoal(this, 1.4F, 3.0F, 10.0F));
+        this.goalSelector.addGoal(6, new LithyEntity.LithyFollowPlayerGoal(this, 1.4F, 3.0F, 10.0F));
 
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
@@ -187,7 +186,7 @@ public class LithyEntity extends PathfinderMob {
 
             if (this.entityData.get(DATA_JUMP_UP)) {
                 this.entityData.set(DATA_JUMP_UP, false);
-                this.push(new Vec3(0.0, 0.4, 0.0));
+                this.addDeltaMovement(new Vec3(0.0, 0.4, 0.0));
             }
             if (!this.entityData.get(DATA_TRIPPED)) {
                 this.entityData.set(DATA_TRIPWIRE_TRIP_COOLDOWN, this.entityData.get(DATA_TRIPWIRE_TRIP_COOLDOWN) - 1);
@@ -198,7 +197,7 @@ public class LithyEntity extends PathfinderMob {
                     BlockState state = this.level().getBlockState(onPos);
 
                     if (state.is(Blocks.TRIPWIRE) && state.getValue(TripWireBlock.ATTACHED) && this.entityData.get(DATA_TRIPWIRE_TRIP_COOLDOWN) <= 0) {
-                        this.push(this.getDeltaMovement().add(0.0, 0.2, 0.0));
+                        this.addDeltaMovement(new Vec3(0, 0.2, 0.0));
                         this.entityData.set(DATA_TRIPPED, true);
                         this.entityData.set(DATA_TRIP_COOLDOWN, 1200 + this.random.nextInt(0, 200));
                         this.tripwireTrip = true;
@@ -211,7 +210,7 @@ public class LithyEntity extends PathfinderMob {
                         this.entityData.set(DATA_TRIP_COOLDOWN, 1200 + this.random.nextInt(0, 200));
                         this.playTripEffects();
                         if (this.level().getServer() != null) {
-                            LootTable loottable = this.level().getServer().reloadableRegistries().getLootTable(JamiesModLootTables.LITHY_TRIP_LOOT_TABLE);
+                            LootTable loottable = this.level().getServer().getLootData().getLootTable(JamiesModLootTables.LITHY_TRIP_LOOT_TABLE);
                             List<ItemStack> list = loottable.getRandomItems(
                                     new LootParams.Builder((ServerLevel)this.level())
                                             .create(LootContextParamSets.EMPTY)
@@ -439,7 +438,7 @@ public class LithyEntity extends PathfinderMob {
                         return false;
                     } else {
                         this.path = this.lithy.getNavigation().createPath(livingentity, 0);
-                        return this.path != null ? true : this.lithy.isWithinMeleeAttackRange(livingentity);
+                        return this.path != null || this.lithy.isWithinMeleeAttackRange(livingentity);
                     }
                 }
             }
@@ -457,9 +456,7 @@ public class LithyEntity extends PathfinderMob {
                 } else if (!this.followingTargetEvenIfNotSeen) {
                     return !this.lithy.getNavigation().isDone();
                 } else {
-                    return !this.lithy.isWithinRestriction(livingentity.blockPosition())
-                            ? false
-                            : !(livingentity instanceof Player) || !livingentity.isSpectator() && !((Player)livingentity).isCreative();
+                    return this.lithy.isWithinRestriction(livingentity.blockPosition()) && (!(livingentity instanceof Player) || !livingentity.isSpectator() && !((Player) livingentity).isCreative());
                 }
             }
             return false;
@@ -585,7 +582,7 @@ public class LithyEntity extends PathfinderMob {
         @Override
         public boolean canUse() {
             if (!this.lithy.entityData.get(DATA_TRIPPED)) {
-                List<Mob> list = this.lithy.level().getEntitiesOfClass(Mob.class, this.lithy.getBoundingBox().inflate((double)this.areaSize), this.followPredicate);
+                List<Mob> list = this.lithy.level().getEntitiesOfClass(Mob.class, this.lithy.getBoundingBox().inflate(this.areaSize), this.followPredicate);
                 if (!list.isEmpty()) {
                     for (Mob mob : list) {
                         if (!mob.isInvisible()) {
@@ -677,7 +674,7 @@ public class LithyEntity extends PathfinderMob {
 
         public boolean canUse() {
             if (!this.mob.entityData.get(DATA_TRIPPED)) {
-                List<Player> list = this.mob.level().getEntitiesOfClass(Player.class, this.mob.getBoundingBox().inflate((double)this.areaSize), this.followPredicate);
+                List<Player> list = this.mob.level().getEntitiesOfClass(Player.class, this.mob.getBoundingBox().inflate(this.areaSize), this.followPredicate);
                 if (!list.isEmpty()) {
                     for(Player mob : list) {
                         if (!mob.isInvisible()) {

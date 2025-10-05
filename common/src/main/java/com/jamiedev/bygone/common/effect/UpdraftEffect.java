@@ -9,7 +9,6 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Items;
 
 public class UpdraftEffect extends MobEffect {
     
@@ -18,7 +17,7 @@ public class UpdraftEffect extends MobEffect {
     }
     
     @Override
-    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
+    public void applyEffectTick(LivingEntity entity, int amplifier) {
         if (!entity.level().isClientSide && entity instanceof Player player) {
             double upwardVelocity = 0.15 * (amplifier + 1);
             boolean isDescending = player.isShiftKeyDown();
@@ -74,11 +73,10 @@ public class UpdraftEffect extends MobEffect {
             
             entity.resetFallDistance();
         }
-        return true;
     }
-    
+
     @Override
-    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
+    public boolean isDurationEffectTick(int duration, int amplifier) {
         return true;
     }
 }

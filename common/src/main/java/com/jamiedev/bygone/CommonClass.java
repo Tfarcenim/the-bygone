@@ -1,6 +1,6 @@
-package com.example.examplemod;
+package com.jamiedev.bygone;
 
-import com.example.examplemod.platform.Services;
+import com.jamiedev.bygone.platform.Services;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Items;
 

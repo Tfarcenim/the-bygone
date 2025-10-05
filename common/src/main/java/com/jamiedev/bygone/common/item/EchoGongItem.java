@@ -28,6 +28,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -46,12 +47,11 @@ public class EchoGongItem extends Item {
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         if (!level.isClientSide && entity instanceof Player player) {
-            BGDataComponentTypes.EchoGongData data = stack.getOrDefault(BGDataComponents.ECHO_GONG_DATA.value(), BGDataComponentTypes.EchoGongData.EMPTY);
-            int charge = data.charge();
+            int charge = BGDataComponents.getEchoGongData(stack);
             
             if (charge < MAX_CHARGE && !player.getCooldowns().isOnCooldown(this)) {
                 charge = Math.min(charge + CHARGE_PER_TICK, MAX_CHARGE);
-                stack.set(BGDataComponents.ECHO_GONG_DATA.value(), new BGDataComponentTypes.EchoGongData(charge));
+                BGDataComponents.setEchoGongData(stack,charge);
                 
                 if (charge % 20 == 0) {
                     level.playSound(null, player.getX(), player.getY(), player.getZ(),
@@ -78,10 +78,9 @@ public class EchoGongItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
-        BGDataComponentTypes.EchoGongData data = itemStack.getOrDefault(BGDataComponents.ECHO_GONG_DATA.value(), BGDataComponentTypes.EchoGongData.EMPTY);
-        int charge = data.charge();
-        
-        if (charge >= MAX_CHARGE) {
+        int data = BGDataComponents.getEchoGongData(itemStack);
+
+        if (data >= MAX_CHARGE) {
             if (!level.isClientSide) {
                 player.startUsingItem(hand);
                 return InteractionResultHolder.consume(itemStack);
@@ -90,7 +89,7 @@ public class EchoGongItem extends Item {
         } else {
             if (!level.isClientSide) {
                 player.displayClientMessage(
-                    Component.translatable("item.bygone.echo_gong.not_charged", charge, MAX_CHARGE)
+                    Component.translatable("item.bygone.echo_gong.not_charged", data, MAX_CHARGE)
                         .withStyle(ChatFormatting.GRAY), true);
             }
             return InteractionResultHolder.fail(itemStack);
@@ -101,7 +100,7 @@ public class EchoGongItem extends Item {
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity user) {
         if (!level.isClientSide && user instanceof Player player) {
             releaseShockwave(level, player, stack);
-            stack.set(BGDataComponents.ECHO_GONG_DATA.value(), new BGDataComponentTypes.EchoGongData(0));
+            BGDataComponents.setEchoGongData(stack,0);
             
             player.getCooldowns().addCooldown(this, COOLDOWN_TICKS);
             player.awardStat(Stats.ITEM_USED.get(this));
@@ -180,24 +179,23 @@ public class EchoGongItem extends Item {
     private boolean isFragileBlock(BlockState state) {
         return state.canBeReplaced();
     }
-    
+
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+    public void appendHoverText(ItemStack stack, @Nullable Level context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
         
-        BGDataComponentTypes.EchoGongData data = stack.getOrDefault(BGDataComponents.ECHO_GONG_DATA.value(), BGDataComponentTypes.EchoGongData.EMPTY);
-        int charge = data.charge();
-        
+        int data = BGDataComponents.getEchoGongData(stack);
+
         tooltipComponents.add(Component.translatable("item.bygone.echo_gong.desc1")
             .withStyle(ChatFormatting.GRAY));
         tooltipComponents.add(Component.translatable("item.bygone.echo_gong.desc2")
             .withStyle(ChatFormatting.GRAY));
         
-        if (charge >= MAX_CHARGE) {
+        if (data >= MAX_CHARGE) {
             tooltipComponents.add(Component.translatable("item.bygone.echo_gong.ready")
                 .withStyle(ChatFormatting.GREEN));
         } else {
-            int percent = (charge * 100) / MAX_CHARGE;
+            int percent = (data * 100) / MAX_CHARGE;
             tooltipComponents.add(Component.translatable("item.bygone.echo_gong.charge", percent)
                 .withStyle(ChatFormatting.YELLOW));
         }
@@ -205,12 +203,12 @@ public class EchoGongItem extends Item {
     
     @Override
     public boolean isFoil(ItemStack stack) {
-        BGDataComponentTypes.EchoGongData data = stack.getOrDefault(BGDataComponents.ECHO_GONG_DATA.value(), BGDataComponentTypes.EchoGongData.EMPTY);
-        return data.charge() >= MAX_CHARGE;
+        int data = BGDataComponents.getEchoGongData(stack);
+        return data >= MAX_CHARGE;
     }
     
     @Override
-    public int getUseDuration(ItemStack stack, LivingEntity entity) {
+    public int getUseDuration(ItemStack stack) {
         return 20;
     }
     

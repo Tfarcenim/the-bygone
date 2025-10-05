@@ -1,36 +1,28 @@
 package com.jamiedev.bygone.common.block;
 
 import com.jamiedev.bygone.common.block.entity.AmphoraBlockEntity;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.stats.Stats;
-import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.PotDecorations;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -109,34 +101,6 @@ public class AmphoraBlock extends BaseEntityBlock implements SimpleWaterloggedBl
         return RenderShape.MODEL;
     }
 
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-        BlockEntity itemStack1 = level.getBlockEntity(pos);
-        if (itemStack1 instanceof AmphoraBlockEntity AmphoraBlockEntity) {
-            if (stack.is(Items.WATER_BUCKET) && state.getValue(WATER_LEVEL) < 8) {
-                AmphoraBlockEntity.wobble(com.jamiedev.bygone.common.block.entity.AmphoraBlockEntity.WobbleStyle.POSITIVE);
-                doWaterParticles(level, pos);
-                level.playSound(null, pos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
-                updateWaterLevel(level, state.getValue(WATER_LEVEL) + 1, state, pos);
-                level.gameEvent((Entity)null, GameEvent.BLOCK_CHANGE, pos);
-                if (!player.hasInfiniteMaterials())
-                    player.setItemInHand(hand, new ItemStack(Items.BUCKET));
-                return ItemInteractionResult.SUCCESS;
-            } else if (stack.is(Items.BUCKET) && state.getValue(WATER_LEVEL) > 0) {
-                AmphoraBlockEntity.wobble(com.jamiedev.bygone.common.block.entity.AmphoraBlockEntity.WobbleStyle.POSITIVE);
-                doWaterParticles(level, pos);
-                level.playSound(null, pos, SoundEvents.BUCKET_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
-                updateWaterLevel(level, state.getValue(WATER_LEVEL) - 1, state, pos);
-                level.gameEvent((Entity)null, GameEvent.BLOCK_CHANGE, pos);
-                if (!player.hasInfiniteMaterials())
-                    player.setItemInHand(hand, ItemUtils.createFilledResult(stack, player, new ItemStack(Items.WATER_BUCKET)));
-                return ItemInteractionResult.SUCCESS;
-            }
-        } else {
-            return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
-        }
-        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-    }
-
     public static void updateWaterLevel(Level level, int waterLevel, BlockState state, BlockPos pos) {
         BlockState newState = state.setValue(WATER_LEVEL, Integer.valueOf(waterLevel));
         level.setBlockAndUpdate(pos, newState);
@@ -155,8 +119,37 @@ public class AmphoraBlock extends BaseEntityBlock implements SimpleWaterloggedBl
     }
 
 
-    public InteractionResult use(BlockState blockState, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult blockHitResult) {
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult blockHitResult) {
         BlockEntity var7 = level.getBlockEntity(pos);
+        ItemStack stack = player.getItemInHand(hand);
+
+        if (!stack.isEmpty()) {
+            if (var7 instanceof AmphoraBlockEntity AmphoraBlockEntity) {
+                if (stack.is(Items.WATER_BUCKET) && state.getValue(WATER_LEVEL) < 8) {
+                    AmphoraBlockEntity.wobble(com.jamiedev.bygone.common.block.entity.AmphoraBlockEntity.WobbleStyle.POSITIVE);
+                    doWaterParticles(level, pos);
+                    level.playSound(null, pos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
+                    updateWaterLevel(level, state.getValue(WATER_LEVEL) + 1, state, pos);
+                    level.gameEvent(null, GameEvent.BLOCK_CHANGE, pos);
+                    if (!player.getAbilities().instabuild)
+                        player.setItemInHand(hand, new ItemStack(Items.BUCKET));
+                    return InteractionResult.SUCCESS;
+                } else if (stack.is(Items.BUCKET) && state.getValue(WATER_LEVEL) > 0) {
+                    AmphoraBlockEntity.wobble(com.jamiedev.bygone.common.block.entity.AmphoraBlockEntity.WobbleStyle.POSITIVE);
+                    doWaterParticles(level, pos);
+                    level.playSound(null, pos, SoundEvents.BUCKET_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
+                    updateWaterLevel(level, state.getValue(WATER_LEVEL) - 1, state, pos);
+                    level.gameEvent(null, GameEvent.BLOCK_CHANGE, pos);
+                    if (!player.getAbilities().instabuild)
+                        player.setItemInHand(hand, ItemUtils.createFilledResult(stack, player, new ItemStack(Items.WATER_BUCKET)));
+                    return InteractionResult.SUCCESS;
+                }
+            } else {
+                return InteractionResult.PASS;
+            }
+            return InteractionResult.PASS;
+        }
+
         if (var7 instanceof AmphoraBlockEntity AmphoraBlockEntity) {
            // level.playSound(null, pos, SoundEvents.DECORATED_POT_INSERT_FAIL, SoundSource.BLOCKS, 1.0F, 1.0F);
             AmphoraBlockEntity.wobble(com.jamiedev.bygone.common.block.entity.AmphoraBlockEntity.WobbleStyle.NEGATIVE);
@@ -168,7 +161,7 @@ public class AmphoraBlock extends BaseEntityBlock implements SimpleWaterloggedBl
 
     }
 
-    protected boolean isPathfindable(BlockState state, BlockGetter getter, BlockPos pos, PathComputationType type) {
+    public boolean isPathfindable(BlockState state, BlockGetter getter, BlockPos pos, PathComputationType type) {
         return false;
     }
 
@@ -187,15 +180,15 @@ public class AmphoraBlock extends BaseEntityBlock implements SimpleWaterloggedBl
     }
 
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        Containers.dropContentsOnDestroy(state, newState, level, pos);
+       // Containers.dropContents(state, newState, level, pos);
         super.onRemove(state, level, pos, newState, movedByPiston);
     }
 
     public List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
         BlockEntity blockEntity = params.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
-        if (blockEntity instanceof AmphoraBlockEntity AmphoraBlockEntity) {
+        if (blockEntity instanceof AmphoraBlockEntity amphoraBlockEntity) {
             params.withDynamicDrop(SHERDS_DYNAMIC_DROP_ID, (consumer) -> {
-                for (Item item : AmphoraBlockEntity.getDecorations().ordered()) {
+                for (Item item : amphoraBlockEntity.getDecorations().ordered()) {
                     consumer.accept(item.getDefaultInstance());
                 }
             });
@@ -204,25 +197,25 @@ public class AmphoraBlock extends BaseEntityBlock implements SimpleWaterloggedBl
         return super.getDrops(state, params);
     }
 
-    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         ItemStack itemStack = player.getMainHandItem();
         BlockState blockState = state;
         if (itemStack.is(ItemTags.BREAKS_DECORATED_POTS) && !EnchantmentHelper.hasTag(itemStack, EnchantmentTags.PREVENTS_DECORATED_POT_SHATTERING)) {
             blockState = state.setValue(CRACKED, true);
             level.setBlock(pos, blockState, 4);
         }
-        return super.playerWillDestroy(level, pos, blockState, player);
+        super.playerWillDestroy(level, pos, blockState, player);
     }
 
-    protected FluidState getFluidState(BlockState state) {
+    public FluidState getFluidState(BlockState state) {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
-    protected SoundType getSoundType(BlockState state) {
+    public SoundType getSoundType(BlockState state) {
         return state.getValue(CRACKED) ? SoundType.DECORATED_POT_CRACKED : SoundType.DECORATED_POT;
     }
 
-    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+    public void appendHoverText(ItemStack stack, Level context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
         PotDecorations potDecorations = stack.getOrDefault(DataComponents.POT_DECORATIONS, PotDecorations.EMPTY);
         if (!potDecorations.equals(PotDecorations.EMPTY)) {
@@ -231,7 +224,7 @@ public class AmphoraBlock extends BaseEntityBlock implements SimpleWaterloggedBl
         }
     }
 
-    protected void onProjectileHit(Level level, BlockState state, BlockHitResult hit, Projectile projectile) {
+    public void onProjectileHit(Level level, BlockState state, BlockHitResult hit, Projectile projectile) {
         BlockPos blockPos = hit.getBlockPos();
         if (!level.isClientSide && projectile.mayInteract(level, blockPos) && projectile.mayBreak(level)) {
             level.setBlock(blockPos, state.setValue(CRACKED, true), 4);
@@ -239,22 +232,22 @@ public class AmphoraBlock extends BaseEntityBlock implements SimpleWaterloggedBl
         }
     }
 
-    protected boolean hasAnalogOutputSignal(BlockState state) {
+    public boolean hasAnalogOutputSignal(BlockState state) {
         return true;
     }
 
-    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+    public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
         //return AbstractContainerMenu.getRedstoneSignalFromBlockEntity(level.getBlockEntity(pos));
-        return (Integer)state.getValue(WATER_LEVEL);
+        return state.getValue(WATER_LEVEL);
     }
 
-    protected BlockState rotate(BlockState state, Rotation rotation) {
+    public BlockState rotate(BlockState state, Rotation rotation) {
         return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
 
     }
 
     @Override
-    protected boolean useShapeForLightOcclusion(BlockState state) {
+    public boolean useShapeForLightOcclusion(BlockState state) {
         return true;
     }
 

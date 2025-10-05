@@ -1,4 +1,4 @@
-package com.example.examplemod;
+package com.jamiedev.bygone;
 
 import net.fabricmc.api.ModInitializer;
 

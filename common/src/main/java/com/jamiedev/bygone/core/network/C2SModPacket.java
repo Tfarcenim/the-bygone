@@ -1,9 +1,8 @@
 package com.jamiedev.bygone.core.network;
 
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 
-public interface C2SModPacket<T extends FriendlyByteBuf> extends ModPacket<T> {
+public interface C2SModPacket extends ModPacket {
 
     void handleServer(ServerPlayer player);
 

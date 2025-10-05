@@ -79,12 +79,12 @@ public class CopperbugModel<C extends Animal> extends EntityModel<CopperbugEntit
 	}
 	
 	@Override
-	public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, int color) {
-		body1.render(matrices, vertexConsumer, light, overlay, color);
-		body2.render(matrices, vertexConsumer, light, overlay, color);
-		body3.render(matrices, vertexConsumer, light, overlay, color);
-		body4.render(matrices, vertexConsumer, light, overlay, color);
-		pincerRight.render(matrices, vertexConsumer, light, overlay, color);
-		pincerLeft.render(matrices, vertexConsumer, light, overlay, color);
+	public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float r,float g,float b,float a) {
+		body1.render(matrices, vertexConsumer, light, overlay, r,g,b,a);
+		body2.render(matrices, vertexConsumer, light, overlay, r,g,b,a);
+		body3.render(matrices, vertexConsumer, light, overlay, r,g,b,a);
+		body4.render(matrices, vertexConsumer, light, overlay, r,g,b,a);
+		pincerRight.render(matrices, vertexConsumer, light, overlay, r,g,b,a);
+		pincerLeft.render(matrices, vertexConsumer, light, overlay, r,g,b,a);
 	}
 }

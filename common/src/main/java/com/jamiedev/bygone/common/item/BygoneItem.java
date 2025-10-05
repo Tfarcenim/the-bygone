@@ -27,7 +27,7 @@ public class BygoneItem extends Item
 EnderEyeItem ref;
 
     @Override
-    public int getUseDuration(ItemStack stack, LivingEntity user) {
+    public int getUseDuration(ItemStack stack) {
         return 0;
     }
 
@@ -51,7 +51,7 @@ EnderEyeItem ref;
 
                     float f = Mth.lerp(world.random.nextFloat(), 0.33F, 0.5F);
                     world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ENDER_EYE_LAUNCH, SoundSource.NEUTRAL, 1.0F, f);
-                    itemStack.consume(1, user);
+                    itemStack.shrink(1);
                     user.awardStat(Stats.ITEM_USED.get(this));
                     user.swing(hand, true);
                     return InteractionResultHolder.success(itemStack);

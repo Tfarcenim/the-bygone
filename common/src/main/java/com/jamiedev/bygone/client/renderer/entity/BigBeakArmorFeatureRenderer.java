@@ -16,7 +16,6 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.DyedItemColor;
 import com.jamiedev.bygone.common.entity.BigBeakEntity;
 
 public class BigBeakArmorFeatureRenderer extends RenderLayer<BigBeakEntity, BigBeakModel<BigBeakEntity>> {
@@ -31,23 +30,23 @@ public class BigBeakArmorFeatureRenderer extends RenderLayer<BigBeakEntity, BigB
     }
 
     @Override
-    public void render(PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i, BigBeakEntity BigBeakEntity, float f, float g, float h, float j, float k, float l) {
-        ItemStack itemStack = BigBeakEntity.getBodyArmorItem();
+    public void render(PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i, BigBeakEntity bigBeakEntity, float f, float g, float h, float j, float k, float l) {
+        ItemStack itemStack = bigBeakEntity.getArmor();
         Item var13 = itemStack.getItem();
         if (var13 instanceof CustomAnimalArmorItem animalArmorItem) {
             if (animalArmorItem.getBodyType() == CustomAnimalArmorItem.BodyType.BIG_BEAK) {
                 this.getParentModel().copyPropertiesTo(this.model);
-                this.model.prepareMobModel(BigBeakEntity, f, g, h);
-                this.model.setupAnim(BigBeakEntity, f, g, j, k, l);
+                this.model.prepareMobModel(bigBeakEntity, f, g, h);
+                this.model.setupAnim(bigBeakEntity, f, g, j, k, l);
                 int m;
-                if (itemStack.is(ItemTags.DYEABLE)) {
-                    m = FastColor.ARGB32.opaque(DyedItemColor.getOrDefault(itemStack, -6265536));
-                } else {
+           //     if (itemStack.is(ItemTags.DYEABLE)) {
+           //         m = FastColor.ARGB32.opaque(DyedItemColor.getOrDefault(itemStack, -6265536));
+           //     } else {
                     m = -1;
-                }
+           //     }
 
                 VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderType.entityCutoutNoCull(animalArmorItem.getTexture()));
-                this.model.renderToBuffer(matrixStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY, m);
+                this.model.renderToBuffer(matrixStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY, 1,1,1,1);
             }
         }
 

@@ -70,7 +70,6 @@ public class BGEntityTypes {
     public static final Supplier<EntityType<MoobooEntity>> MOOBOO = registerEntityType("mooboo", () ->
             EntityType.Builder.of(MoobooEntity::new, MobCategory.CREATURE)
                 .sized(0.9F, 1.4F)
-                    .eyeHeight(1.3f)
                         .build(""));
 
 
@@ -80,7 +79,7 @@ public class BGEntityTypes {
 
     public static final Supplier<EntityType<ScuttleSpikeEntity>> SCUTTLE_SPIKE = registerEntityType( "scuttle_spike", () ->
             EntityType.Builder.<ScuttleSpikeEntity>of(ScuttleSpikeEntity::new, MobCategory.MISC)
-                    .sized(0.5F, 0.5F).eyeHeight(0.13F)
+                    .sized(0.5F, 0.5F)
                     .clientTrackingRange(4)
 
                     .build("")
@@ -101,38 +100,35 @@ public class BGEntityTypes {
 
     public static final Supplier<EntityType<CopperbugEntity>> COPPERBUG = registerEntityType("copperbug", () ->
             EntityType.Builder.of(CopperbugEntity::new, MobCategory.CREATURE)
-                    .sized(0.4F, 0.3F).eyeHeight(.13f)
+                    .sized(0.4F, 0.3F)
                     .clientTrackingRange(8)
 
                     .build(""));
 
     public static final Supplier<EntityType<CopperbugEntity>> COPPERFLY = registerEntityType("copperfly", () ->
             EntityType.Builder.of(CopperbugEntity::new, MobCategory.CREATURE)
-                    .sized(0.4F, 0.3F).eyeHeight(.13f)
+                    .sized(0.4F, 0.3F)
                     .clientTrackingRange(8)
 
                     .build(""));
 
     public static final Supplier<EntityType<PeskyEntity>> PESKY = registerEntityType("pesky", () ->
             EntityType.Builder.of(PeskyEntity::new, MobCategory.CREATURE)
-                    .sized(0.5F, 0.5F).eyeHeight(.13f)
+                    .sized(0.5F, 0.5F)
                     .clientTrackingRange(8)
                     .build(""));
 
     public static final Supplier<EntityType<PestEntity>> PEST = registerEntityType("pest", () ->
             EntityType.Builder.of(PestEntity::new, MobCategory.CREATURE)
-                    .sized(0.5F, 0.5F).eyeHeight(.13f)
+                    .sized(0.5F, 0.5F)
                     .clientTrackingRange(8)
 
                     .build(""));
 
     public static final Supplier<EntityType<WhiskbillEntity>> WHISKBILL = registerEntityType("whiskbill", () ->
             EntityType.Builder.of(WhiskbillEntity::new, MobCategory.CREATURE)
-                    .sized(1.9F, 1.25F).eyeHeight(1.04f)
+                    .sized(1.9F, 1.25F)
                     .clientTrackingRange(10)
-
-                    .nameTagOffset(2.04F)
-                    .passengerAttachments(2.09F)
                     .build(""));
 
     public static final Supplier<EntityType<NectaurEntity>> NECTAUR = registerEntityType("nectaur", () ->
@@ -146,8 +142,6 @@ public class BGEntityTypes {
     public static final Supplier<EntityType<WispEntity>> WISP = registerEntityType("wisp", () ->
             EntityType.Builder.of(WispEntity::new, MobCategory.CREATURE)
                     .sized(0.35F, 0.35F)
-                    .eyeHeight(0.36F)
-                    .ridingOffset(0.04F)
                     .clientTrackingRange(8)
                     .updateInterval(2)
                     .build(""));

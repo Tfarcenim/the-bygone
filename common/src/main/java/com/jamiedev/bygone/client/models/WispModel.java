@@ -46,7 +46,7 @@ public class WispModel<T extends WispEntity> extends EntityModel<T> {
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-		bb_main.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float r,float g,float b,float a) {
+		bb_main.render(poseStack, vertexConsumer, packedLight, packedOverlay, r,g,b,a);
 	}
 }

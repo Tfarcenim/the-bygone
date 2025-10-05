@@ -5,7 +5,6 @@ import com.jamiedev.bygone.common.block.entity.BlemishSpreadManager;
 import com.jamiedev.bygone.common.block.entity.BlemishSpreadable;
 import com.jamiedev.bygone.core.registry.BGBlocks;
 import com.jamiedev.bygone.core.init.JamiesModTag;
-import com.mojang.serialization.MapCodec;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -35,15 +34,10 @@ import java.util.Collection;
 import java.util.Iterator;
 
 public class BlemishVeinBlock extends MultifaceBlock implements BlemishSpreadable, SimpleWaterloggedBlock {
-    public static final MapCodec<BlemishVeinBlock> CODEC = simpleCodec(BlemishVeinBlock::new);
     private static final BooleanProperty WATERLOGGED;
     private final MultifaceSpreader allGrowTypeGrower;
     private final MultifaceSpreader samePositionOnlyGrower;
 
-    @Override
-    public MapCodec<BlemishVeinBlock> codec() {
-        return CODEC;
-    }
 
     public BlemishVeinBlock(BlockBehaviour.Properties settings) {
         super(settings);
@@ -178,7 +172,7 @@ public class BlemishVeinBlock extends MultifaceBlock implements BlemishSpreadabl
     }
 
     @Override
-    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         if (state.getValue(WATERLOGGED)) {
             world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
         }
@@ -193,12 +187,12 @@ public class BlemishVeinBlock extends MultifaceBlock implements BlemishSpreadabl
     }
 
     @Override
-    protected boolean canBeReplaced(BlockState state, BlockPlaceContext context) {
+    public boolean canBeReplaced(BlockState state, BlockPlaceContext context) {
         return !context.getItemInHand().is(Item.byBlock(BGBlocks.BLEMISH_VEIN.get())) || super.canBeReplaced(state, context);
     }
 
     @Override
-    protected FluidState getFluidState(BlockState state) {
+    public FluidState getFluidState(BlockState state) {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
