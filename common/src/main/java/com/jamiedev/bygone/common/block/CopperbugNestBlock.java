@@ -1,30 +1,29 @@
 package com.jamiedev.bygone.common.block;
 
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import org.jetbrains.annotations.NotNull;
 import com.jamiedev.bygone.common.block.entity.CopperbugNestBlockEntity;
 import com.jamiedev.bygone.common.entity.CopperbugEntity;
 import com.jamiedev.bygone.core.registry.BGBlockEntities;
 import com.jamiedev.bygone.core.registry.BGItems;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.Util;
 import net.minecraft.advancements.CriteriaTriggers;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.EnchantmentTags;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.util.*;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
@@ -35,7 +34,6 @@ import net.minecraft.world.entity.vehicle.MinecartTNT;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameRules;
@@ -71,16 +69,11 @@ import java.util.List;
 public class CopperbugNestBlock extends BaseEntityBlock
 {
 
-    public static final MapCodec<CopperbugNestBlock> CODEC = simpleCodec(CopperbugNestBlock::new);
     public static final DirectionProperty FACING;
     public static final IntegerProperty OXIDIZATION_LEVEL;
     public static final int FULL_OXIDIZATION_LEVEL = 5;
     private static final int DROPPED_HONEYCOMB_COUNT = 3;
 
-    @Override
-    public MapCodec<CopperbugNestBlock> codec() {
-        return CODEC;
-    }
 
     public CopperbugNestBlock(BlockBehaviour.Properties settings) {
         super(settings);
@@ -88,26 +81,28 @@ public class CopperbugNestBlock extends BaseEntityBlock
     }
 
     @Override
-    protected boolean hasAnalogOutputSignal(BlockState state) {
+    public boolean hasAnalogOutputSignal(BlockState state) {
         return true;
     }
 
     @Override
-    protected int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos) {
+    public int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos) {
         return state.getValue(OXIDIZATION_LEVEL);
     }
 
     @Override
-    public void playerDestroy(Level world, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack tool) {
-        super.playerDestroy(world, player, pos, state, blockEntity, tool);
-        if (!world.isClientSide && blockEntity instanceof CopperbugNestBlockEntity beehiveBlockEntity) {
-            if (!EnchantmentHelper.hasTag(tool, EnchantmentTags.PREVENTS_BEE_SPAWNS_WHEN_MINING)) {
-                beehiveBlockEntity.angerCopperbugs(player, state, CopperbugNestBlockEntity.CopperbugState.EMERGENCY);
-                world.updateNeighbourForOutputSignal(pos, this);
-                this.angerNearbyCopperbugs(world, pos);
+    /**
+     * Called after a player has successfully harvested this block. This method will only be called if the player has used the correct tool and drops should be spawned.
+     */
+    public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @javax.annotation.Nullable BlockEntity te, ItemStack stack) {
+        super.playerDestroy(level, player, pos, state, te, stack);
+        if (!level.isClientSide && te instanceof BeehiveBlockEntity beehiveblockentity) {
+            if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, stack) == 0) {
+                beehiveblockentity.emptyAllLivingFromHive(player, state, BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
+                level.updateNeighbourForOutputSignal(pos, this);
+                this.angerNearbyCopperbugs(level, pos);
             }
-
-            CriteriaTriggers.BEE_NEST_DESTROYED.trigger((ServerPlayer)player, state, tool, beehiveBlockEntity.getCopperbugCount());
+            CriteriaTriggers.BEE_NEST_DESTROYED.trigger((ServerPlayer)player, state, stack, beehiveblockentity.getOccupantCount());
         }
 
     }
@@ -143,50 +138,74 @@ public class CopperbugNestBlock extends BaseEntityBlock
     }
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        ItemStack itemstack = player.getItemInHand(hand);
         int i = state.getValue(OXIDIZATION_LEVEL);
-        boolean bl = false;
+        boolean flag = false;
         if (i >= 5) {
-            Item item = stack.getItem();
-            if (stack.is(ItemTags.AXES)) {
-                world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.AXE_SCRAPE, SoundSource.BLOCKS, 1.0F, 1.0F);
-                dropItems(world, pos);
-                stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
-                bl = true;
-                world.gameEvent(player, GameEvent.SHEAR, pos);
-            } else if (stack.is(Items.BUCKET)) {
-                stack.shrink(1);
-                world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BUCKET_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
-                if (stack.isEmpty()) {
-                    player.setItemInHand(hand, new ItemStack(Items.WATER_BUCKET));
-                } else if (!player.getInventory().add(new ItemStack(Items.WATER_BUCKET))) {
-                    player.drop(new ItemStack(Items.WATER_BUCKET), false);
+            Item item = itemstack.getItem();
+            if (itemstack.is(Items.SHEARS)) {
+                level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BEEHIVE_SHEAR, SoundSource.BLOCKS, 1.0F, 1.0F);
+                dropItems(level, pos);
+                itemstack.hurtAndBreak(1, player, (p_49571_) -> {
+                    p_49571_.broadcastBreakEvent(hand);
+                });
+                flag = true;
+                level.gameEvent(player, GameEvent.SHEAR, pos);
+            } else if (itemstack.is(Items.GLASS_BOTTLE)) {
+                itemstack.shrink(1);
+                level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
+                if (itemstack.isEmpty()) {
+                    player.setItemInHand(hand, new ItemStack(Items.HONEY_BOTTLE));
+                } else if (!player.getInventory().add(new ItemStack(Items.HONEY_BOTTLE))) {
+                    player.drop(new ItemStack(Items.HONEY_BOTTLE), false);
                 }
 
-                bl = true;
-                world.gameEvent(player, GameEvent.FLUID_PICKUP, pos);
+                flag = true;
+                level.gameEvent(player, GameEvent.FLUID_PICKUP, pos);
             }
 
-            if (!world.isClientSide() && bl) {
+            if (!level.isClientSide() && flag) {
                 player.awardStat(Stats.ITEM_USED.get(item));
             }
         }
 
-        if (bl) {
-            if (!CampfireBlock.isSmokeyPos(world, pos)) {
-                if (this.hasCopperbugs(world, pos)) {
-                    this.angerNearbyCopperbugs(world, pos);
+        if (flag) {
+            if (!CampfireBlock.isSmokeyPos(level, pos)) {
+                if (this.hiveContainsCopperbugs(level, pos)) {
+                    this.angerNearbyCopperbugs(level, pos);
                 }
 
-                this.takeOxidization(world, state, pos, player, CopperbugNestBlockEntity.CopperbugState.EMERGENCY);
+                this.releaseCopperbugsAndResetHoneyLevel(level, state, pos, player, BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
             } else {
-                this.takeOxidization(world, state, pos);
+                this.resetHoneyLevel(level, state, pos);
             }
 
-            return ItemInteractionResult.sidedSuccess(world.isClientSide);
+            return InteractionResult.sidedSuccess(level.isClientSide);
         } else {
-            return super.useItemOn(stack, state, world, pos, player, hand, hit);
+            return super.use(state, level, pos, player, hand, hit);
         }
+    }
+
+    public void releaseCopperbugsAndResetHoneyLevel(Level level, BlockState state, BlockPos pos, @javax.annotation.Nullable Player player, BeehiveBlockEntity.BeeReleaseStatus beeReleaseStatus) {
+        this.resetHoneyLevel(level, state, pos);
+        BlockEntity blockentity = level.getBlockEntity(pos);
+        if (blockentity instanceof BeehiveBlockEntity beehiveblockentity) {
+            beehiveblockentity.emptyAllLivingFromHive(player, state, beeReleaseStatus);
+        }
+    }
+
+    private boolean hiveContainsCopperbugs(Level level, BlockPos pos) {
+        BlockEntity blockentity = level.getBlockEntity(pos);
+        if (blockentity instanceof CopperbugNestBlockEntity beehiveblockentity) {
+            return !beehiveblockentity.isEmpty();
+        } else {
+            return false;
+        }
+    }
+
+    public void resetHoneyLevel(Level level, BlockState state, BlockPos pos) {
+        level.setBlock(pos, state.setValue(OXIDIZATION_LEVEL, 0), 3);
     }
 
     private boolean hasCopperbugs(Level world, BlockPos pos) {
@@ -198,7 +217,7 @@ public class CopperbugNestBlock extends BaseEntityBlock
         }
     }
 
-    public void takeOxidization(Level world, BlockState state, BlockPos pos, @Nullable Player player, CopperbugNestBlockEntity.CopperbugState beeState) {
+    public void takeOxidization(Level world, BlockState state, BlockPos pos, @Nullable Player player, BeehiveBlockEntity.BeeReleaseStatus beeState) {
         this.takeOxidization(world, state, pos);
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof CopperbugNestBlockEntity beehiveBlockEntity) {
@@ -262,7 +281,7 @@ public class CopperbugNestBlock extends BaseEntityBlock
     }
 
     @Override
-    protected RenderShape getRenderShape(BlockState state) {
+    public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
 
@@ -279,33 +298,40 @@ public class CopperbugNestBlock extends BaseEntityBlock
     }
 
     @Override
-    public BlockState playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
-        if (!world.isClientSide && player.isCreative() && world.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
-            BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof CopperbugNestBlockEntity beehiveBlockEntity) {
+    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+        if (!level.isClientSide && player.isCreative() && level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
+            BlockEntity blockentity = level.getBlockEntity(pos);
+            if (blockentity instanceof CopperbugNestBlockEntity beehiveblockentity) {
+                ItemStack itemstack = new ItemStack(this);
                 int i = state.getValue(OXIDIZATION_LEVEL);
-                boolean bl = !beehiveBlockEntity.hasNoCopperbugs();
-                if (bl || i > 0) {
-                    ItemStack itemStack = new ItemStack(this);
-                    itemStack.applyComponents(beehiveBlockEntity.collectComponents());
-                    itemStack.set(DataComponents.BLOCK_STATE, BlockItemStateProperties.EMPTY.with(OXIDIZATION_LEVEL, i));
-                    ItemEntity itemEntity = new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), itemStack);
-                    itemEntity.setDefaultPickUpDelay();
-                    world.addFreshEntity(itemEntity);
+                boolean flag = !beehiveblockentity.isEmpty();
+                if (flag || i > 0) {
+                    if (flag) {
+                        CompoundTag compoundtag = new CompoundTag();
+                        compoundtag.put("Bees", beehiveblockentity.writeCopperbugs());
+                        BlockItem.setBlockEntityData(itemstack, BlockEntityType.BEEHIVE, compoundtag);
+                    }
+
+                    CompoundTag compoundtag1 = new CompoundTag();
+                    compoundtag1.putInt("honey_level", i);
+                    itemstack.addTagElement("BlockStateTag", compoundtag1);
+                    ItemEntity itementity = new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), itemstack);
+                    itementity.setDefaultPickUpDelay();
+                    level.addFreshEntity(itementity);
                 }
             }
         }
 
-        return super.playerWillDestroy(world, pos, state, player);
+        super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override
-    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
+    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         Entity entity = builder.getOptionalParameter(LootContextParams.THIS_ENTITY);
         if (entity instanceof PrimedTnt || entity instanceof Creeper || entity instanceof WitherSkull || entity instanceof WitherBoss || entity instanceof MinecartTNT) {
             BlockEntity blockEntity = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
             if (blockEntity instanceof CopperbugNestBlockEntity beehiveBlockEntity) {
-                beehiveBlockEntity.angerCopperbugs(null, state, CopperbugNestBlockEntity.CopperbugState.EMERGENCY);
+                beehiveBlockEntity.angerCopperbugs(null, state, BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
             }
         }
 
@@ -313,11 +339,11 @@ public class CopperbugNestBlock extends BaseEntityBlock
     }
 
     @Override
-    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         if (world.getBlockState(neighborPos).getBlock() instanceof FireBlock) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof CopperbugNestBlockEntity beehiveBlockEntity) {
-                beehiveBlockEntity.angerCopperbugs(null, state, CopperbugNestBlockEntity.CopperbugState.EMERGENCY);
+                beehiveBlockEntity.angerCopperbugs(null, state, BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
             }
         }
 

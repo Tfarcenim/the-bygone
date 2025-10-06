@@ -7,9 +7,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -22,13 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import net.minecraft.world.phys.BlockHitResult;
 
 public class AncientCaveVinesHeadBlock extends GrowingPlantHeadBlock implements BonemealableBlock, AncientCaveVines {
-    public static final MapCodec<AncientCaveVinesHeadBlock> CODEC = simpleCodec(AncientCaveVinesHeadBlock::new);
     private static final float GROW_CHANCE = 0.11F;
-
-    @Override
-    public MapCodec<AncientCaveVinesHeadBlock> codec() {
-        return CODEC;
-    }
 
     public AncientCaveVinesHeadBlock(BlockBehaviour.Properties settings) {
         super(settings, Direction.DOWN, SHAPE, false, 0.1);
@@ -60,14 +56,15 @@ public class AncientCaveVinesHeadBlock extends GrowingPlantHeadBlock implements 
         return super.getGrowIntoState(state, random).setValue(BERRIES, random.nextFloat() < 0.11F);
     }
 
+
     @Override
-    public ItemStack getCloneItemStack(LevelReader world, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
         return new ItemStack(BGBlocks.CAVE_VINES_PLANT.get());
     }
 
     @Override
-    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
-        return AncientCaveVines.pickBerries(player, state, world, pos);
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        return AncientCaveVines.pickBerries(player, state, level, pos);
     }
 
     @Override
@@ -77,7 +74,7 @@ public class AncientCaveVinesHeadBlock extends GrowingPlantHeadBlock implements 
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state) {
+    public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state,boolean b) {
         return !(Boolean)state.getValue(BERRIES);
     }
 

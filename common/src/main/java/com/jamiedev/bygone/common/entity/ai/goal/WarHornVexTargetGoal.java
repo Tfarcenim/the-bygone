@@ -51,7 +51,7 @@ public class WarHornVexTargetGoal extends NearestAttackableTargetGoal<Monster> {
             for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
                 ItemStack stack = player.getInventory().getItem(i);
                 if (stack.getItem() == BGItems.MALICIOUS_WAR_HORN.get()) {
-                    MaliciousWarHornItem.WarHornData data = stack.getOrDefault(BGDataComponents.WAR_HORN_DATA.value(), MaliciousWarHornItem.WarHornData.EMPTY);
+                    MaliciousWarHornItem.WarHornData data = BGDataComponents.getWarHornData(stack,true);
                     if (data.activeVexes().contains(vex.getUUID())) {
                         warHornVexChecked = true;
                         isWarHornVexCached = true;

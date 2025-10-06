@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class AbandonedFarmGenerator
 {
-    private static final ResourceLocation[] FOSSILS = new ResourceLocation[]{ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID, "abandoned_farm_1")};
+    private static final ResourceLocation[] FOSSILS = new ResourceLocation[]{Bygone.id("abandoned_farm_1")};
 
     public AbandonedFarmGenerator() {
     }

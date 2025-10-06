@@ -231,7 +231,7 @@ public class GlareEntity extends Animal implements FlyingAnimal
             if (!this.navigation.isInProgress())
             {
                 double hoverY = Math.sin(this.tickCount * 0.1) * 0.02;
-                this.push(new Vec3(0, hoverY, 0));
+                this.addDeltaMovement(new Vec3(0, hoverY, 0));
             }
             else
             {
@@ -347,7 +347,8 @@ public class GlareEntity extends Animal implements FlyingAnimal
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData,
+    CompoundTag dataTag) {
         RandomSource random = this.random;
         int i = random.nextInt(8);
         if (i < 2 && random.nextFloat() < 0.5F * difficulty.getSpecialMultiplier()) {
@@ -356,7 +357,7 @@ public class GlareEntity extends Animal implements FlyingAnimal
 
         int j = 1 << i;
         this.setSize(j);
-        return super.finalizeSpawn(world, difficulty, spawnReason, entityData);
+        return super.finalizeSpawn(world, difficulty, spawnReason, entityData,dataTag);
     }
 
     public static boolean checkAnimalSpawnRules(EntityType<? extends Animal> type, LevelAccessor serverWorldAccess, MobSpawnType spawnReason, BlockPos blockPos, @NotNull RandomSource random) {
@@ -373,7 +374,7 @@ public class GlareEntity extends Animal implements FlyingAnimal
     public static boolean canSpawn(EntityType<? extends Mob> glareEntityEntityType, ServerLevelAccessor serverWorldAccess, MobSpawnType spawnReason, BlockPos blockPos, @NotNull RandomSource random) {
        return serverWorldAccess.getBlockState(blockPos.below()).is(Blocks.MOSS_BLOCK)
                || serverWorldAccess.getBlockState(blockPos).is(Blocks.MOSS_CARPET)
-               || serverWorldAccess.getBlockState(blockPos).is(Blocks.SHORT_GRASS)
+               || serverWorldAccess.getBlockState(blockPos).is(Blocks.GRASS)
                || serverWorldAccess.getBlockState(blockPos).is(Blocks.TALL_GRASS)
                || serverWorldAccess.getBlockState(blockPos.below()).is(BGBlocks.MOSSY_CLAYSTONE.get());
     }

@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class AmberPyramidGenerator
 {
-    private static final ResourceLocation[] FOSSILS = new ResourceLocation[]{ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID, "amber_pyramid")};
+    private static final ResourceLocation[] FOSSILS = new ResourceLocation[]{Bygone.id("amber_pyramid")};
 
     public AmberPyramidGenerator() {
     }

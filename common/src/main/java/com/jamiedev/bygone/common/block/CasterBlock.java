@@ -45,7 +45,6 @@ import java.util.List;
 
 public class CasterBlock extends BaseEntityBlock implements BlockEntityTicker<CasterBlockEntity>
 {
-    public static final MapCodec<CasterBlock> CODEC = simpleCodec(CasterBlock::new);
     public static final DirectionProperty FACING = DirectionalBlock.FACING;
     public static final BooleanProperty TRIGGERED = BlockStateProperties.POWERED;
     public static final EnumProperty<CasterType> TYPE = EnumProperty.create("caster_type", CasterType.class);
@@ -56,23 +55,18 @@ public class CasterBlock extends BaseEntityBlock implements BlockEntityTicker<Ca
     }
 
     @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
-
-    @Override
     public BlockState getStateForPlacement(BlockPlaceContext ctx) {
         return this.defaultBlockState().setValue(FACING, ctx.getNearestLookingDirection().getOpposite());
     }
 
     @Override
-    protected void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean moved) {
+    public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean moved) {
         Containers.dropContentsOnDestroy(state, newState, world, pos);
         super.onRemove(state, world, pos, newState, moved);
     }
 
     @Override
-    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
+    public InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
         if (world.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
@@ -97,17 +91,17 @@ public class CasterBlock extends BaseEntityBlock implements BlockEntityTicker<Ca
     }
 
     @Override
-    protected RenderShape getRenderShape(BlockState state) {
+    public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rotation) {
+    public BlockState rotate(BlockState state, Rotation rotation) {
         return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
     }
 
     @Override
-    protected BlockState mirror(BlockState state, Mirror mirror) {
+    public BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
@@ -117,7 +111,7 @@ public class CasterBlock extends BaseEntityBlock implements BlockEntityTicker<Ca
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {
+    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {
         boolean bl = world.hasNeighborSignal(pos) || world.hasNeighborSignal(pos.above());
         boolean bl2 = state.getValue(TRIGGERED);
         if (bl && !bl2) {
@@ -128,12 +122,12 @@ public class CasterBlock extends BaseEntityBlock implements BlockEntityTicker<Ca
     }
 
     @Override
-    protected boolean hasAnalogOutputSignal(BlockState state) {
+    public boolean hasAnalogOutputSignal(BlockState state) {
         return true;
     }
 
     @Override
-    protected int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos) {
+    public int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos) {
         BlockEntity entity = world.getBlockEntity(pos);
         if (entity instanceof CasterBlockEntity casterBlockEntity && casterBlockEntity.cooldownTicks > 0) {
             return (int) Math.max(Math.min(Math.round((double) casterBlockEntity.cooldownTicks / 6), 15), 1);

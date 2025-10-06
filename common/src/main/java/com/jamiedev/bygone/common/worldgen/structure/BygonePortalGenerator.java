@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class BygonePortalGenerator 
 {
-    private static final ResourceLocation[] PORTAL = new ResourceLocation[]{ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID, "bygone_portal/bygone_portal")};
+    private static final ResourceLocation[] PORTAL = new ResourceLocation[]{Bygone.id( "bygone_portal/bygone_portal")};
     
 
     public static void addPieces(StructureTemplateManager manager, StructurePieceAccessor holder, @NotNull RandomSource random, BlockPos pos) {

@@ -26,8 +26,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class BygoneFossilGenerator 
 {
-    private static final ResourceLocation[] FOSSILS = new ResourceLocation[]{ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID, "bygone_fossil/bygone_fossil_1"), ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID, "bygone_fossil/bygone_fossil_2"),
-            ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID, "bygone_fossil/bygone_fossil_3"), ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID, "bygone_fossil/bygone_fossil_4"),
+    private static final ResourceLocation[] FOSSILS = new ResourceLocation[]{Bygone.id( "bygone_fossil/bygone_fossil_1"), Bygone.id( "bygone_fossil/bygone_fossil_2"),
+            Bygone.id( "bygone_fossil/bygone_fossil_3"), Bygone.id( "bygone_fossil/bygone_fossil_4"),
             ResourceLocation.withDefaultNamespace("nether_fossils/fossil_1"), ResourceLocation.withDefaultNamespace("nether_fossils/fossil_2"), ResourceLocation.withDefaultNamespace("nether_fossils/fossil_3"), ResourceLocation.withDefaultNamespace("nether_fossils/fossil_4"), ResourceLocation.withDefaultNamespace("nether_fossils/fossil_5"), ResourceLocation.withDefaultNamespace("nether_fossils/fossil_6"), ResourceLocation.withDefaultNamespace("nether_fossils/fossil_7"), ResourceLocation.withDefaultNamespace("nether_fossils/fossil_8"), ResourceLocation.withDefaultNamespace("nether_fossils/fossil_9"), ResourceLocation.withDefaultNamespace("nether_fossils/fossil_10"), ResourceLocation.withDefaultNamespace("nether_fossils/fossil_11"), ResourceLocation.withDefaultNamespace("nether_fossils/fossil_12"), ResourceLocation.withDefaultNamespace("nether_fossils/fossil_13"), ResourceLocation.withDefaultNamespace("nether_fossils/fossil_14")};
     public BygoneFossilGenerator() {
     }

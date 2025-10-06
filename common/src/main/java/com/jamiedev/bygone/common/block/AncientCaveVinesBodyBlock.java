@@ -10,6 +10,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -23,12 +24,6 @@ import org.jetbrains.annotations.NotNull;
 import net.minecraft.world.phys.BlockHitResult;
 
 public class AncientCaveVinesBodyBlock  extends GrowingPlantBodyBlock implements BonemealableBlock, AncientCaveVines {
-    public static final MapCodec<AncientCaveVinesBodyBlock> CODEC = simpleCodec(AncientCaveVinesBodyBlock::new);
-
-    @Override
-    public MapCodec<AncientCaveVinesBodyBlock> codec() {
-        return CODEC;
-    }
 
     public AncientCaveVinesBodyBlock(BlockBehaviour.Properties settings) {
         super(settings, Direction.DOWN, SHAPE, false);
@@ -46,7 +41,7 @@ public class AncientCaveVinesBodyBlock  extends GrowingPlantBodyBlock implements
     }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader world, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
         return new ItemStack(BGBlocks.CAVE_VINES_PLANT.get());
     }
 
@@ -61,7 +56,7 @@ public class AncientCaveVinesBodyBlock  extends GrowingPlantBodyBlock implements
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state) {
+    public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state,boolean b) {
         return !(Boolean)state.getValue(BERRIES);
     }
 

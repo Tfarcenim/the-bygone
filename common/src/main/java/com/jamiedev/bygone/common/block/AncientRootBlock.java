@@ -18,13 +18,7 @@ import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.Nullable;
 
 public class AncientRootBlock  extends Block implements SimpleWaterloggedBlock {
-    public static final MapCodec<AncientRootBlock> CODEC = simpleCodec(AncientRootBlock::new);
     public static final BooleanProperty WATERLOGGED;
-
-    @Override
-    public MapCodec<AncientRootBlock> codec() {
-        return CODEC;
-    }
 
     public AncientRootBlock(BlockBehaviour.Properties settings) {
         super(settings);
@@ -32,7 +26,7 @@ public class AncientRootBlock  extends Block implements SimpleWaterloggedBlock {
     }
 
     @Override
-    protected boolean skipRendering(BlockState state, BlockState stateFrom, Direction direction) {
+    public boolean skipRendering(BlockState state, BlockState stateFrom, Direction direction) {
         return stateFrom.is(BGBlocks.ANCIENT_ROOTS.get()) && direction.getAxis() == Direction.Axis.Y;
     }
 
@@ -45,7 +39,7 @@ public class AncientRootBlock  extends Block implements SimpleWaterloggedBlock {
     }
 
     @Override
-    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         if (state.getValue(WATERLOGGED)) {
             world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
         }
@@ -54,7 +48,7 @@ public class AncientRootBlock  extends Block implements SimpleWaterloggedBlock {
     }
 
     @Override
-    protected FluidState getFluidState(BlockState state) {
+    public FluidState getFluidState(BlockState state) {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 

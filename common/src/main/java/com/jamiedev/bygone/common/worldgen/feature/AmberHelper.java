@@ -1,6 +1,5 @@
 package com.jamiedev.bygone.common.worldgen.feature;
 
-import com.jamiedev.bygone.common.block.PointedAmberBlock;
 import com.jamiedev.bygone.core.registry.BGBlocks;
 import java.util.function.Consumer;
 import net.minecraft.core.BlockPos;
@@ -10,6 +9,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.PointedDripstoneBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DripstoneThickness;
 
@@ -84,7 +84,7 @@ public class AmberHelper
             BlockPos.MutableBlockPos mutable = pos.mutable();
             getAmberThickness(direction, height, merge, (state) -> {
                 if (state.is(BGBlocks.POINTED_AMBER.get())) {
-                    state = state.setValue(PointedAmberBlock.WATERLOGGED, world.isWaterAt(mutable));
+                    state = state.setValue(PointedDripstoneBlock.WATERLOGGED, world.isWaterAt(mutable));
                 }
 
                 world.setBlock(mutable, state, 2);
@@ -104,7 +104,7 @@ public class AmberHelper
     }
 
     private static BlockState getState(Direction direction, DripstoneThickness thickness) {
-        return BGBlocks.POINTED_AMBER.get().defaultBlockState().setValue(PointedAmberBlock.VERTICAL_DIRECTION, direction).setValue(PointedAmberBlock.THICKNESS, thickness);
+        return BGBlocks.POINTED_AMBER.get().defaultBlockState().setValue(PointedDripstoneBlock.TIP_DIRECTION, direction).setValue(PointedDripstoneBlock.THICKNESS, thickness);
     }
 
     public static boolean canReplaceOrLava(BlockState state) {

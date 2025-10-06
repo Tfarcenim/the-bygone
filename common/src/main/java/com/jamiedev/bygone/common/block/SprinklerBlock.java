@@ -8,7 +8,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -32,7 +32,6 @@ import java.util.Iterator;
 
 public class SprinklerBlock extends BaseEntityBlock {
     public static final VoxelShape SHAPE= Block.box(5.0F, 0.0F, 5.0F, 11.0F, 6.0F, 11.0F);
-    public static final MapCodec<SprinklerBlock> CODEC = simpleCodec(SprinklerBlock::new);
    // public static final IntProperty FERTILIZERS;
     public static final IntegerProperty AGE;
     RandomSource random;
@@ -47,17 +46,12 @@ public class SprinklerBlock extends BaseEntityBlock {
 
 
     @Override
-    protected VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
 
     @Override
-    protected MapCodec<SprinklerBlock> codec() {
-        return CODEC;
-    }
-
-    @Override
-    protected RenderShape getRenderShape(BlockState state) {
+    public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
 
@@ -92,23 +86,26 @@ public class SprinklerBlock extends BaseEntityBlock {
     }
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (isFertilizerItem(stack)) {
-            stack.consume(1, player);
-            if (isCropsNearby(world, pos))
-            {
-                if (world.random.nextInt(4) == 1) {
-                    for(int i = 1; i <= 2; ++i) {
+    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        ItemStack stack = player.getItemInHand(hand);
 
-                        for(BlockPos blockPos : BlockPos.betweenClosed(pos.offset(-15, 0, -15), pos.offset(15, 1, 15))) {
-                            BlockState blockState = world.getBlockState(blockPos);
-                            Block block = blockState.getBlock();
-                            if (block instanceof AmaranthCropBlock cropBlock) {
-                                if (world.random.nextFloat() <= 0.3 && !cropBlock.isMaxAge(blockState)) {
-                                    if (world instanceof ServerLevel) {
-                                        if (cropBlock.isBonemealSuccess(world, world.random, blockPos, blockState)) {
-                                            cropBlock.performBonemeal((ServerLevel)world, world.random, blockPos, blockState);
-                                            world.levelEvent(1505, blockPos, 15);
+        if (!stack.isEmpty()) {
+            if (isFertilizerItem(stack)) {
+                stack.shrink(1);
+                if (isCropsNearby(world, pos)) {
+                    if (world.random.nextInt(4) == 1) {
+                        for (int i = 1; i <= 2; ++i) {
+
+                            for (BlockPos blockPos : BlockPos.betweenClosed(pos.offset(-15, 0, -15), pos.offset(15, 1, 15))) {
+                                BlockState blockState = world.getBlockState(blockPos);
+                                Block block = blockState.getBlock();
+                                if (block instanceof AmaranthCropBlock cropBlock) {
+                                    if (world.random.nextFloat() <= 0.3 && !cropBlock.isMaxAge(blockState)) {
+                                        if (world instanceof ServerLevel) {
+                                            if (cropBlock.isBonemealSuccess(world, world.random, blockPos, blockState)) {
+                                                cropBlock.performBonemeal((ServerLevel) world, world.random, blockPos, blockState);
+                                                world.levelEvent(1505, blockPos, 15);
+                                            }
                                         }
                                     }
                                 }
@@ -116,12 +113,13 @@ public class SprinklerBlock extends BaseEntityBlock {
                         }
                     }
                 }
-            }
 
-            return ItemInteractionResult.sidedSuccess(world.isClientSide);
-        } else {
-            return hand == InteractionHand.MAIN_HAND && canFertilize(state) ? ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+                return InteractionResult.sidedSuccess(world.isClientSide);
+            } else {
+                return hand == InteractionHand.MAIN_HAND && canFertilize(state) ? InteractionResult.CONSUME: InteractionResult.PASS;
+            }
         }
+        return InteractionResult.PASS;
     }
 
     @Override

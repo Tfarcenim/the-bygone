@@ -31,7 +31,6 @@ import org.jetbrains.annotations.Nullable;
 
 public class CrinoidBlock  extends BushBlock implements BonemealableBlock, LiquidBlockContainer
 {
-    public static final MapCodec<CrinoidBlock> CODEC = simpleCodec(CrinoidBlock::new);
     protected static final VoxelShape SHAPE;
     FlowerBlock modelRef;
     PrimordialVentBlock waterloggableref;
@@ -43,14 +42,9 @@ public class CrinoidBlock  extends BushBlock implements BonemealableBlock, Liqui
     }
 
     @Override
-    protected VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         Vec3 vec3d = state.getOffset(world, pos);
         return SHAPE.move(vec3d.x, vec3d.y, vec3d.z);
-    }
-
-    @Override
-    protected MapCodec<? extends CrinoidBlock> codec() {
-        return CODEC;
     }
 
     @Override
@@ -66,7 +60,7 @@ public class CrinoidBlock  extends BushBlock implements BonemealableBlock, Liqui
     }
 
     @Override
-    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         BlockState blockState = super.updateShape(state, direction, neighborState, world, pos, neighborPos);
         if (!blockState.isAir()) {
             world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
@@ -76,7 +70,7 @@ public class CrinoidBlock  extends BushBlock implements BonemealableBlock, Liqui
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state) {
+    public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state,boolean b) {
         return true;
     }
 
@@ -86,7 +80,7 @@ public class CrinoidBlock  extends BushBlock implements BonemealableBlock, Liqui
     }
 
     @Override
-    protected FluidState getFluidState(BlockState state) {
+    public FluidState getFluidState(BlockState state) {
         return Fluids.WATER.getSource(false);
     }
 
@@ -96,7 +90,7 @@ public class CrinoidBlock  extends BushBlock implements BonemealableBlock, Liqui
     }
 
     @Override
-    public boolean canPlaceLiquid(@Nullable Player player, BlockGetter world, BlockPos pos, BlockState state, Fluid fluid) {
+    public boolean canPlaceLiquid(BlockGetter level, BlockPos pos, BlockState state, Fluid fluid) {
         return false;
     }
 

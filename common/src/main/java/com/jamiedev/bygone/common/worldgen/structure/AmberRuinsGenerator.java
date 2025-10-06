@@ -26,8 +26,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class AmberRuinsGenerator
 {
-    private static final ResourceLocation[] FOSSILS = new ResourceLocation[]{ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID, "amber_ruins_1"), ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID, "amber_ruins_2"),
-            ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID, "amber_ruins_3"), ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID, "amber_ruins_4"), ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID, "amber_ruins_5")};
+    private static final ResourceLocation[] FOSSILS = new ResourceLocation[]{Bygone.id( "amber_ruins_1"), Bygone.id( "amber_ruins_2"),
+            Bygone.id( "amber_ruins_3"), Bygone.id( "amber_ruins_4"), Bygone.id( "amber_ruins_5")};
 
     public AmberRuinsGenerator() {
     }

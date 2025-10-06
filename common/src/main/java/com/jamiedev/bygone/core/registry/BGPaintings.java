@@ -3,7 +3,6 @@ package com.jamiedev.bygone.core.registry;
 import com.jamiedev.bygone.Bygone;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
-import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.decoration.PaintingVariant;
 
@@ -16,7 +15,7 @@ public class BGPaintings
     }
 
     private static void register(BootstapContext<PaintingVariant> registry, ResourceKey<PaintingVariant> key, int width, int height) {
-        registry.register(key, new PaintingVariant(width, height, key.location()));
+        registry.register(key, new PaintingVariant(width, height));
     }
 
     private static ResourceKey<PaintingVariant> of(String id) {

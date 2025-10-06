@@ -1,7 +1,6 @@
 package com.jamiedev.bygone.common.block;
 
 import com.jamiedev.bygone.core.registry.BGParticleTypes;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
@@ -15,12 +14,6 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class AncientLeavesBlock extends LeavesBlock
 {
-    public static final MapCodec<AncientLeavesBlock> CODEC = simpleCodec(AncientLeavesBlock::new);
-
-    @Override
-    public MapCodec<AncientLeavesBlock> codec() {
-        return CODEC;
-    }
 
     public AncientLeavesBlock(BlockBehaviour.Properties settings) {
         super(settings);

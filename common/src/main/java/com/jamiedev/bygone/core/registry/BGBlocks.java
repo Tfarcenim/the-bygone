@@ -548,7 +548,7 @@ Blocks ref;
                 return 2;
             })));
 
-    public static final Supplier<Block> POINTED_AMBER = registerBlock("pointed_amber", () -> new PointedAmberBlock2(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BROWN).forceSolidOn()
+    public static final Supplier<Block> POINTED_AMBER = registerBlock("pointed_amber", () -> new PointedDripstoneBlock(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BROWN).forceSolidOn()
             .instrument(NoteBlockInstrument.BASEDRUM).noOcclusion().sound(SoundType.POINTED_DRIPSTONE).randomTicks()
             .strength(1.5F, 3.0F).dynamicShape()
             .offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.DESTROY).isRedstoneConductor(Blocks::never)));

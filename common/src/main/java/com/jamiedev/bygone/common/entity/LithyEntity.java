@@ -1,6 +1,5 @@
 package com.jamiedev.bygone.common.entity;
 
-import com.jamiedev.bygone.common.entity.ai.FollowPlayerGoal;
 import com.jamiedev.bygone.core.init.JamiesModLootTables;
 import com.jamiedev.bygone.core.registry.BGBlocks;
 import com.jamiedev.bygone.core.registry.BGSoundEvents;
@@ -36,14 +35,13 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.TripWireBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.Path;
-import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 import net.minecraft.world.entity.PathfinderMob;
 
 import java.util.EnumSet;
@@ -53,7 +51,9 @@ import java.util.function.Predicate;
 
 public class LithyEntity extends PathfinderMob {
     Wolf test;
-    IronGolem ref;
+
+    /** @see IronGolem
+     */
 
     protected static final EntityDataAccessor<Byte> DATA_FLAGS_ID;
     protected static final EntityDataAccessor<Boolean> DATA_TRIPPED;
@@ -205,7 +205,7 @@ public class LithyEntity extends PathfinderMob {
                     }
 
                     else if (this.entityData.get(DATA_TRIP_COOLDOWN) <= 0 && this.random.nextFloat() < 0.1) {
-                        this.push(this.getDeltaMovement().add(0.0, 0.2, 0.0));
+                        this.addDeltaMovement(new Vec3(0.0, 0.2, 0.0));
                         this.entityData.set(DATA_TRIPPED, true);
                         this.entityData.set(DATA_TRIP_COOLDOWN, 1200 + this.random.nextInt(0, 200));
                         this.playTripEffects();
@@ -318,8 +318,8 @@ public class LithyEntity extends PathfinderMob {
         return this.getDeltaMovement().horizontalDistanceSqr() > (double)2.5000003E-7F && this.random.nextInt(5) == 0;
     }
 
-    public Crackiness.Level getCrackiness() {
-        return Crackiness.GOLEM.byFraction(this.getHealth() / this.getMaxHealth());
+    public IronGolem.Crackiness getCrackiness() {
+        return IronGolem.Crackiness.byFraction(this.getHealth() / this.getMaxHealth());
     }
 
     private void playTripEffects() {
@@ -359,7 +359,7 @@ public class LithyEntity extends PathfinderMob {
     }
 
     public boolean hurt(DamageSource source, float amount) {
-        Crackiness.Level crackiness$level = this.getCrackiness();
+        IronGolem.Crackiness crackiness$level = this.getCrackiness();
         boolean flag = super.hurt(source, amount);
         if (flag && this.getCrackiness() != crackiness$level) {
             this.playSound(SoundEvents.DEEPSLATE_BRICKS_BREAK, 1.0F, 1.0F);
@@ -607,15 +607,15 @@ public class LithyEntity extends PathfinderMob {
         @Override
         public void start() {
             this.timeToRecalcPath = 0;
-            this.oldWaterCost = this.lithy.getPathfindingMalus(PathType.WATER);
-            this.lithy.setPathfindingMalus(PathType.WATER, 0.0F);
+            this.oldWaterCost = this.lithy.getPathfindingMalus(BlockPathTypes.WATER);
+            this.lithy.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
         }
 
         @Override
         public void stop() {
             this.followingMob = null;
             this.navigation.stop();
-            this.lithy.setPathfindingMalus(PathType.WATER, this.oldWaterCost);
+            this.lithy.setPathfindingMalus(BlockPathTypes.WATER, this.oldWaterCost);
         }
 
         @Override
@@ -694,14 +694,14 @@ public class LithyEntity extends PathfinderMob {
 
         public void start() {
             this.timeToRecalcPath = 0;
-            this.oldWaterCost = this.mob.getPathfindingMalus(PathType.WATER);
-            this.mob.setPathfindingMalus(PathType.WATER, 0.0F);
+            this.oldWaterCost = this.mob.getPathfindingMalus(BlockPathTypes.WATER);
+            this.mob.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
         }
 
         public void stop() {
             this.followingMob = null;
             this.navigation.stop();
-            this.mob.setPathfindingMalus(PathType.WATER, this.oldWaterCost);
+            this.mob.setPathfindingMalus(BlockPathTypes.WATER, this.oldWaterCost);
         }
 
         public void tick() {

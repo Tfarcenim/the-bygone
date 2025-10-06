@@ -76,6 +76,6 @@ public class MoobooRenderer extends MobRenderer<MoobooEntity, MoobooModel<Mooboo
         this.model.prepareMobModel(entity, p, o, g);
         this.model.setupAnim(entity, p, o, n, k, m);
         matrixStack.popPose();
-        model.renderToBuffer(matrixStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY, color);
+        model.renderToBuffer(matrixStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY,1,1,1,1);
     }
 }

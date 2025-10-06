@@ -29,8 +29,8 @@ SalmonRenderer ref;
     //}
 
     @Override
-    protected void setupRotations(CoelacanthEntity salmonEntity, PoseStack matrixStack, float f, float g, float h, float i) {
-        super.setupRotations(salmonEntity, matrixStack, f, g, h, i);
+    protected void setupRotations(CoelacanthEntity salmonEntity, PoseStack matrixStack, float f, float g, float h) {
+        super.setupRotations(salmonEntity, matrixStack, f, g, h);
         float j = 1.0F;
         float k = 1.0F;
         if (!salmonEntity.isInWater()) {

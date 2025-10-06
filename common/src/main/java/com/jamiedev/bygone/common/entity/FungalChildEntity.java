@@ -59,7 +59,9 @@ import java.util.UUID;
 public class FungalChildEntity extends FungalParentEntity
 {
 
-    EnderMan ref;
+    /**
+     * @see EnderMan
+     */
 
     private static final EntityDataAccessor<Boolean> WARNING;
     private static final float field_30352 = 6.0F;
@@ -91,9 +93,7 @@ public class FungalChildEntity extends FungalParentEntity
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new FungalChildEntity.AttackGoal());
-        this.goalSelector.addGoal(1, new PanicGoal(this, 4.0, (polarBear) -> {
-            return polarBear.isBaby() ? DamageTypeTags.PANIC_CAUSES : DamageTypeTags.PANIC_ENVIRONMENTAL_CAUSES;
-        }));
+        this.goalSelector.addGoal(1, new PanicGoal(this, 4.0));
         this.goalSelector.addGoal(4, new FollowParentGoal(this, 1.25));
         this.goalSelector.addGoal(5, new RandomStrollGoal(this, 0.5));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 63.0F));
@@ -179,16 +179,16 @@ public class FungalChildEntity extends FungalParentEntity
     @Override
     protected void playWarningSound() {
         if (this.warningSoundCooldown <= 0) {
-            this.makeSound(SoundEvents.POLAR_BEAR_WARNING);
+            this.playSound(SoundEvents.POLAR_BEAR_WARNING);
             this.warningSoundCooldown = 40;
         }
 
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        super.defineSynchedData(builder);
-        builder.define(WARNING, false);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        entityData.define(WARNING, false);
     }
 
     @Override
@@ -249,12 +249,12 @@ public class FungalChildEntity extends FungalParentEntity
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData,@Nullable CompoundTag dataTag) {
         if (entityData == null) {
             entityData = new AgeableMobGroupData(1.0F);
         }
 
-        return super.finalizeSpawn(world, difficulty, spawnReason, entityData);
+        return super.finalizeSpawn(world, difficulty, spawnReason, entityData,dataTag);
     }
 
     static {
@@ -268,8 +268,9 @@ public class FungalChildEntity extends FungalParentEntity
         }
 
         @Override
-        protected void checkAndPerformAttack(LivingEntity target) {
-            if (this.canPerformAttack(target)) {
+        protected void checkAndPerformAttack(LivingEntity target,double distSq) {
+            double d0 = this.getAttackReachSqr(target);
+            if (d0 <= distSq) {
                 this.resetAttackCooldown();
                 this.mob.doHurtTarget(target);
                 FungalChildEntity.this.setWarning(false);

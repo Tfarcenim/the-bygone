@@ -824,6 +824,14 @@ public class CopperbugEntity extends Animal implements NeutralMob
             return Optional.empty();
         }
     }
+
+    public boolean hasSavedFlowerPos() {
+        return copperPos != null;
+    }
+
+    public void setSavedFlowerPos(BlockPos flowerPos) {
+        this.copperPos = flowerPos;
+    }
     
     class EnterNestGoal extends Goal {
         EnterNestGoal() {
@@ -858,7 +866,7 @@ public class CopperbugEntity extends Animal implements NeutralMob
         public void start() {
             BlockEntity blockEntity = CopperbugEntity.this.level().getBlockEntity(CopperbugEntity.this.nestPos);
             if (blockEntity instanceof CopperbugNestBlockEntity beenestBlockEntity) {
-                beenestBlockEntity.tryEnterNest(CopperbugEntity.this);
+                beenestBlockEntity.addOccupant(CopperbugEntity.this,hasOxidization());
             }
 
         }

@@ -21,7 +21,7 @@ public class VerdigrisBowItem extends BowItem {
     }
 
     @Override
-    public int getUseDuration(ItemStack stack, LivingEntity user) {
+    public int getUseDuration(ItemStack stack) {
         return 72000;
     }
 
@@ -38,24 +38,17 @@ public class VerdigrisBowItem extends BowItem {
         if (user instanceof Player playerEntity) {
             ItemStack itemStack = playerEntity.getProjectile(stack);
             if (!itemStack.isEmpty()) {
-                List<ItemStack> list = draw(stack, itemStack, playerEntity);
+               /* List<ItemStack> list = draw(stack, itemStack, playerEntity);
                 if (world instanceof ServerLevel serverWorld) {
                     if (!list.isEmpty()) {
                         this.shoot(serverWorld, playerEntity, playerEntity.getUsedItemHand(), stack, list, 1 * 3.0F, 1.0F, false, null);
                     }
-                }
+                }todo*/
 
                 world.playSound(null, playerEntity.getX(), playerEntity.getY(), playerEntity.getZ(), SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F / (world.getRandom().nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
                 playerEntity.awardStat(Stats.ITEM_USED.get(this));
             }
         }
-    }
-
-    @Override
-    protected Projectile createProjectile(Level level, LivingEntity shooter, ItemStack weapon, ItemStack ammo, boolean isCrit) {
-        AbstractArrow projectile = (AbstractArrow) super.createProjectile(level, shooter, weapon, ammo, isCrit);
-        projectile.setBaseDamage(projectile.getBaseDamage() * 0.1);
-        return projectile;
     }
 
     @Override

@@ -16,10 +16,10 @@ public class CustomAnimalArmorItem extends ArmorItem {
     private final ResourceLocation overlayTextureLocation;
     private final BodyType bodyType;
 
-    public CustomAnimalArmorItem(Holder<ArmorMaterial> armorMaterial, BodyType bodyType, boolean hasOverlay, Item.Properties properties) {
-        super(armorMaterial, ArmorItem.Type.BODY, properties);
+    public CustomAnimalArmorItem(ArmorMaterial armorMaterial, BodyType bodyType, boolean hasOverlay, Item.Properties properties) {
+        super(armorMaterial,Type.CHESTPLATE, properties);
         this.bodyType = bodyType;
-        ResourceLocation resourcelocation = bodyType.textureLocator.apply(armorMaterial.unwrapKey().orElseThrow().location());
+        ResourceLocation resourcelocation = bodyType.textureLocator.apply(new ResourceLocation(armorMaterial.getName()));
         this.textureLocation = resourcelocation.withSuffix(".png");
         if (hasOverlay) {
             this.overlayTextureLocation = resourcelocation.withSuffix("_overlay.png");
@@ -41,10 +41,6 @@ public class CustomAnimalArmorItem extends ArmorItem {
         return this.bodyType;
     }
 
-    @Override
-    public SoundEvent getBreakingSound() {
-        return this.bodyType.breakingSound;
-    }
 
     /**
      * Checks isDamagable and if it cannot be stacked

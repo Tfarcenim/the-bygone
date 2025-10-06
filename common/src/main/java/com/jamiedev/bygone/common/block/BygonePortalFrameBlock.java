@@ -29,7 +29,6 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class BygonePortalFrameBlock extends Block {
-    public static final MapCodec<BygonePortalFrameBlock> CODEC = simpleCodec(BygonePortalFrameBlock::new);
     public static final DirectionProperty FACING;
     public static final BooleanProperty EYE;
     protected static final VoxelShape FRAME_SHAPE;
@@ -37,10 +36,6 @@ public class BygonePortalFrameBlock extends Block {
     protected static final VoxelShape FRAME_WITH_EYE_SHAPE;
     private static BlockPattern COMPLETED_FRAME;
 
-    @Override
-    public MapCodec<BygonePortalFrameBlock> codec() {
-        return CODEC;
-    }
 
     public BygonePortalFrameBlock(BlockBehaviour.Properties settings) {
         super(settings);
@@ -48,12 +43,12 @@ public class BygonePortalFrameBlock extends Block {
     }
 
     @Override
-    protected boolean useShapeForLightOcclusion(BlockState state) {
+    public boolean useShapeForLightOcclusion(BlockState state) {
         return true;
     }
 
     @Override
-    protected VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return state.getValue(EYE) ? FRAME_WITH_EYE_SHAPE : FRAME_SHAPE;
     }
 
@@ -63,22 +58,22 @@ public class BygonePortalFrameBlock extends Block {
     }
 
     @Override
-    protected boolean hasAnalogOutputSignal(BlockState state) {
+    public boolean hasAnalogOutputSignal(BlockState state) {
         return true;
     }
 
     @Override
-    protected int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos) {
+    public int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos) {
         return state.getValue(EYE) ? 15 : 0;
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rotation) {
+    public BlockState rotate(BlockState state, Rotation rotation) {
         return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
     }
 
     @Override
-    protected BlockState mirror(BlockState state, Mirror mirror) {
+    public BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
@@ -96,10 +91,9 @@ public class BygonePortalFrameBlock extends Block {
     }
 
     @Override
-    protected boolean isPathfindable(BlockState state, PathComputationType type) {
+    public boolean isPathfindable(BlockState state, BlockGetter level, BlockPos pos, PathComputationType type) {
         return false;
     }
-
 
     static {
         FACING = HorizontalDirectionalBlock.FACING;

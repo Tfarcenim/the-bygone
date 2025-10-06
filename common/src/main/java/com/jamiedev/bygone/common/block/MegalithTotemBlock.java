@@ -3,11 +3,10 @@
     import com.jamiedev.bygone.common.block.entity.MegalithTotemEntity;
     import com.jamiedev.bygone.core.registry.BGBlockEntities;
     import com.jamiedev.bygone.core.registry.BGItems;
-    import com.mojang.serialization.MapCodec;
     import net.minecraft.core.BlockPos;
     import net.minecraft.core.Direction;
     import net.minecraft.world.InteractionHand;
-    import net.minecraft.world.ItemInteractionResult;
+    import net.minecraft.world.InteractionResult;
     import net.minecraft.world.SimpleContainer;
     import net.minecraft.world.entity.player.Player;
     import net.minecraft.world.item.ItemStack;
@@ -27,7 +26,6 @@
     import org.jetbrains.annotations.Nullable;
 
     public class MegalithTotemBlock extends BaseEntityBlock {
-        public static final MapCodec<MegalithTotemBlock> CODEC = simpleCodec(MegalithTotemBlock::new);
         public static final VoxelShape SHAPE;
 
         public static final DirectionProperty FACING = DirectionProperty.create("facing", Direction.Plane.HORIZONTAL);
@@ -37,17 +35,12 @@
         }
 
         @Override
-        protected VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+        public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
             return SHAPE;
         }
 
         @Override
-        protected MapCodec<? extends BaseEntityBlock> codec() {
-            return CODEC;
-        }
-
-        @Override
-        protected RenderShape getRenderShape(BlockState state) {
+        public RenderShape getRenderShape(BlockState state) {
             return RenderShape.MODEL;
         }
 
@@ -69,41 +62,45 @@
 
         @Deprecated
         @Override
-        protected BlockState rotate(BlockState state, Rotation rotation) {
+        public BlockState rotate(BlockState state, Rotation rotation) {
             return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
         }
 
         @Deprecated
         @Override
-        protected BlockState mirror(BlockState state, Mirror mirror) {
+        public BlockState mirror(BlockState state, Mirror mirror) {
             return state.rotate(mirror.getRotation(state.getValue(FACING)));
         }
 
         @Override
-        protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+            ItemStack stack = player.getItemInHand(hand);
 
-            if (!level.isClientSide && stack.is(BGItems.LITHOPLASM.get())) {
+            if (!stack.isEmpty()) {
+                if (!level.isClientSide && stack.is(BGItems.LITHOPLASM.get())) {
 
-                BlockEntity be = level.getBlockEntity(pos);
-                if (be instanceof MegalithTotemEntity totem) {
-                    SimpleContainer inv = totem.getInventory();
-                    ItemStack slotStack = inv.getItem(0);
-                    if (slotStack.isEmpty() || slotStack.is(BGItems.LITHOPLASM.get())) {
-                        if (slotStack.isEmpty()) {
-                            inv.setItem(0, stack.copyWithCount(1));
-                            stack.shrink(1);
-                        } else if (slotStack.getCount() < slotStack.getMaxStackSize()) {
-                            slotStack.grow(1);
-                            stack.shrink(1);
+                    BlockEntity be = level.getBlockEntity(pos);
+                    if (be instanceof MegalithTotemEntity totem) {
+                        SimpleContainer inv = totem.getInventory();
+                        ItemStack slotStack = inv.getItem(0);
+                        if (slotStack.isEmpty() || slotStack.is(BGItems.LITHOPLASM.get())) {
+                            if (slotStack.isEmpty()) {
+                                inv.setItem(0, stack.copyWithCount(1));
+                                stack.shrink(1);
+                            } else if (slotStack.getCount() < slotStack.getMaxStackSize()) {
+                                slotStack.grow(1);
+                                stack.shrink(1);
+                            }
+                            MegalithTotemEntity.tick(level, pos, state, totem);
                         }
-                        MegalithTotemEntity.tick(level, pos, state, totem);
                     }
+
+
+                    return InteractionResult.sidedSuccess(false);
                 }
-
-
-                return ItemInteractionResult.sidedSuccess(false);
+                return InteractionResult.PASS;
             }
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            return InteractionResult.PASS;
         }
 
         @Override

@@ -13,21 +13,15 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class CreosoteBlock extends BushBlock {
-    public static final MapCodec<CreosoteBlock> CODEC = simpleCodec(CreosoteBlock::new);
     protected static final float field_31080 = 6.0F;
     protected static final VoxelShape SHAPE = Block.box(2.0, 0.0, 2.0, 14.0, 13.0, 14.0);
-
-    @Override
-    public MapCodec<CreosoteBlock> codec() {
-        return CODEC;
-    }
 
     public CreosoteBlock(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
     @Override
-    protected VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
 

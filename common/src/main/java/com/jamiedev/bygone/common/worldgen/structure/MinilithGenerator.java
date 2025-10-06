@@ -25,15 +25,15 @@ import org.jetbrains.annotations.NotNull;
 
 public class MinilithGenerator
 {
-    private static final ResourceLocation[] FOSSILS = new ResourceLocation[]{ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID, 
-            "miniliths/minilith_1x2"), ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID,
-            "miniliths/minilith_1x3"), ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID,
-            "miniliths/minilith_1x4"), ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID,
-            "miniliths/minilith_1x5"), ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID,
-            "miniliths/minilith_2x"), ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID,
-            "miniliths/minilith_cluster_1"), ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID,
-            "miniliths/minilith_cluster_2"), ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID,
-            "miniliths/minilith_fallen_1x4"), ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID,
+    private static final ResourceLocation[] FOSSILS = new ResourceLocation[]{Bygone.id( 
+            "miniliths/minilith_1x2"), Bygone.id(
+            "miniliths/minilith_1x3"), Bygone.id(
+            "miniliths/minilith_1x4"), Bygone.id(
+            "miniliths/minilith_1x5"), Bygone.id(
+            "miniliths/minilith_2x"), Bygone.id(
+            "miniliths/minilith_cluster_1"), Bygone.id(
+            "miniliths/minilith_cluster_2"), Bygone.id(
+            "miniliths/minilith_fallen_1x4"), Bygone.id(
             "miniliths/minilith_fallen_1x7")};
     public MinilithGenerator() {
     }

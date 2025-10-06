@@ -26,14 +26,8 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import org.jetbrains.annotations.Nullable;
 
 public class BlemishCatalystBlock  extends BaseEntityBlock {
-    public static final MapCodec<BlemishCatalystBlock> CODEC = simpleCodec(BlemishCatalystBlock::new);
     public static final BooleanProperty BLOOM;
     private final IntProvider experience = ConstantInt.of(5);
-
-    @Override
-    public MapCodec<BlemishCatalystBlock> codec() {
-        return CODEC;
-    }
 
     public BlemishCatalystBlock(BlockBehaviour.Properties settings) {
         super(settings);
@@ -46,7 +40,7 @@ public class BlemishCatalystBlock  extends BaseEntityBlock {
     }
 
     @Override
-    protected void tick(BlockState state, ServerLevel world, BlockPos pos, @NotNull RandomSource random) {
+    public void tick(BlockState state, ServerLevel world, BlockPos pos, @NotNull RandomSource random) {
         if (state.getValue(BLOOM)) {
             world.setBlock(pos, state.setValue(BLOOM, false), 3);
         }
@@ -66,12 +60,12 @@ public class BlemishCatalystBlock  extends BaseEntityBlock {
     }
 
     @Override
-    protected RenderShape getRenderShape(BlockState state) {
+    public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
 
     @Override
-    protected void spawnAfterBreak(BlockState state, ServerLevel world, BlockPos pos, ItemStack tool, boolean dropExperience) {
+    public void spawnAfterBreak(BlockState state, ServerLevel world, BlockPos pos, ItemStack tool, boolean dropExperience) {
         super.spawnAfterBreak(state, world, pos, tool, dropExperience);
         if (dropExperience) {
             this.tryDropExperience(world, pos, tool, this.experience);

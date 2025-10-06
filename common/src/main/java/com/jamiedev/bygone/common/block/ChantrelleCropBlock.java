@@ -2,7 +2,6 @@ package com.jamiedev.bygone.common.block;
 
 import com.jamiedev.bygone.core.registry.BGBlocks;
 import com.jamiedev.bygone.core.registry.BGItems;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
@@ -25,21 +24,19 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import java.util.Iterator;
 
 public class ChantrelleCropBlock extends BushBlock implements BonemealableBlock {
-    public static final MapCodec<ChantrelleCropBlock> CODEC = simpleCodec(ChantrelleCropBlock::new);
-    public static final IntegerProperty AGE;
-    private static final VoxelShape[] SHAPE_BY_AGE;
-
-
-    public MapCodec<? extends ChantrelleCropBlock> codec() {
-        return CODEC;
-    }
+    public static final IntegerProperty AGE = BlockStateProperties.AGE_3;
+    private static final VoxelShape[] SHAPE_BY_AGE = new VoxelShape[]{
+            Block.box(5.0F, 0.0F, 5.0F, 11.0F, 7.0F, 11.0F),
+            Block.box(5.0F, 0.0F, 5.0F, 11.0F, 8.0F, 11.0F),
+            Block.box(5.0F, 0.0F, 5.0F, 11.0F, 9.0F, 11.0F),
+            Block.box(5.0F, 0.0F, 5.0F, 11.0F, 10.0F, 11.0F),};
 
     public ChantrelleCropBlock(BlockBehaviour.Properties properties) {
         super(properties);
-        this.registerDefaultState((BlockState)((BlockState)this.stateDefinition.any()).setValue(this.getAgeProperty(), 0));
+        this.registerDefaultState(this.stateDefinition.any().setValue(this.getAgeProperty(), 0));
     }
 
-    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPE_BY_AGE[this.getAge(state)];
     }
 
@@ -56,22 +53,22 @@ public class ChantrelleCropBlock extends BushBlock implements BonemealableBlock 
     }
 
     public int getAge(BlockState state) {
-        return (Integer)state.getValue(this.getAgeProperty());
+        return state.getValue(this.getAgeProperty());
     }
 
     public BlockState getStateForAge(int age) {
-        return (BlockState)this.defaultBlockState().setValue(this.getAgeProperty(), age);
+        return this.defaultBlockState().setValue(this.getAgeProperty(), age);
     }
 
     public boolean isMaxAge(BlockState state) {
         return this.getAge(state) >= this.getMaxAge();
     }
 
-    protected boolean isRandomlyTicking(BlockState state) {
+    public boolean isRandomlyTicking(BlockState state) {
         return !this.isMaxAge(state);
     }
 
-    protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (level.getRawBrightness(pos, 0) <= 12) {
             int i = this.getAge(state);
             if (i < this.getMaxAge()) {
@@ -94,7 +91,7 @@ public class ChantrelleCropBlock extends BushBlock implements BonemealableBlock 
                             if (level.random.nextFloat() <= 0.3 && !cropBlock.isMaxAge(blockState)) {
                                 if (level instanceof ServerLevel) {
                                     if (cropBlock.isBonemealSuccess(level, level.random, blockPos, blockState)) {
-                                        cropBlock.performBonemeal((ServerLevel)level, level.random, blockPos, blockState);
+                                        cropBlock.performBonemeal(level, level.random, blockPos, blockState);
                                         level.levelEvent(1505, blockPos, 15);
                                     }
                                 }
@@ -178,7 +175,7 @@ public class ChantrelleCropBlock extends BushBlock implements BonemealableBlock 
         return f;
     }
 
-    protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         return hasSufficientLight(level, pos) && super.canSurvive(state, level, pos);
     }
 
@@ -186,7 +183,7 @@ public class ChantrelleCropBlock extends BushBlock implements BonemealableBlock 
         return level.getRawBrightness(pos, 0) <= 11;
     }
 
-    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+    public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
         if (entity instanceof Ravager && level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
             level.destroyBlock(pos, true, entity);
         }
@@ -202,7 +199,7 @@ public class ChantrelleCropBlock extends BushBlock implements BonemealableBlock 
         return new ItemStack(this.getBaseSeedId());
     }
 
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state,boolean b) {
         return !this.isMaxAge(state);
     }
 
@@ -215,15 +212,6 @@ public class ChantrelleCropBlock extends BushBlock implements BonemealableBlock 
     }
 
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(new Property[]{AGE});
-    }
-
-    static {
-        AGE = BlockStateProperties.AGE_3;
-        SHAPE_BY_AGE = new VoxelShape[]{
-                Block.box((double)5.0F, (double)0.0F, (double)5.0F, (double)11.0F, (double)7.0F, (double)11.0F),
-                Block.box((double)5.0F, (double)0.0F, (double)5.0F, (double)11.0F, (double)8.0F, (double)11.0F),
-                Block.box((double)5.0F, (double)0.0F, (double)5.0F, (double)11.0F, (double)9.0F, (double)11.0F),
-                Block.box((double)5.0F, (double)0.0F, (double)5.0F, (double)11.0F, (double)10.0F, (double)11.0F),};
+        builder.add(AGE);
     }
 }

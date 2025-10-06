@@ -1,16 +1,12 @@
 package com.jamiedev.bygone.common.entity.ai;
 
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.TamableAnimal;
-import net.minecraft.world.entity.ai.control.LookControl;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.pathfinder.PathType;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -64,14 +60,14 @@ public class FollowPlayerGoal extends Goal
 
     public void start() {
         this.timeToRecalcPath = 0;
-        this.oldWaterCost = this.mob.getPathfindingMalus(PathType.WATER);
-        this.mob.setPathfindingMalus(PathType.WATER, 0.0F);
+        this.oldWaterCost = this.mob.getPathfindingMalus(BlockPathTypes.WATER);
+        this.mob.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
     }
 
     public void stop() {
         this.followingMob = null;
         this.navigation.stop();
-        this.mob.setPathfindingMalus(PathType.WATER, this.oldWaterCost);
+        this.mob.setPathfindingMalus(BlockPathTypes.WATER, this.oldWaterCost);
     }
 
     public void tick() {

@@ -26,10 +26,10 @@ import org.jetbrains.annotations.NotNull;
 
 public class AncientRootGenerator
 {
-    private static final ResourceLocation[] FOSSILS = new ResourceLocation[]{ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID, "ancient_roots_1"),
-            ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID, "ancient_roots_2"), ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID,"ancient_roots_3"),
-            ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID,"ancient_roots_4"), ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID,"ancient_roots_5"),
-            ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID,"ancient_roots_6")};
+    private static final ResourceLocation[] FOSSILS = new ResourceLocation[]{Bygone.id( "ancient_roots_1"),
+            Bygone.id( "ancient_roots_2"), Bygone.id("ancient_roots_3"),
+            Bygone.id("ancient_roots_4"), Bygone.id("ancient_roots_5"),
+            Bygone.id("ancient_roots_6")};
 
     public AncientRootGenerator() {
     }

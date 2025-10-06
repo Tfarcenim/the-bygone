@@ -3,14 +3,11 @@ package com.jamiedev.bygone.common.block;
 import com.jamiedev.bygone.core.init.JamiesModTag;
 import com.jamiedev.bygone.core.registry.BGBlocks;
 import com.jamiedev.bygone.core.registry.BGSoundEvents;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -30,13 +27,11 @@ import net.minecraft.world.level.block.state.pattern.BlockPattern;
 import net.minecraft.world.level.block.state.pattern.BlockPatternBuilder;
 import net.minecraft.world.level.block.state.predicate.BlockStatePredicate;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.block.state.properties.Property;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
 
 public class MegalithLanternBlock extends HorizontalDirectionalBlock {
-    public static final MapCodec<MegalithLanternBlock> CODEC = simpleCodec(MegalithLanternBlock::new);
     public static final DirectionProperty FACING;
     @Nullable
     private BlockPattern snowGolemBase;
@@ -48,16 +43,12 @@ public class MegalithLanternBlock extends HorizontalDirectionalBlock {
     private BlockPattern ironGolemFull;
     private static final Predicate<BlockState> PUMPKINS_PREDICATE;
 
-    public MapCodec<? extends MegalithLanternBlock> codec() {
-        return CODEC;
-    }
-
     public MegalithLanternBlock(BlockBehaviour.Properties properties) {
         super(properties);
-        this.registerDefaultState((BlockState)((BlockState)this.stateDefinition.any()).setValue(FACING, Direction.NORTH));
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
-    protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
+    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
         if (!oldState.is(state.getBlock())) {
             this.trySpawnGolem(level, pos);
         }
@@ -70,7 +61,7 @@ public class MegalithLanternBlock extends HorizontalDirectionalBlock {
             if (blockState1.is(JamiesModTag.MEGALITH_BLOCKS) || blockState.is(JamiesModTag.MEGALITH_BLOCKS) ||
             blockState1.is(BGBlocks.MEGALITH_BLOCK.get()) || blockState.is(BGBlocks.MEGALITH_BLOCK.get())
                     || blockState1.is(BGBlocks.CRACKED_MEGALITH_BLOCK.get())|| blockState.is(BGBlocks.CRACKED_MEGALITH_BLOCK.get())) {
-                level.playLocalSound((double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), BGSoundEvents.BLOCK_MEGALITH_BLOCK_IDLE_ADDITIONS_EVENT, SoundSource.AMBIENT, 1.0F, 1.0F, false);
+                level.playLocalSound(pos.getX(), pos.getY(), pos.getZ(), BGSoundEvents.BLOCK_MEGALITH_BLOCK_IDLE_ADDITIONS_EVENT, SoundSource.AMBIENT, 1.0F, 1.0F, false);
             }
         }
 
@@ -83,14 +74,14 @@ public class MegalithLanternBlock extends HorizontalDirectionalBlock {
     private void trySpawnGolem(Level level, BlockPos pos) {
         BlockPattern.BlockPatternMatch blockPatternMatch = this.getOrCreateSnowGolemFull().find(level, pos);
         if (blockPatternMatch != null) {
-            SnowGolem snowGolem = (SnowGolem) EntityType.SNOW_GOLEM.create(level);
+            SnowGolem snowGolem = EntityType.SNOW_GOLEM.create(level);
             if (snowGolem != null) {
                 spawnGolemInWorld(level, blockPatternMatch, snowGolem, blockPatternMatch.getBlock(0, 2, 0).getPos());
             }
         } else {
             BlockPattern.BlockPatternMatch blockPatternMatch2 = this.getOrCreateIronGolemFull().find(level, pos);
             if (blockPatternMatch2 != null) {
-                IronGolem ironGolem = (IronGolem)EntityType.IRON_GOLEM.create(level);
+                IronGolem ironGolem = EntityType.IRON_GOLEM.create(level);
                 if (ironGolem != null) {
                     ironGolem.setPlayerCreated(true);
                     spawnGolemInWorld(level, blockPatternMatch2, ironGolem, blockPatternMatch2.getBlock(1, 2, 0).getPos());
@@ -105,7 +96,7 @@ public class MegalithLanternBlock extends HorizontalDirectionalBlock {
         golem.moveTo((double)pos.getX() + (double)0.5F, (double)pos.getY() + 0.05, (double)pos.getZ() + (double)0.5F, 0.0F, 0.0F);
         level.addFreshEntity(golem);
 
-        for(ServerPlayer serverPlayer : level.getEntitiesOfClass(ServerPlayer.class, golem.getBoundingBox().inflate((double)5.0F))) {
+        for(ServerPlayer serverPlayer : level.getEntitiesOfClass(ServerPlayer.class, golem.getBoundingBox().inflate(5.0F))) {
             CriteriaTriggers.SUMMONED_ENTITY.trigger(serverPlayer, golem);
         }
 
@@ -134,16 +125,16 @@ public class MegalithLanternBlock extends HorizontalDirectionalBlock {
     }
 
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return (BlockState)this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(new Property[]{FACING});
+        builder.add(FACING);
     }
 
     private BlockPattern getOrCreateSnowGolemBase() {
         if (this.snowGolemBase == null) {
-            this.snowGolemBase = BlockPatternBuilder.start().aisle(new String[]{" ", "#", "#"}).where('#', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.SNOW_BLOCK))).build();
+            this.snowGolemBase = BlockPatternBuilder.start().aisle(" ", "#", "#").where('#', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.SNOW_BLOCK))).build();
         }
 
         return this.snowGolemBase;
@@ -151,7 +142,7 @@ public class MegalithLanternBlock extends HorizontalDirectionalBlock {
 
     private BlockPattern getOrCreateSnowGolemFull() {
         if (this.snowGolemFull == null) {
-            this.snowGolemFull = BlockPatternBuilder.start().aisle(new String[]{"^", "#", "#"}).where('^', BlockInWorld.hasState(PUMPKINS_PREDICATE)).where('#', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.SNOW_BLOCK))).build();
+            this.snowGolemFull = BlockPatternBuilder.start().aisle("^", "#", "#").where('^', BlockInWorld.hasState(PUMPKINS_PREDICATE)).where('#', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.SNOW_BLOCK))).build();
         }
 
         return this.snowGolemFull;
@@ -159,7 +150,7 @@ public class MegalithLanternBlock extends HorizontalDirectionalBlock {
 
     private BlockPattern getOrCreateIronGolemBase() {
         if (this.ironGolemBase == null) {
-            this.ironGolemBase = BlockPatternBuilder.start().aisle(new String[]{"~ ~", "###", "~#~"}).where('#', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.IRON_BLOCK))).where('~', (blockInWorld) -> blockInWorld.getState().isAir()).build();
+            this.ironGolemBase = BlockPatternBuilder.start().aisle("~ ~", "###", "~#~").where('#', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.IRON_BLOCK))).where('~', (blockInWorld) -> blockInWorld.getState().isAir()).build();
         }
 
         return this.ironGolemBase;
@@ -167,7 +158,7 @@ public class MegalithLanternBlock extends HorizontalDirectionalBlock {
 
     private BlockPattern getOrCreateIronGolemFull() {
         if (this.ironGolemFull == null) {
-            this.ironGolemFull = BlockPatternBuilder.start().aisle(new String[]{"~^~", "###", "~#~"}).where('^', BlockInWorld.hasState(PUMPKINS_PREDICATE)).where('#', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.IRON_BLOCK))).where('~', (blockInWorld) -> blockInWorld.getState().isAir()).build();
+            this.ironGolemFull = BlockPatternBuilder.start().aisle("~^~", "###", "~#~").where('^', BlockInWorld.hasState(PUMPKINS_PREDICATE)).where('#', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.IRON_BLOCK))).where('~', (blockInWorld) -> blockInWorld.getState().isAir()).build();
         }
 
         return this.ironGolemFull;

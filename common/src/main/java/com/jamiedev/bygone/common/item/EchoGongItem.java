@@ -2,7 +2,6 @@ package com.jamiedev.bygone.common.item;
 
 import com.jamiedev.bygone.common.util.ShockwaveHandler;
 import com.jamiedev.bygone.core.registry.BGDataComponents;
-import com.jamiedev.bygone.core.registry.BGDataComponentTypes;
 import com.jamiedev.bygone.core.registry.BGSoundEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;

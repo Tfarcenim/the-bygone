@@ -30,22 +30,17 @@ import org.jetbrains.annotations.Nullable;
 
 public class CharniaBlock extends DoublePlantBlock implements LiquidBlockContainer {
     KelpBlock ref;
-    public static final MapCodec<CharniaBlock> CODEC = simpleCodec(CharniaBlock::new);
     public static final EnumProperty<DoubleBlockHalf> HALF;
     protected static final float field_31262 = 6.0F;
     protected static final VoxelShape SHAPE;
 
-    @Override
-    public MapCodec<CharniaBlock> codec() {
-        return CODEC;
-    }
 
     public CharniaBlock(BlockBehaviour.Properties settings) {
         super(settings);
     }
 
     @Override
-    protected VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
 
@@ -55,7 +50,7 @@ public class CharniaBlock extends DoublePlantBlock implements LiquidBlockContain
     }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader world, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
         return new ItemStack(BGBlocks.CHARNIA.get());
     }
 
@@ -74,7 +69,7 @@ public class CharniaBlock extends DoublePlantBlock implements LiquidBlockContain
     }
 
     @Override
-    protected boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
+    public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
         if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {
             BlockState blockState = world.getBlockState(pos.below());
             return blockState.is(this) && blockState.getValue(HALF) == DoubleBlockHalf.LOWER;
@@ -85,12 +80,12 @@ public class CharniaBlock extends DoublePlantBlock implements LiquidBlockContain
     }
 
     @Override
-    protected FluidState getFluidState(BlockState state) {
+    public FluidState getFluidState(BlockState state) {
         return Fluids.WATER.getSource(false);
     }
 
     @Override
-    public boolean canPlaceLiquid(@Nullable Player player, BlockGetter world, BlockPos pos, BlockState state, Fluid fluid) {
+    public boolean canPlaceLiquid(BlockGetter level, BlockPos pos, BlockState state, Fluid fluid) {
         return false;
     }
 

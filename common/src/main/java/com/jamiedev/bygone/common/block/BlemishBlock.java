@@ -30,12 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Iterator;
 
 public class BlemishBlock extends Block implements BlemishSpreadable
-{    public static final MapCodec<BlemishBlock> CODEC = simpleCodec(BlemishBlock::new);
-
-    @Override
-    public MapCodec<BlemishBlock> codec() {
-        return CODEC;
-    }
+{
 
     CactusBlock ref;
     public BlemishBlock(BlockBehaviour.Properties settings) {
@@ -43,7 +38,7 @@ public class BlemishBlock extends Block implements BlemishSpreadable
     }
 
     @Override
-    protected void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
+    public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
         Vec3 vec3d = new Vec3(0.25, 0.05000000074505806, 0.25);
         entity.makeStuckInBlock(state, vec3d);
         entity.hurt(world.damageSources().wither(), 2.0F);

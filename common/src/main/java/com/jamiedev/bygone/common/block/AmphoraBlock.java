@@ -83,6 +83,7 @@ public class AmphoraBlock extends BaseEntityBlock implements SimpleWaterloggedBl
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
+    @Override
     public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         if (state.getValue(WATERLOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
@@ -91,6 +92,7 @@ public class AmphoraBlock extends BaseEntityBlock implements SimpleWaterloggedBl
         return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
     }
 
+    @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite()).setValue(WATERLOGGED, fluidState.getType() == Fluids.WATER).setValue(CRACKED, false);
@@ -119,6 +121,7 @@ public class AmphoraBlock extends BaseEntityBlock implements SimpleWaterloggedBl
     }
 
 
+    @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult blockHitResult) {
         BlockEntity var7 = level.getBlockEntity(pos);
         ItemStack stack = player.getItemInHand(hand);
@@ -161,29 +164,35 @@ public class AmphoraBlock extends BaseEntityBlock implements SimpleWaterloggedBl
 
     }
 
+    @Override
     public boolean isPathfindable(BlockState state, BlockGetter getter, BlockPos pos, PathComputationType type) {
         return false;
     }
 
+    @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         int i = state.getValue(WATER_LEVEL);
         return BOUNDING_BOX;
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING, WATERLOGGED, CRACKED, WATER_LEVEL);
     }
 
+    @Override
     @Nullable
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new AmphoraBlockEntity(pos, state);
     }
 
+    @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
        // Containers.dropContents(state, newState, level, pos);
         super.onRemove(state, level, pos, newState, movedByPiston);
     }
 
+    @Override
     public List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
         BlockEntity blockEntity = params.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
         if (blockEntity instanceof AmphoraBlockEntity amphoraBlockEntity) {
@@ -197,6 +206,7 @@ public class AmphoraBlock extends BaseEntityBlock implements SimpleWaterloggedBl
         return super.getDrops(state, params);
     }
 
+    @Override
     public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         ItemStack itemStack = player.getMainHandItem();
         BlockState blockState = state;
@@ -207,23 +217,22 @@ public class AmphoraBlock extends BaseEntityBlock implements SimpleWaterloggedBl
         super.playerWillDestroy(level, pos, blockState, player);
     }
 
+    @Override
     public FluidState getFluidState(BlockState state) {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
+    @Override
     public SoundType getSoundType(BlockState state) {
         return state.getValue(CRACKED) ? SoundType.DECORATED_POT_CRACKED : SoundType.DECORATED_POT;
     }
 
-    public void appendHoverText(ItemStack stack, Level context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
-        PotDecorations potDecorations = stack.getOrDefault(DataComponents.POT_DECORATIONS, PotDecorations.EMPTY);
-        if (!potDecorations.equals(PotDecorations.EMPTY)) {
-            tooltipComponents.add(CommonComponents.EMPTY);
-            Stream.of(potDecorations.front(), potDecorations.left(), potDecorations.right(), potDecorations.back()).forEach((optional) -> tooltipComponents.add((new ItemStack(optional.orElse(Items.BRICK), 1)).getHoverName().plainCopy().withStyle(ChatFormatting.GRAY)));
-        }
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
+        super.appendHoverText(stack, level, tooltip, flag);
     }
 
+    @Override
     public void onProjectileHit(Level level, BlockState state, BlockHitResult hit, Projectile projectile) {
         BlockPos blockPos = hit.getBlockPos();
         if (!level.isClientSide && projectile.mayInteract(level, blockPos) && projectile.mayBreak(level)) {
@@ -232,15 +241,18 @@ public class AmphoraBlock extends BaseEntityBlock implements SimpleWaterloggedBl
         }
     }
 
+    @Override
     public boolean hasAnalogOutputSignal(BlockState state) {
         return true;
     }
 
+    @Override
     public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
         //return AbstractContainerMenu.getRedstoneSignalFromBlockEntity(level.getBlockEntity(pos));
         return state.getValue(WATER_LEVEL);
     }
 
+    @Override
     public BlockState rotate(BlockState state, Rotation rotation) {
         return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
 

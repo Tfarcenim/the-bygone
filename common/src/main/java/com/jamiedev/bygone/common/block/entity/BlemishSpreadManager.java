@@ -212,7 +212,9 @@ public class BlemishSpreadManager {
         private int decay;
         @Nullable
         private Set<Direction> faces;
-        private static final Codec<Set<Direction>> DIRECTION_SET_CODEC;
+        private static final Codec<Set<Direction>> DIRECTION_SET_CODEC = Direction.CODEC.listOf().xmap((directions) -> {
+            return Sets.newEnumSet(directions, Direction.class);
+        }, Lists::newArrayList);
         public static final Codec<BlemishSpreadManager.Cursor> CODEC;
 
         private Cursor(BlockPos pos, int charge, int decay, int update, Optional<Set<Direction>> faces) {
@@ -366,9 +368,6 @@ public class BlemishSpreadManager {
         }
 
         static {
-            DIRECTION_SET_CODEC = Direction.CODEC.listOf().xmap((directions) -> {
-                return Sets.newEnumSet(directions, Direction.class);
-            }, Lists::newArrayList);
             CODEC = RecordCodecBuilder.create((instance) -> {
                 return instance.group(BlockPos.CODEC.fieldOf("pos").forGetter(BlemishSpreadManager.Cursor::getPos), Codec.intRange(0, 1000).fieldOf("charge").orElse(0).forGetter(BlemishSpreadManager.Cursor::getCharge), Codec.intRange(0, 1).fieldOf("decay_delay").orElse(1).forGetter(BlemishSpreadManager.Cursor::getDecay), Codec.intRange(0, Integer.MAX_VALUE).fieldOf("update_delay").orElse(0).forGetter((cursor) -> {
                     return cursor.update;

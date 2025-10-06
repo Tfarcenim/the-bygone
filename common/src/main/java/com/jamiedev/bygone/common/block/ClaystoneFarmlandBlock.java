@@ -37,15 +37,9 @@ import java.util.Iterator;
 
 public class ClaystoneFarmlandBlock extends Block
 {
-    public static final MapCodec<ClaystoneFarmlandBlock> CODEC = simpleCodec(ClaystoneFarmlandBlock::new);
-    public static final IntegerProperty MOISTURE;
-    protected static final VoxelShape SHAPE;
+    public static final IntegerProperty MOISTURE = BlockStateProperties.MOISTURE;
+    protected static final VoxelShape SHAPE = Block.box(0.0, 0.0, 0.0, 16.0, 15.0, 16.0);
     public static final int MAX_MOISTURE = 7;
-
-    @Override
-    public MapCodec<ClaystoneFarmlandBlock> codec() {
-        return CODEC;
-    }
 
     public ClaystoneFarmlandBlock(BlockBehaviour.Properties settings) {
         super(settings);
@@ -53,7 +47,7 @@ public class ClaystoneFarmlandBlock extends Block
     }
 
     @Override
-    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         if (direction == Direction.UP && !state.canSurvive(world, pos)) {
             world.scheduleTick(pos, this, 1);
         }
@@ -62,7 +56,7 @@ public class ClaystoneFarmlandBlock extends Block
     }
 
     @Override
-    protected boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
+    public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
         BlockState blockState = world.getBlockState(pos.above());
         return !blockState.isSolid() || blockState.getBlock() instanceof FenceGateBlock || blockState.getBlock() instanceof MovingPistonBlock;
     }
@@ -73,17 +67,17 @@ public class ClaystoneFarmlandBlock extends Block
     }
 
     @Override
-    protected boolean useShapeForLightOcclusion(BlockState state) {
+    public boolean useShapeForLightOcclusion(BlockState state) {
         return true;
     }
 
     @Override
-    protected VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
 
     @Override
-    protected void tick(BlockState state, ServerLevel world, BlockPos pos, @NotNull RandomSource random) {
+    public void tick(BlockState state, ServerLevel world, BlockPos pos, @NotNull RandomSource random) {
         if (!state.canSurvive(world, pos)) {
             setToDirt(null, state, world, pos);
         }
@@ -91,7 +85,7 @@ public class ClaystoneFarmlandBlock extends Block
     }
 
     @Override
-    protected void randomTick(BlockState state, ServerLevel world, BlockPos pos, @NotNull RandomSource random) {
+    public void randomTick(BlockState state, ServerLevel world, BlockPos pos, @NotNull RandomSource random) {
         int i = state.getValue(MOISTURE);
         if ((!isSprinklerNearby(world, pos)) && (!isWaterNearby(world, pos))) {
             if (i > 0) {
@@ -135,7 +129,7 @@ public class ClaystoneFarmlandBlock extends Block
                 return false;
             }
 
-            blockPos = (BlockPos)var2.next();
+            blockPos = var2.next();
         } while(!world.getFluidState(blockPos).is(FluidTags.WATER));
 
 
@@ -151,8 +145,7 @@ public class ClaystoneFarmlandBlock extends Block
                 return false;
             }
 
-            blockPos = (BlockPos)var2.next();
-            BlockState blockstate1 = world.getBlockState(blockPos);
+            blockPos = var2.next();
         } while(!world.getBlockState(blockPos).is(BGBlocks.SPRINKER.get()));
 
         return true;
@@ -164,12 +157,7 @@ public class ClaystoneFarmlandBlock extends Block
     }
 
     @Override
-    protected boolean isPathfindable(BlockState state, PathComputationType type) {
+    public boolean isPathfindable(BlockState state, BlockGetter level, BlockPos pos, PathComputationType type) {
         return false;
-    }
-
-    static {
-        MOISTURE = BlockStateProperties.MOISTURE;
-        SHAPE = Block.box(0.0, 0.0, 0.0, 16.0, 15.0, 16.0);
     }
 }

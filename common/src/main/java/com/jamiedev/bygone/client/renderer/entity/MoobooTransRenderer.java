@@ -37,7 +37,7 @@ public class MoobooTransRenderer <T extends LivingEntity> extends RenderLayer<T,
             this.getParentModel().copyPropertiesTo(this.model);
             this.model.prepareMobModel(livingEntity, f, g, h);
             this.model.setupAnim(livingEntity, f, g, j, k, l);
-            this.model.renderToBuffer(matrixStack, vertexConsumer, i, LivingEntityRenderer.getOverlayCoords(livingEntity, 0.0F));
+            this.model.renderToBuffer(matrixStack, vertexConsumer, i, LivingEntityRenderer.getOverlayCoords(livingEntity, 0.0F),1,1,1,1);
         }
     }
 }

@@ -22,18 +22,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class BlueAlgueBlock extends BushBlock {
-    public static final MapCodec<BlueAlgueBlock> CODEC = simpleCodec(BlueAlgueBlock::new);
     protected static final VoxelShape SHAPE = Block.box(1.0, 0.0, 1.0, 15.0, 1.5, 15.0);
 
     protected SimpleParticleType particle;
-    Blocks ref;
-
-    @Override
-    public MapCodec<BlueAlgueBlock> codec() {
-        return CODEC;
-    }
-
-
 
     public BlueAlgueBlock(SimpleParticleType particle, BlockBehaviour.Properties settings) {
         super(settings);
@@ -46,7 +37,7 @@ public class BlueAlgueBlock extends BushBlock {
     }
 
     @Override
-    protected void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
+    public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
         super.entityInside(state, world, pos, entity);
         if (world instanceof ServerLevel && entity instanceof Boat) {
 
@@ -59,7 +50,7 @@ public class BlueAlgueBlock extends BushBlock {
 
     }
     @Override
-    protected VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
 

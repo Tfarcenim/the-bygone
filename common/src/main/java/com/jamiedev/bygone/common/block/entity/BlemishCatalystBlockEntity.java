@@ -29,7 +29,7 @@ import net.minecraft.world.level.gameevent.GameEventListener;
 import net.minecraft.world.level.gameevent.PositionSource;
 import net.minecraft.world.phys.Vec3;
 
-public class BlemishCatalystBlockEntity extends BlockEntity implements GameEventListener.Provider<BlemishCatalystBlockEntity.Listener> {
+public class BlemishCatalystBlockEntity extends BlockEntity implements GameEventListener.Holder<BlemishCatalystBlockEntity.Listener> {
     private final BlemishCatalystBlockEntity.Listener eventListener;
 
     public BlemishCatalystBlockEntity(BlockPos pos, BlockState state) {
@@ -42,15 +42,15 @@ public class BlemishCatalystBlockEntity extends BlockEntity implements GameEvent
     }
 
     @Override
-    protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider registryLookup) {
-        super.loadAdditional(nbt, registryLookup);
+    public void load(CompoundTag nbt) {
+        super.load(nbt);
         this.eventListener.spreadManager.readNbt(nbt);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registryLookup) {
+    protected void saveAdditional(CompoundTag nbt) {
         this.eventListener.spreadManager.writeNbt(nbt);
-        super.saveAdditional(nbt, registryLookup);
+        super.saveAdditional(nbt);
     }
 
     @Override
@@ -86,13 +86,13 @@ public class BlemishCatalystBlockEntity extends BlockEntity implements GameEvent
         }
 
         @Override
-        public boolean handleGameEvent(ServerLevel world, Holder<GameEvent> event, GameEvent.Context emitter, Vec3 emitterPos) {
-            if (event.is(GameEvent.ENTITY_DIE)) {
+        public boolean handleGameEvent(ServerLevel world, GameEvent event, GameEvent.Context emitter, Vec3 emitterPos) {
+            if (event == GameEvent.ENTITY_DIE) {
                 Entity var6 = emitter.sourceEntity();
                 if (var6 instanceof LivingEntity livingEntity) {
                     if (!livingEntity.wasExperienceConsumed()) {
                         DamageSource damageSource = livingEntity.getLastDamageSource();
-                        int i = livingEntity.getExperienceReward(world, Optionull.map(damageSource, DamageSource::getEntity));
+                        int i = livingEntity.getExperienceReward();
                         if (livingEntity.shouldDropExperience() && i > 0) {
                             this.spreadManager.spread(BlockPos.containing(emitterPos.relative(Direction.UP, 0.5)), i);
                             this.triggerCriteria(world, livingEntity);

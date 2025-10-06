@@ -49,20 +49,9 @@ public class PrimordialVentBlock extends BaseEntityBlock implements SimpleWaterl
     CoralFanBlock ref1;
     public static final BooleanProperty WATERLOGGED;
 
-    public static final MapCodec<PrimordialVentBlock> CODEC = RecordCodecBuilder.mapCodec((instance) -> {
-        return instance.group(Codec.BOOL.fieldOf("spawn_particles").forGetter((block) -> {
-            return block.emitsParticles;
-        }), propertiesCodec()).apply(instance, PrimordialVentBlock::new);
-    });
-
     public static BooleanProperty SIGNAL_FIRE;
 
-    @Override
-    public MapCodec<PrimordialVentBlock> codec() {
-        return CODEC;
-    }
-
-    FlowerBlock ref;
+    /**@see FlowerBlock;*/
 
     protected static final VoxelShape SHAPE;
     private final boolean emitsParticles;
@@ -91,7 +80,7 @@ public class PrimordialVentBlock extends BaseEntityBlock implements SimpleWaterl
         }
     }
     @Override
-    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         if (state.getValue(WATERLOGGED)) {
             world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
         }
@@ -99,10 +88,10 @@ public class PrimordialVentBlock extends BaseEntityBlock implements SimpleWaterl
         return super.updateShape(state, direction, neighborState, world, pos, neighborPos);
     }
 
-    CoralFanBlock ref2;
+    /** @see CoralFanBlock ref2;*/
 
     @Override
-    protected void tick(BlockState state, ServerLevel world, BlockPos pos, @NotNull RandomSource random) {
+    public void tick(BlockState state, ServerLevel world, BlockPos pos, @NotNull RandomSource random) {
         if (!isInWater(state, world, pos)) {
             world.setBlock(pos, this.defaultBlockState().setValue(WATERLOGGED, false), 2);
         }
@@ -110,13 +99,13 @@ public class PrimordialVentBlock extends BaseEntityBlock implements SimpleWaterl
     }
 
     @Override
-    protected VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         Vec3 vec3d = state.getOffset(world, pos);
         return SHAPE.move(vec3d.x, vec3d.y, vec3d.z);
     }
 
     @Override
-    protected void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
+    public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
         if (entity instanceof LivingEntity) {
             entity.hurt(world.damageSources().inFire(), 1.0F);
         }
@@ -151,7 +140,7 @@ public class PrimordialVentBlock extends BaseEntityBlock implements SimpleWaterl
     }
 
     @Override
-    protected RenderShape getRenderShape(BlockState state) {
+    public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
 
@@ -165,13 +154,14 @@ public class PrimordialVentBlock extends BaseEntityBlock implements SimpleWaterl
         }
     }
 
+
     @Override
-    protected boolean isPathfindable(BlockState state, PathComputationType type) {
+    public boolean isPathfindable(BlockState state, BlockGetter level, BlockPos pos, PathComputationType type) {
         return false;
     }
 
     @Override
-    protected boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
+    public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
         BlockPos blockPos = pos.below();
         return world.getBlockState(blockPos).isFaceSturdy(world, blockPos, Direction.UP);
     }
@@ -182,7 +172,7 @@ public class PrimordialVentBlock extends BaseEntityBlock implements SimpleWaterl
     }
 
     @Override
-    protected FluidState getFluidState(BlockState state) {
+    public FluidState getFluidState(BlockState state) {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 

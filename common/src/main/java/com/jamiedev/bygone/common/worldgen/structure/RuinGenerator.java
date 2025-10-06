@@ -26,8 +26,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class RuinGenerator
 {
-    private static final ResourceLocation[] FOSSILS = new ResourceLocation[]{ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID, "ruin_overworld_1"), ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID, "ruin_nether_1"),
-            ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID, "ruin_end_1")};
+    private static final ResourceLocation[] FOSSILS = new ResourceLocation[]{Bygone.id( "ruin_overworld_1"), Bygone.id( "ruin_nether_1"),
+            Bygone.id( "ruin_end_1")};
 
     public RuinGenerator() {
     }

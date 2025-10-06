@@ -28,16 +28,13 @@ import java.util.Optional;
 
 public class MossyClaystoneBlock  extends SpreadingSnowyDirtBlock implements BonemealableBlock
 {
-    GrassBlock ref;
-    public static final MapCodec<MossyClaystoneBlock> CODEC = simpleCodec(MossyClaystoneBlock::new);
+
+    /**
+     * @see GrassBlock
+     */
 
     @Override
-    public MapCodec<MossyClaystoneBlock> codec() {
-        return CODEC;
-    }
-
-    @Override
-    public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state) {
+    public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state,boolean b) {
         return world.getBlockState(pos.above()).isAir();
     }
 
@@ -68,7 +65,7 @@ public class MossyClaystoneBlock  extends SpreadingSnowyDirtBlock implements Bon
     }
 
     @Override
-    protected void randomTick(BlockState state, ServerLevel world, BlockPos pos, @NotNull RandomSource random) {
+    public void randomTick(BlockState state, ServerLevel world, BlockPos pos, @NotNull RandomSource random) {
         if (!canBeGrass(state, world, pos)) {
             world.setBlockAndUpdate(pos, BGBlocks.CLAYSTONE.get().defaultBlockState());
         } else {
@@ -87,14 +84,9 @@ public class MossyClaystoneBlock  extends SpreadingSnowyDirtBlock implements Bon
     }
 
     @Override
-    public BonemealableBlock.Type getType() {
-        return Type.NEIGHBOR_SPREADER;
-    }
-
-    @Override
     public void performBonemeal(ServerLevel world, @NotNull RandomSource random, BlockPos pos, BlockState state) {
         BlockPos blockPos = pos.above();
-        BlockState blockState = Blocks.SHORT_GRASS.defaultBlockState();
+        BlockState blockState = Blocks.GRASS.defaultBlockState();
         Optional<Holder.Reference<PlacedFeature>> optional = world.registryAccess().registryOrThrow(Registries.PLACED_FEATURE).getHolder(VegetationPlacements.GRASS_BONEMEAL);
 
         label49:

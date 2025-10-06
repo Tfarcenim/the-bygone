@@ -25,28 +25,21 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class PlagaCropBlock extends AmaranthCropBlock {
 
-    FlowerBlock ref;
-
     /**
      * Last stage drops actual "crop / block"
-     *
+     * @see FlowerBlock
      */
 
-    public static final MapCodec<PlagaCropBlock> CODEC = simpleCodec(PlagaCropBlock::new);
     public static final int MAX_AGE = 7;
     public static final IntegerProperty AGE;
     private static final VoxelShape[] SHAPE_BY_AGE;
 
-    public MapCodec<? extends PlagaCropBlock> codec() {
-        return CODEC;
-    }
-
     public PlagaCropBlock(BlockBehaviour.Properties properties) {
         super(properties);
-        this.registerDefaultState((BlockState) ((BlockState) this.stateDefinition.any()).setValue(this.getAgeProperty(), 0));
+        this.registerDefaultState(this.stateDefinition.any().setValue(this.getAgeProperty(), 0));
     }
 
-    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPE_BY_AGE[this.getAge(state)];
     }
 
@@ -63,22 +56,22 @@ public class PlagaCropBlock extends AmaranthCropBlock {
     }
 
     public int getAge(BlockState state) {
-        return (Integer) state.getValue(this.getAgeProperty());
+        return state.getValue(this.getAgeProperty());
     }
 
     public BlockState getStateForAge(int age) {
-        return (BlockState) this.defaultBlockState().setValue(this.getAgeProperty(), age);
+        return this.defaultBlockState().setValue(this.getAgeProperty(), age);
     }
 
     public final boolean isMaxAge(BlockState state) {
         return this.getAge(state) >= this.getMaxAge();
     }
 
-    protected boolean isRandomlyTicking(BlockState state) {
+    public boolean isRandomlyTicking(BlockState state) {
         return !this.isMaxAge(state);
     }
 
-    protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (level.getRawBrightness(pos, 0) <= 12) {
             int i = this.getAge(state);
             if (i < this.getMaxAge()) {
@@ -115,7 +108,7 @@ public class PlagaCropBlock extends AmaranthCropBlock {
                 BlockState blockstate = level.getBlockState(blockpos.offset(i, 0, j));
                 if (blockstate.is(BGBlocks.CLAYSTONE_FARMLAND.get())) {
                     f1 = 1.0F;
-                    if ((Integer) blockstate.getValue(FarmBlock.MOISTURE) > 0) {
+                    if (blockstate.getValue(FarmBlock.MOISTURE) > 0) {
                         f1 = 3.0F;
                     }
                 }
@@ -146,7 +139,7 @@ public class PlagaCropBlock extends AmaranthCropBlock {
         return f;
     }
 
-    protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         return hasSufficientLight(level, pos) && super.canSurvive(state, level, pos);
     }
 
@@ -154,7 +147,7 @@ public class PlagaCropBlock extends AmaranthCropBlock {
         return level.getRawBrightness(pos, 0) <= 11;
     }
 
-    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+    public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
         if (entity instanceof Ravager && level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
             level.destroyBlock(pos, true, entity);
         }
@@ -183,19 +176,19 @@ public class PlagaCropBlock extends AmaranthCropBlock {
     }
 
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(new Property[]{AGE});
+        builder.add(AGE);
     }
 
     static {
         AGE = BlockStateProperties.AGE_7;
         SHAPE_BY_AGE = new VoxelShape[]{
-                Block.box((double)5.0F, (double)0.0F, (double)5.0F, (double)11.0F, (double)7.0F, (double)11.0F),
-                Block.box((double)5.0F, (double)0.0F, (double)5.0F, (double)11.0F, (double)11.0F, (double)11.0F),
-                Block.box((double)5.0F, (double)0.0F, (double)5.0F, (double)11.0F, (double)12.0F, (double)11.0F),
-                Block.box((double)5.0F, (double)0.0F, (double)5.0F, (double)11.0F, (double)13.0F, (double)11.0F),
-                Block.box((double)5.0F, (double)0.0F, (double)5.0F, (double)11.0F, (double)16.0F, (double)11.0F),
-                Block.box((double)5.0F, (double)0.0F, (double)5.0F, (double)11.0F, (double)16.0F, (double)11.0F),
-                Block.box((double)5.0F, (double)0.0F, (double)5.0F, (double)11.0F, (double)16.0F, (double)11.0F),
-                Block.box((double)5.0F, (double)0.0F, (double)5.0F, (double)11.0F, (double)16.0F, (double)11.0F)};
+                Block.box(5.0F, 0.0F, 5.0F, 11.0F, 7.0F, 11.0F),
+                Block.box(5.0F, 0.0F, 5.0F, 11.0F, 11.0F, 11.0F),
+                Block.box(5.0F, 0.0F, 5.0F, 11.0F, 12.0F, 11.0F),
+                Block.box(5.0F, 0.0F, 5.0F, 11.0F, 13.0F, 11.0F),
+                Block.box(5.0F, 0.0F, 5.0F, 11.0F, 16.0F, 11.0F),
+                Block.box(5.0F, 0.0F, 5.0F, 11.0F, 16.0F, 11.0F),
+                Block.box(5.0F, 0.0F, 5.0F, 11.0F, 16.0F, 11.0F),
+                Block.box(5.0F, 0.0F, 5.0F, 11.0F, 16.0F, 11.0F)};
     }
 }
