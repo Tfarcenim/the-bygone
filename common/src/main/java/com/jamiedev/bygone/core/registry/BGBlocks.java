@@ -11,16 +11,10 @@ import com.jamiedev.bygone.common.block.gourds.GourdVineBlock;
 import com.jamiedev.bygone.common.block.shelf.*;
 import com.kekecreations.jinxedlib.core.util.JinxedRegistryHelper;
 
-import net.minecraft.core.Registry;
-import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.worldgen.features.TreeFeatures;
 
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -328,7 +322,7 @@ Blocks ref;
 
 // Start of the Primordial Ocean blockset
 
-    public static final Supplier<Block> BLUE_ALGAE = registerBlock("blue_algae", () -> new BlueAlgueBlock((SimpleParticleType) BGParticleTypes.ALGAE_BLOOM, BlockBehaviour.Properties.of().mapColor(MapColor.GLOW_LICHEN)
+    public static final Supplier<Block> BLUE_ALGAE = registerBlock("blue_algae", () -> new BlueAlgueBlock(BlockBehaviour.Properties.of().mapColor(MapColor.GLOW_LICHEN)
             .replaceable().noCollission().strength(0.2F).sound(SoundType.GLOW_LICHEN).lightLevel((state) -> {
                 return 15;
             })

@@ -40,15 +40,16 @@ public class NectaurJoinGroup extends Behavior<NectaurEntity> {
                 .toList();
 
         if (nectaurs.isEmpty()){
-            if (owner.getBrain().getMemory(BGMemoryModuleTypes.GROUP_LEADER).isPresent() && level.getEntity(owner.getBrain().getMemory(BGMemoryModuleTypes.GROUP_LEADER).get()) == null){
-                owner.getBrain().eraseMemory(BGMemoryModuleTypes.GROUP_LEADER);
+            if (owner.getBrain().getMemory(BGMemoryModuleTypes.GROUP_LEADER.get()).isPresent() && level.getEntity(owner.getBrain()
+                    .getMemory(BGMemoryModuleTypes.GROUP_LEADER.get()).get()) == null){
+                owner.getBrain().eraseMemory(BGMemoryModuleTypes.GROUP_LEADER.get());
             }
             return;
         }
 
         for (NectaurEntity nectaur : nectaurs) {
-            if (nectaur.getBrain().hasMemoryValue(BGMemoryModuleTypes.GROUP_LEADER)) {
-                owner.getBrain().setMemory(BGMemoryModuleTypes.GROUP_LEADER, nectaur.getBrain().getMemory(BGMemoryModuleTypes.GROUP_LEADER).get());
+            if (nectaur.getBrain().hasMemoryValue(BGMemoryModuleTypes.GROUP_LEADER.get())) {
+                owner.getBrain().setMemory(BGMemoryModuleTypes.GROUP_LEADER.get(), nectaur.getBrain().getMemory(BGMemoryModuleTypes.GROUP_LEADER.get()).get());
                 return;
             }
         }
@@ -57,10 +58,10 @@ public class NectaurJoinGroup extends Behavior<NectaurEntity> {
         UUID leaderId = leader.getUUID();
 
         for (NectaurEntity member : nectaurs) {
-            member.getBrain().setMemory(BGMemoryModuleTypes.GROUP_LEADER, leaderId);
+            member.getBrain().setMemory(BGMemoryModuleTypes.GROUP_LEADER.get(), leaderId);
         }
 
-        owner.getBrain().setMemory(BGMemoryModuleTypes.GROUP_LEADER, leaderId);
+        owner.getBrain().setMemory(BGMemoryModuleTypes.GROUP_LEADER.get(), leaderId);
     }
 
 }

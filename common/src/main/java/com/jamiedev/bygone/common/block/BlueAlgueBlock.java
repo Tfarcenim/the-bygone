@@ -24,15 +24,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class BlueAlgueBlock extends BushBlock {
     protected static final VoxelShape SHAPE = Block.box(1.0, 0.0, 1.0, 15.0, 1.5, 15.0);
 
-    protected SimpleParticleType particle;
-
-    public BlueAlgueBlock(SimpleParticleType particle, BlockBehaviour.Properties settings) {
-        super(settings);
-        this.particle = particle;
-    }
-
-    public BlueAlgueBlock(BlockBehaviour.Properties settings)
-    {
+    public BlueAlgueBlock( BlockBehaviour.Properties settings) {
         super(settings);
     }
 

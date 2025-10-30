@@ -28,14 +28,14 @@ public class NectaurSetWalkTargetFromAttackTargetIfTargetOutOfReach {
                                 p_258687_.registered(MemoryModuleType.WALK_TARGET),
                                 p_258687_.registered(MemoryModuleType.LOOK_TARGET),
                                 p_258687_.present(MemoryModuleType.ATTACK_TARGET),
-                                p_258687_.present(BGMemoryModuleTypes.GROUP_LEADER),
-                                p_258687_.registered(BGMemoryModuleTypes.IS_STALKING),
+                                p_258687_.present(BGMemoryModuleTypes.GROUP_LEADER.get()),
+                                p_258687_.registered(BGMemoryModuleTypes.IS_STALKING.get()),
                                 p_258687_.registered(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES)
                         )
                         .apply(p_258687_, (walk_target, look_target, attack_target, group_leader, is_stalking, nearest_visible_living_entities) -> (p_258694_, mob, p_258696_) -> {
                             LivingEntity livingentity = p_258687_.get(attack_target);
                             Optional<NearestVisibleLivingEntities> optional = p_258687_.tryGet(nearest_visible_living_entities);
-                            if (mob.getBrain().getMemory(BGMemoryModuleTypes.IS_STALKING).orElse(false)) return false;
+                            if (mob.getBrain().getMemory(BGMemoryModuleTypes.IS_STALKING.get()).orElse(false)) return false;
                             if (optional.isPresent() && optional.get().contains(livingentity) && BehaviorUtils.isWithinAttackRange(mob, livingentity, 1)) {
                                 walk_target.erase();
                             } else {

@@ -31,7 +31,7 @@ public class WhirliweedBundleItem extends Item {
             player.addEffect(new MobEffectInstance(BGMobEffects.UPDRAFT.get(), 600, 0));
             
             level.playSound(null, player.getX(), player.getY(), player.getZ(),
-                    BGSoundEvents.WHIRLIWEED_BUNDLE_USE.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+                    BGSoundEvents.WHIRLIWEED_BUNDLE_USE_EVENT.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
             level.gameEvent(GameEvent.INSTRUMENT_PLAY, player.position(), GameEvent.Context.of(player));
             
             player.awardStat(Stats.ITEM_USED.get(this));

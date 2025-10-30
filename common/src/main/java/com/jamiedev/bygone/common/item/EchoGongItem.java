@@ -54,7 +54,7 @@ public class EchoGongItem extends Item {
                 
                 if (charge % 20 == 0) {
                     level.playSound(null, player.getX(), player.getY(), player.getZ(),
-                        BGSoundEvents.ECHO_GONG_CHARGE.get(), SoundSource.PLAYERS, 
+                        BGSoundEvents.ECHO_GONG_CHARGE_EVENT.get(), SoundSource.PLAYERS,
                         0.3F, 1.0F + (charge / (float)MAX_CHARGE) * 0.5F);
                     
                     if (level instanceof ServerLevel serverLevel) {
@@ -110,7 +110,7 @@ public class EchoGongItem extends Item {
     
     private void releaseShockwave(Level level, Player player, ItemStack stack) {
         level.playSound(null, player.getX(), player.getY(), player.getZ(),
-            BGSoundEvents.ECHO_GONG_USE.get(), SoundSource.RECORDS, 2.0F, 1.0F);
+            BGSoundEvents.ECHO_GONG_USE_EVENT.get(), SoundSource.RECORDS, 2.0F, 1.0F);
         level.gameEvent(GameEvent.INSTRUMENT_PLAY, player.position(), GameEvent.Context.of(player));
         
         if (level instanceof ServerLevel serverLevel) {

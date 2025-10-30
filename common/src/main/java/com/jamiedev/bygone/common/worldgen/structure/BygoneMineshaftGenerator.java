@@ -112,7 +112,7 @@ public class BygoneMineshaftGenerator {
 
 
         public BygoneMineshaftCrossing(StructurePieceSerializationContext context, CompoundTag nbt) {
-            super(BGStructures.BYGONE_MINESHAFT_CROSSING, nbt);
+            super(BGStructures.BYGONE_MINESHAFT_CROSSING.get(), nbt);
             this.direction = Direction.from2DDataValue(nbt.getInt("D"));
         }
 
@@ -123,7 +123,7 @@ public class BygoneMineshaftGenerator {
         }
 
         public BygoneMineshaftCrossing(int chainLength, BoundingBox boundingBox, @Nullable Direction orientation, BygoneMineshaftStructure.Type type) {
-            super(BGStructures.BYGONE_MINESHAFT_CROSSING, chainLength, type, boundingBox);
+            super(BGStructures.BYGONE_MINESHAFT_CROSSING.get(), chainLength, type, boundingBox);
             this.direction = orientation;
         }
 
@@ -219,12 +219,12 @@ public class BygoneMineshaftGenerator {
 
     public static class BygoneMineshaftStairs extends BygoneMineshaftGenerator.BygoneMineshaftPart {
         public BygoneMineshaftStairs(int chainLength, BoundingBox boundingBox, Direction orientation, BygoneMineshaftStructure.Type type) {
-            super(BGStructures.BYGONE_MINESHAFT_STAIRS, chainLength, type, boundingBox);
+            super(BGStructures.BYGONE_MINESHAFT_STAIRS.get(), chainLength, type, boundingBox);
             this.setOrientation(orientation);
         }
 
         public BygoneMineshaftStairs(StructurePieceSerializationContext context, CompoundTag nbt) {
-            super(BGStructures.BYGONE_MINESHAFT_STAIRS, nbt);
+            super(BGStructures.BYGONE_MINESHAFT_STAIRS.get(), nbt);
         }
 
         @Nullable
@@ -293,7 +293,7 @@ public class BygoneMineshaftGenerator {
         private final int length;
 
         public BygoneMineshaftCorridor(CompoundTag nbt) {
-            super(BGStructures.BYGONE_MINESHAFT_CORRIDOR, nbt);
+            super(BGStructures.BYGONE_MINESHAFT_CORRIDOR.get(), nbt);
             this.hasRails = nbt.getBoolean("hr");
             this.hasCobwebs = nbt.getBoolean("sc");
             this.hasSpawner = nbt.getBoolean("hps");
@@ -301,7 +301,7 @@ public class BygoneMineshaftGenerator {
         }
 
         public BygoneMineshaftCorridor(StructurePieceSerializationContext structureContext, CompoundTag nbt) {
-            super(BGStructures.BYGONE_MINESHAFT_CORRIDOR, nbt);
+            super(BGStructures.BYGONE_MINESHAFT_CORRIDOR.get(), nbt);
             this.hasRails = nbt.getBoolean("hr");
             this.hasCobwebs = nbt.getBoolean("sc");
             this.hasSpawner = nbt.getBoolean("hps");
@@ -318,7 +318,7 @@ public class BygoneMineshaftGenerator {
         }
 
         public BygoneMineshaftCorridor(int chainLength, @NotNull RandomSource random, BoundingBox boundingBox, Direction orientation, BygoneMineshaftStructure.Type type) {
-            super(BGStructures.BYGONE_MINESHAFT_CORRIDOR, chainLength, type, boundingBox);
+            super(BGStructures.BYGONE_MINESHAFT_CORRIDOR.get(), chainLength, type, boundingBox);
             this.setOrientation(orientation);
             this.hasRails = random.nextInt(3) == 0;
             this.hasCobwebs = !this.hasRails && random.nextInt(23) == 0;
@@ -760,12 +760,12 @@ public class BygoneMineshaftGenerator {
         private final List<BoundingBox> entrances = Lists.newLinkedList();
 
         public BygoneMineshaftRoom(int chainLength, @NotNull RandomSource random, int x, int z, BygoneMineshaftStructure.Type type) {
-            super(BGStructures.BYGONE_MINESHAFT_ROOM, chainLength, type, new BoundingBox(x, 100, z, x + 7 + random.nextInt(6), 200, z + 7 + random.nextInt(6)));
+            super(BGStructures.BYGONE_MINESHAFT_ROOM.get(), chainLength, type, new BoundingBox(x, 100, z, x + 7 + random.nextInt(6), 200, z + 7 + random.nextInt(6)));
             this.mineshaftType = type;
         }
 
         public BygoneMineshaftRoom(StructurePieceSerializationContext context, CompoundTag nbt) {
-            super(BGStructures.BYGONE_MINESHAFT_ROOM, nbt);
+            super(BGStructures.BYGONE_MINESHAFT_ROOM.get(), nbt);
             DataResult<List<BoundingBox>> var10000 = BoundingBox.CODEC.listOf().parse(NbtOps.INSTANCE, nbt.getList("Entrances", 11));
             Logger var10001 = BygoneMineshaftGenerator.LOGGER;
             Objects.requireNonNull(var10001);

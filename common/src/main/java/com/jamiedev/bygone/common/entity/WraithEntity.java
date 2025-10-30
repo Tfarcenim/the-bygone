@@ -54,7 +54,7 @@ public class WraithEntity extends Monster implements RangedAttackMob, FlyingAnim
 
     public AnimationState floatAnimationState = new AnimationState();
     public AnimationState idleAnimationState = new AnimationState();
-    private int idleAnimationTimeout = 0;
+    private final int idleAnimationTimeout = 0;
     public AnimationState meleeAnimationState = new AnimationState();
     public AnimationState spellAnimationState = new AnimationState();
 
@@ -163,21 +163,21 @@ public class WraithEntity extends Monster implements RangedAttackMob, FlyingAnim
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return BGSoundEvents.WRAITH_AMBIENT_ADDITIONS_EVENT;
+        return BGSoundEvents.WRAITH_AMBIENT_ADDITIONS_EVENT.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return BGSoundEvents.WRAITH_HURT_ADDITIONS_EVENT;
+        return BGSoundEvents.WRAITH_HURT_ADDITIONS_EVENT.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return BGSoundEvents.WRAITH_DEATH_ADDITIONS_EVENT;
+        return BGSoundEvents.WRAITH_DEATH_ADDITIONS_EVENT.get();
     }
 
     public boolean isCastingSpell() {
-        return this.level().isClientSide ? (Byte)this.entityData.get(DATA_SPELL_CASTING_ID) > 0 : this.spellCastingTickCount > 0;
+        return this.level().isClientSide ? this.entityData.get(DATA_SPELL_CASTING_ID) > 0 : this.spellCastingTickCount > 0;
     }
 
     public void setIsCastingSpell(WraithEntity.WraithSpell currentSpell) {
@@ -186,7 +186,7 @@ public class WraithEntity extends Monster implements RangedAttackMob, FlyingAnim
     }
 
     protected WraithEntity.WraithSpell getCurrentSpell() {
-        return !this.level().isClientSide ? this.currentSpell : WraithEntity.WraithSpell.byId((Byte)this.entityData.get(DATA_SPELL_CASTING_ID));
+        return !this.level().isClientSide ? this.currentSpell : WraithEntity.WraithSpell.byId(this.entityData.get(DATA_SPELL_CASTING_ID));
     }
 
 
@@ -242,8 +242,8 @@ public class WraithEntity extends Monster implements RangedAttackMob, FlyingAnim
             float f5 = Mth.sin(f3);
             double d0 = 0.6 * (double)this.getScale();
             double d1 = 1.8 * (double)this.getScale();
-            this.level().addParticle(ParticleTypes.ENTITY_EFFECT, this.getX() + (double)f4 * d0, this.getY() + d1, this.getZ() + (double)f5 * d0, (double)0.0F, (double)0.0F, (double)0.0F);
-            this.level().addParticle(ParticleTypes.ENTITY_EFFECT, this.getX() - (double)f4 * d0, this.getY() + d1, this.getZ() - (double)f5 * d0, (double)0.0F, (double)0.0F, (double)0.0F);
+            this.level().addParticle(ParticleTypes.ENTITY_EFFECT, this.getX() + (double)f4 * d0, this.getY() + d1, this.getZ() + (double)f5 * d0, 0.0F, 0.0F, 0.0F);
+            this.level().addParticle(ParticleTypes.ENTITY_EFFECT, this.getX() - (double)f4 * d0, this.getY() + d1, this.getZ() - (double)f5 * d0, 0.0F, 0.0F, 0.0F);
         }
 
         if (this.getTarget() != null) {
@@ -293,8 +293,8 @@ public class WraithEntity extends Monster implements RangedAttackMob, FlyingAnim
                                         this.level().getBlockState(newGroundPos.above()).isAir() &&
                                         this.level().getBlockState(newGroundPos.above().above()).isAir()) {
                                     target.teleportTo(x, y + 1, z);
-                                    this.level().playSound(null, this.xo, this.yo, this.zo, BGSoundEvents.WRAITH_TELEPORT_ADDITIONS_EVENT, this.getSoundSource(), 1.0F, 1.0F);
-                                    this.playSound(BGSoundEvents.WRAITH_TELEPORT_ADDITIONS_EVENT, 1.0F, 1.0F);
+                                    this.level().playSound(null, this.xo, this.yo, this.zo, BGSoundEvents.WRAITH_TELEPORT_ADDITIONS_EVENT.get(), this.getSoundSource(), 1.0F, 1.0F);
+                                    this.playSound(BGSoundEvents.WRAITH_TELEPORT_ADDITIONS_EVENT.get(), 1.0F, 1.0F);
                                     teleported = true;
                                     break;
                                 }
@@ -407,7 +407,7 @@ public class WraithEntity extends Monster implements RangedAttackMob, FlyingAnim
 
     protected SoundEvent getCastingSoundEvent()
     {
-        return BGSoundEvents.WRAITH_ATTACK_ADDITIONS_EVENT;
+        return BGSoundEvents.WRAITH_ATTACK_ADDITIONS_EVENT.get();
     }
 
     static {
@@ -416,11 +416,11 @@ public class WraithEntity extends Monster implements RangedAttackMob, FlyingAnim
     }
 
 
-    protected static enum WraithSpell {
-        NONE(0, (double)0.0F, (double)0.0F, (double)0.0F),
+    protected enum WraithSpell {
+        NONE(0, 0.0F, 0.0F, 0.0F),
         TELEPORT(1, 0.7, 0.7, 0.8),
         FIRE(2, 0.4, 0.3, 0.35),
-        NOVELTY(3, 0.7, (double)0.5F, 0.2),
+        NOVELTY(3, 0.7, 0.5F, 0.2),
         DISAPPEAR(4, 0.3, 0.3, 0.8),
         PUKE(5, 0.1, 0.1, 0.2);
 
@@ -428,13 +428,13 @@ public class WraithEntity extends Monster implements RangedAttackMob, FlyingAnim
         final int id;
         final double[] spellColor;
 
-        private WraithSpell(int id, double red, double green, double blue) {
+        WraithSpell(int id, double red, double green, double blue) {
             this.id = id;
             this.spellColor = new double[]{red, green, blue};
         }
 
         public static WraithEntity.WraithSpell byId(int id) {
-            return (WraithEntity.WraithSpell)BY_ID.apply(id);
+            return BY_ID.apply(id);
         }
     }
 

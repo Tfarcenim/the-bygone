@@ -94,7 +94,7 @@ public class HookEntity extends AbstractArrow
 
     @Override
     protected @NotNull SoundEvent getDefaultHitGroundSoundEvent() {
-        return BGSoundEvents.HOOK_HIT_ADDITIONS_EVENT;
+        return BGSoundEvents.HOOK_HIT_ADDITIONS_EVENT.get();
     }
 
     @Override

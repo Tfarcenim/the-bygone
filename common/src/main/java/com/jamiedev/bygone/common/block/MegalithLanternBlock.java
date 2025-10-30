@@ -61,7 +61,7 @@ public class MegalithLanternBlock extends HorizontalDirectionalBlock {
             if (blockState1.is(JamiesModTag.MEGALITH_BLOCKS) || blockState.is(JamiesModTag.MEGALITH_BLOCKS) ||
             blockState1.is(BGBlocks.MEGALITH_BLOCK.get()) || blockState.is(BGBlocks.MEGALITH_BLOCK.get())
                     || blockState1.is(BGBlocks.CRACKED_MEGALITH_BLOCK.get())|| blockState.is(BGBlocks.CRACKED_MEGALITH_BLOCK.get())) {
-                level.playLocalSound(pos.getX(), pos.getY(), pos.getZ(), BGSoundEvents.BLOCK_MEGALITH_BLOCK_IDLE_ADDITIONS_EVENT, SoundSource.AMBIENT, 1.0F, 1.0F, false);
+                level.playLocalSound(pos.getX(), pos.getY(), pos.getZ(), BGSoundEvents.BLOCK_MEGALITH_BLOCK_IDLE_ADDITIONS_EVENT.get(), SoundSource.AMBIENT, 1.0F, 1.0F, false);
             }
         }
 

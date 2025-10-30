@@ -63,6 +63,6 @@ public class BygonePortalStructure extends Structure
 
     @Override
     public StructureType<?> type() {
-        return BGStructures.BYGONE_PORTAL;
+        return BGStructures.BYGONE_PORTAL.get();
     }
 }

@@ -45,7 +45,7 @@ public class NectaurBrain {
                         NectaurStalk.create(
                                 (LivingEntity entity) -> {
                                     if (!(entity instanceof NectaurEntity nectaurEntity)) return 0.0F;
-                                    var leaderMemory = nectaurEntity.getBrain().getMemory(BGMemoryModuleTypes.GROUP_LEADER);
+                                    var leaderMemory = nectaurEntity.getBrain().getMemory(BGMemoryModuleTypes.GROUP_LEADER.get());
                                     return (leaderMemory.isPresent() && leaderMemory.get().equals(nectaurEntity.getUUID())) ? 0.75F : 0.0F; // 0.0F disables movement
                                 },
                                 6,
@@ -59,15 +59,15 @@ public class NectaurBrain {
 
                         // If not in group, apply defensive backoff
                         BehaviorBuilder.triggerIf(
-                                entity -> entity.getBrain().checkMemory(BGMemoryModuleTypes.IS_IN_GROUP, MemoryStatus.VALUE_ABSENT),
+                                entity -> entity.getBrain().checkMemory(BGMemoryModuleTypes.IS_IN_GROUP.get(), MemoryStatus.VALUE_ABSENT),
                                 BackUpIfTooClose.create(4, 1.4F)
                         ),
 
                         // If is in group but not leader, backup to form formation
                         BehaviorBuilder.triggerIf(
-                                entity -> entity.getBrain().checkMemory(BGMemoryModuleTypes.IS_IN_GROUP, MemoryStatus.VALUE_PRESENT) &&
-                                        (!entity.getBrain().hasMemoryValue(BGMemoryModuleTypes.GROUP_LEADER) ||
-                                                !entity.getUUID().equals(entity.getBrain().getMemory(BGMemoryModuleTypes.GROUP_LEADER).orElse(null))),
+                                entity -> entity.getBrain().checkMemory(BGMemoryModuleTypes.IS_IN_GROUP.get(), MemoryStatus.VALUE_PRESENT) &&
+                                        (!entity.getBrain().hasMemoryValue(BGMemoryModuleTypes.GROUP_LEADER.get()) ||
+                                                !entity.getUUID().equals(entity.getBrain().getMemory(BGMemoryModuleTypes.GROUP_LEADER.get()).orElse(null))),
                                 BackUpIfTooClose.create(12, 1.3F)
                         ),
 

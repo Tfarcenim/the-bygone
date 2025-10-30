@@ -3,63 +3,50 @@ package com.jamiedev.bygone.core.registry;
 import com.jamiedev.bygone.Bygone;
 
 import java.util.Locale;
+import java.util.function.Supplier;
 
 import com.jamiedev.bygone.common.worldgen.structure.*;
+import com.kekecreations.jinxedlib.core.util.JinxedRegistryHelper;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
-import net.minecraft.world.level.storage.loot.predicates.WeatherCheck;
 
 public class BGStructures
 {
-    public static StructureType<AncientRootStructure> ANCIENT_ROOTS;
-    public static StructurePieceType ANCIENT_ROOTS_PIECES = Registry.register(BuiltInRegistries.STRUCTURE_PIECE,
-            Bygone.id("ancient_roots"),  AncientRootGenerator.Piece::new);
-    public static StructureType<AncientRootStructure> ABANDONED_FARM;
-    public static StructurePieceType ABANDONED_FARM_PIECES = Registry.register(BuiltInRegistries.STRUCTURE_PIECE,
-            Bygone.id("abandoned_farm"),  AbandonedFarmGenerator.Piece::new);
+    public static final Supplier<StructureType<AncientRootStructure>> ANCIENT_ROOTS =  register("ancient_roots", AncientRootStructure.CODEC);
+    public static final Supplier<StructurePieceType> ANCIENT_ROOTS_PIECES = registerPieces("ancient_roots", () -> AncientRootGenerator.Piece::new);
+    public static final Supplier<StructureType<AncientRootStructure>> ABANDONED_FARM = register("abandoned_farm", AncientRootStructure.CODEC);
+    public static final Supplier<StructurePieceType> ABANDONED_FARM_PIECES = registerPieces("abandoned_farm",() ->  AbandonedFarmGenerator.Piece::new);
 
-    public static StructureType<RuinStructure> BLEMISH_RUINS;
-    public static StructureType<AmberRuinsStructure> AMBER_RUINS;
-    public static StructureType<AmberPyramidStructure> AMBER_PYRAMID;
-    public static StructureType<MegalithRuinsStructure> MEGALITH_RUINS;
-    public static StructureType<MinilithStructure> MINILITHS;
+    public static final Supplier<StructureType<RuinStructure>> BLEMISH_RUINS = register( "ruin", RuinStructure.CODEC);
+    public static final Supplier<StructureType<AmberRuinsStructure>> AMBER_RUINS = register( "amber_ruins", AmberRuinsStructure.CODEC);
+    public static final Supplier<StructureType<AmberPyramidStructure>> AMBER_PYRAMID = register( "amber_pyramid", AmberPyramidStructure.CODEC);
+    public static final Supplier<StructureType<MegalithRuinsStructure>> MEGALITH_RUINS = register( "megalith_ruins", MegalithRuinsStructure.CODEC);
+    public static final Supplier<StructureType<MinilithStructure>> MINILITHS = register( "miniliths", MinilithStructure.CODEC);
 
-    public static StructureType<BygoneMineshaftStructure> BYGONE_MINESHAFT;
-    public static StructurePieceType BYGONE_MINESHAFT_CORRIDOR = Registry.register(BuiltInRegistries.STRUCTURE_PIECE,
-            Bygone.id("corr"), BygoneMineshaftGenerator.BygoneMineshaftCorridor::new);
-    public static StructurePieceType BYGONE_MINESHAFT_CROSSING = Registry.register(BuiltInRegistries.STRUCTURE_PIECE,
-            Bygone.id("cros"), BygoneMineshaftGenerator.BygoneMineshaftCrossing::new);
+    public static final Supplier<StructureType<BygoneMineshaftStructure>> BYGONE_MINESHAFT = register( "bygone_mineshaft", BygoneMineshaftStructure.CODEC);
+    public static Supplier<StructurePieceType> BYGONE_MINESHAFT_CORRIDOR = registerPieces("corr",() -> BygoneMineshaftGenerator.BygoneMineshaftCorridor::new);
+    public static Supplier<StructurePieceType> BYGONE_MINESHAFT_CROSSING = registerPieces("cros",() ->  BygoneMineshaftGenerator.BygoneMineshaftCrossing::new);
 
-    public static  StructurePieceType BYGONE_MINESHAFT_ROOM = Registry.register(BuiltInRegistries.STRUCTURE_PIECE,
-            Bygone.id("room"), BygoneMineshaftGenerator.BygoneMineshaftRoom::new);
-    public static StructurePieceType BYGONE_MINESHAFT_STAIRS = Registry.register(BuiltInRegistries.STRUCTURE_PIECE,
-            Bygone.id("star"), BygoneMineshaftGenerator.BygoneMineshaftStairs::new);
+    public static Supplier<StructurePieceType> BYGONE_MINESHAFT_ROOM = registerPieces("room",() -> BygoneMineshaftGenerator.BygoneMineshaftRoom::new);
+    public static Supplier<StructurePieceType> BYGONE_MINESHAFT_STAIRS = registerPieces("star",() -> BygoneMineshaftGenerator.BygoneMineshaftStairs::new);
 
-    public static StructureType<BygoneFossilStructure> BYGONE_FOSSIL;
-    public static StructurePieceType FOSSIL_PIECES = Registry.register(BuiltInRegistries.STRUCTURE_PIECE,
-            Bygone.id("bygone_fossil"), BygoneFossilGenerator.Piece::new);
-    public static StructurePieceType AMBER_RUIN_PIECES = Registry.register(BuiltInRegistries.STRUCTURE_PIECE,
-            Bygone.id("ruin"),  RuinGenerator.Piece::new);
-    public static StructurePieceType RUIN_PIECES = Registry.register(BuiltInRegistries.STRUCTURE_PIECE,
-            Bygone.id("amber_ruins"),  AmberRuinsGenerator.Piece::new);
-    public static StructurePieceType PYRAMID_PIECES = Registry.register(BuiltInRegistries.STRUCTURE_PIECE,
-            Bygone.id("amber_pyramid"), AmberRuinsGenerator.Piece::new);
+    public static final Supplier<StructureType<BygoneFossilStructure>> BYGONE_FOSSIL = register( "bygone_fossil", BygoneFossilStructure.CODEC);
+    public static Supplier<StructurePieceType> FOSSIL_PIECES = registerPieces("bygone_fossil",() -> BygoneFossilGenerator.Piece::new);
+    public static Supplier<StructurePieceType> AMBER_RUIN_PIECES = registerPieces("ruin",() ->  RuinGenerator.Piece::new);
+    public static Supplier<StructurePieceType> RUIN_PIECES = registerPieces("amber_ruins", () -> AmberRuinsGenerator.Piece::new);
+    public static Supplier<StructurePieceType> PYRAMID_PIECES = registerPieces("amber_pyramid",() -> AmberRuinsGenerator.Piece::new);
 
-    public static StructurePieceType MEGALITH_RUINS_PIECES = Registry.register(BuiltInRegistries.STRUCTURE_PIECE,
-            Bygone.id("megalith_ruins"), AmberRuinsGenerator.Piece::new);
-    public static StructurePieceType MINILITH_PIECES = Registry.register(BuiltInRegistries.STRUCTURE_PIECE,
-            Bygone.id("miniliths"),  MinilithGenerator.Piece::new);
+    public static Supplier<StructurePieceType> MEGALITH_RUINS_PIECES = registerPieces("megalith_ruins",() -> AmberRuinsGenerator.Piece::new);
+    public static Supplier<StructurePieceType> MINILITH_PIECES = registerPieces("miniliths",() ->  MinilithGenerator.Piece::new);
 
-    public static StructureType<TestRootStructure> TEST_ROOTS;
+    public static final  Supplier<StructureType<TestRootStructure>> TEST_ROOTS = register( "test_roots", TestRootStructure.CODEC);
 
-    public static StructureType<BygonePortalStructure> BYGONE_PORTAL;
-    public static StructurePieceType PORTAL_PIECE = Registry.register(BuiltInRegistries.STRUCTURE_PIECE,
-            Bygone.id("bygone_portal"), BygonePortalGenerator.Piece::new);
+    public static final  Supplier<StructureType<BygonePortalStructure>> BYGONE_PORTAL = register( "bygone_portal", BygonePortalStructure.CODEC);
+    public static Supplier<StructurePieceType> PORTAL_PIECE = registerPieces("bygone_portal",() -> BygonePortalGenerator.Piece::new);
 
 
     private static StructurePieceType register(StructurePieceType type, String id) {
@@ -74,27 +61,15 @@ public class BGStructures
         return register((StructurePieceType)type, id);
     }
 
-    public static void init()
-    {
-        ABANDONED_FARM = register("abandoned_farm", AncientRootStructure.CODEC);
-        ANCIENT_ROOTS = register("ancient_roots", AncientRootStructure.CODEC);
-        BYGONE_FOSSIL = register( "bygone_fossil", BygoneFossilStructure.CODEC);
-        BYGONE_PORTAL = register( "bygone_portal", BygonePortalStructure.CODEC);
-        TEST_ROOTS = register( "test_roots", TestRootStructure.CODEC);
-        BLEMISH_RUINS = register( "ruin", RuinStructure.CODEC);
-        AMBER_RUINS = register( "amber_ruins", AmberRuinsStructure.CODEC);
-        AMBER_PYRAMID = register( "amber_pyramid", AmberPyramidStructure.CODEC);
-        BYGONE_MINESHAFT = register( "bygone_mineshaft", BygoneMineshaftStructure.CODEC);
-
-        MEGALITH_RUINS = register( "megalith_ruins", MegalithRuinsStructure.CODEC);
-        MINILITHS = register( "miniliths", MinilithStructure.CODEC);
-
+    private static <S extends Structure> Supplier<StructureType<S>> register(String name, Codec<S> codec) {
+        return (Supplier<StructureType<S>>)(Object) JinxedRegistryHelper.register(BuiltInRegistries.STRUCTURE_TYPE, Bygone.MOD_ID, name,
+                () -> (StructureType<S>)() -> codec);
     }
 
-    private static <S extends Structure> StructureType<S> register(String name, Codec<S> codec) {
-        return Registry.register(BuiltInRegistries.STRUCTURE_TYPE, name, () -> {
-            return codec;
-        });
+    private static Supplier<StructurePieceType> registerPieces(String name, Supplier<StructurePieceType> supplier) {
+        return JinxedRegistryHelper.register(BuiltInRegistries.STRUCTURE_PIECE, Bygone.MOD_ID, name,supplier);
     }
 
+    public static void init() {
+    }
 }

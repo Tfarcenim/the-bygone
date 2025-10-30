@@ -110,6 +110,6 @@ public class AmberRuinsStructure extends Structure {
 
     @Override
     public StructureType<?> type() {
-        return BGStructures.AMBER_RUINS;
+        return BGStructures.AMBER_RUINS.get();
     }
 }

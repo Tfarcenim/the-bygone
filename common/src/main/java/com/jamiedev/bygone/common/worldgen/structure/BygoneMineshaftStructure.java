@@ -8,6 +8,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.Optional;
 import java.util.function.IntFunction;
+import java.util.function.Supplier;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.ByIdMap;
@@ -59,24 +60,24 @@ public class BygoneMineshaftStructure extends Structure {
 
     @Override
     public StructureType<?> type() {
-        return BGStructures.BYGONE_MINESHAFT;
+        return BGStructures.BYGONE_MINESHAFT.get();
     }
 
     public enum Type implements StringRepresentable {
-        NORMAL("ancient", BGBlocks.ANCIENT_LOG.get(), BGBlocks.ANCIENT_PLANKS.get(), BGBlocks.ANCIENT_FENCE.get());
+        NORMAL("ancient", BGBlocks.ANCIENT_LOG, BGBlocks.ANCIENT_PLANKS, BGBlocks.ANCIENT_FENCE);
 
         public static final Codec<BygoneMineshaftStructure.Type> CODEC = StringRepresentable.fromEnum(BygoneMineshaftStructure.Type::values);
         private static final IntFunction<BygoneMineshaftStructure.Type> BY_ID = ByIdMap.continuous(Enum::ordinal, values(), ByIdMap.OutOfBoundsStrategy.ZERO);
         private final String name;
-        private final BlockState log;
-        private final BlockState planks;
-        private final BlockState fence;
+        private final Supplier<Block> log;
+        private final Supplier<Block> planks;
+        private final Supplier<Block> fence;
 
-        Type(final String name, final Block log, final Block planks, final Block fence) {
+        Type(final String name, final Supplier<Block> log, final Supplier<Block> planks, final Supplier<Block> fence) {
             this.name = name;
-            this.log = log.defaultBlockState();
-            this.planks = planks.defaultBlockState();
-            this.fence = fence.defaultBlockState();
+            this.log = log;
+            this.planks = planks;
+            this.fence = fence;
         }
 
         public String getName() {
@@ -88,7 +89,7 @@ public class BygoneMineshaftStructure extends Structure {
         }
 
         public BlockState getLog() {
-            return this.log;
+            return this.log.get().defaultBlockState();
         }
 
         public BlockState getPlanks() {
@@ -96,7 +97,7 @@ public class BygoneMineshaftStructure extends Structure {
         }
 
         public BlockState getFence() {
-            return this.fence;
+            return this.fence.get().defaultBlockState();
         }
 
         @Override

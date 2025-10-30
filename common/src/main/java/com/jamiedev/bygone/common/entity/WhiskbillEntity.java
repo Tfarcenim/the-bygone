@@ -98,7 +98,7 @@ public class WhiskbillEntity extends Animal
     }
 
     boolean isLookingAtMe(Player player) {
-        ItemStack itemstack = (ItemStack)player.getInventory().armor.get(3);
+        ItemStack itemstack = player.getInventory().armor.get(3);
         if (itemstack.is(Blocks.CARVED_PUMPKIN.asItem())) {
             return false;
         } else {
@@ -120,19 +120,19 @@ public class WhiskbillEntity extends Animal
     }
 
     protected SoundEvent getAmbientSound() {
-        return BGSoundEvents.WHISKBILL_AMBIENT_ADDITIONS_EVENT;
+        return BGSoundEvents.WHISKBILL_AMBIENT_ADDITIONS_EVENT.get();
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return BGSoundEvents.WHISKBILL_HURT_ADDITIONS_EVENT;
+        return BGSoundEvents.WHISKBILL_HURT_ADDITIONS_EVENT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return BGSoundEvents.WHISKBILL_DEATH_ADDITIONS_EVENT;
+        return BGSoundEvents.WHISKBILL_DEATH_ADDITIONS_EVENT.get();
     }
 
     public boolean isClimbing() {
-        return ((Byte)this.entityData.get(DATA_FLAGS_ID) & 1) != 0;
+        return (this.entityData.get(DATA_FLAGS_ID) & 1) != 0;
     }
 
     public boolean hurt(DamageSource source, float amount) {
@@ -141,10 +141,9 @@ public class WhiskbillEntity extends Animal
         } else {
             if (source.getEntity() instanceof Player) {
                 Entity var4 = source.getDirectEntity();
-                if (var4 instanceof LivingEntity) {
-                    LivingEntity livingentity = (LivingEntity)var4;
+                if (var4 instanceof LivingEntity livingentity) {
                     livingentity.hurt(this.damageSources().thorns(this), 2.0F);
-                    livingentity.addEffect(new MobEffectInstance(MobEffects.POISON, 60 * 1, 0), this);
+                    livingentity.addEffect(new MobEffectInstance(MobEffects.POISON, 60, 0), this);
                 }
             }
 
@@ -154,7 +153,7 @@ public class WhiskbillEntity extends Animal
 
 
     public void setClimbing(boolean climbing) {
-        byte b0 = (Byte)this.entityData.get(DATA_FLAGS_ID);
+        byte b0 = this.entityData.get(DATA_FLAGS_ID);
         if (climbing) {
             b0 = (byte)(b0 | 1);
         } else {
@@ -179,15 +178,15 @@ public class WhiskbillEntity extends Animal
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, (double)0.20F).add(Attributes.MAX_HEALTH, (double)10.0F);
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.20F).add(Attributes.MAX_HEALTH, 10.0F);
     }
 
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(1, new ClimbOnTopOfPowderSnowGoal(this, this.level()));
         this.goalSelector.addGoal(2, new BreedGoal(this, 0.8));
-        this.goalSelector.addGoal(3, new TemptGoal(this, (double)1.0F, Ingredient.of(JamiesModTag.WHISKBILL_FOOD), false));
-        this.goalSelector.addGoal(4, new AvoidEntityGoal<>(this, Player.class, 16.0F, 1.3, 1.4, (p_352798_) -> AVOID_PLAYERS.test((Entity) p_352798_) && !this.isBaby()));
+        this.goalSelector.addGoal(3, new TemptGoal(this, 1.0F, Ingredient.of(JamiesModTag.WHISKBILL_FOOD), false));
+        this.goalSelector.addGoal(4, new AvoidEntityGoal<>(this, Player.class, 16.0F, 1.3, 1.4, (p_352798_) -> AVOID_PLAYERS.test(p_352798_) && !this.isBaby()));
 
         this.goalSelector.addGoal(4, new WhiskbillEntity.EatGourdGoal(this, 1.5, 11, 9));
         /*this.goalSelector.addGoal(4, new WhiskbillEntity.EatVerdantGourdGoal(this, 1.5, 9, 9));

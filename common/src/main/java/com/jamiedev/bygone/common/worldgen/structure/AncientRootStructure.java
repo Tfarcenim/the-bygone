@@ -111,6 +111,6 @@ public class AncientRootStructure extends Structure {
 
     @Override
     public StructureType<?> type() {
-        return BGStructures.ANCIENT_ROOTS;
+        return BGStructures.ANCIENT_ROOTS.get();
     }
 }

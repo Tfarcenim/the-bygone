@@ -36,17 +36,17 @@ public class BygonePortalGenerator
 
     public static class Piece extends TemplateStructurePiece {
         public Piece(StructureTemplateManager manager, ResourceLocation template, BlockPos pos, Rotation rotation) {
-            super(BGStructures.PORTAL_PIECE, 0, manager, template, template.toString(), createPlacementData(rotation), pos);
+            super(BGStructures.PORTAL_PIECE.get(), 0, manager, template, template.toString(), createPlacementData(rotation), pos);
         }
 
         public Piece(StructureTemplateManager manager, CompoundTag nbt) {
-            super(BGStructures.PORTAL_PIECE, nbt, manager, (id) -> {
+            super(BGStructures.PORTAL_PIECE.get(), nbt, manager, (id) -> {
                 return createPlacementData(Rotation.valueOf(nbt.getString("Rot")));
             });
         }
 
         public Piece(StructurePieceSerializationContext structureContext, CompoundTag nbt) {
-            super(BGStructures.PORTAL_PIECE, nbt, structureContext.structureTemplateManager(), (id) -> {
+            super(BGStructures.PORTAL_PIECE.get(), nbt, structureContext.structureTemplateManager(), (id) -> {
                 return createPlacementData(Rotation.valueOf(nbt.getString("Rot")));
             });
         }

@@ -63,6 +63,6 @@ public class BygoneFossilStructure extends Structure
 
     @Override
     public StructureType<?> type() {
-        return BGStructures.BYGONE_FOSSIL;
+        return BGStructures.BYGONE_FOSSIL.get();
     }
 }

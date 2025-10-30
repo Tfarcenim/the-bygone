@@ -255,12 +255,12 @@ public class BigBeakEntity  extends AbstractHorse implements VariantHolder<BigBe
                 if (this.gallopSoundCounter > 5 && this.gallopSoundCounter % 3 == 0) {
                     this.playGallopSound(blockSoundGroup);
                 } else if (this.gallopSoundCounter <= 5) {
-                    this.playSound(BGSoundEvents.BIGBEAK_STEP_WOOD_ADDITIONS_EVENT, blockSoundGroup.getVolume() * 0.15F, blockSoundGroup.getPitch());
+                    this.playSound(BGSoundEvents.BIGBEAK_STEP_WOOD_ADDITIONS_EVENT.get(), blockSoundGroup.getVolume() * 0.15F, blockSoundGroup.getPitch());
                 }
             } else if (this.isWoodSoundType(blockSoundGroup)) {
-                this.playSound(BGSoundEvents.BIGBEAK_STEP_WOOD_ADDITIONS_EVENT, blockSoundGroup.getVolume() * 0.15F, blockSoundGroup.getPitch());
+                this.playSound(BGSoundEvents.BIGBEAK_STEP_WOOD_ADDITIONS_EVENT.get(), blockSoundGroup.getVolume() * 0.15F, blockSoundGroup.getPitch());
             } else {
-                this.playSound(BGSoundEvents.BIGBEAK_STEP_ADDITIONS_EVENT, blockSoundGroup.getVolume() * 0.15F, blockSoundGroup.getPitch());
+                this.playSound(BGSoundEvents.BIGBEAK_STEP_ADDITIONS_EVENT.get(), blockSoundGroup.getVolume() * 0.15F, blockSoundGroup.getPitch());
             }
 
         }
@@ -268,7 +268,7 @@ public class BigBeakEntity  extends AbstractHorse implements VariantHolder<BigBe
 
     @Override
     protected void playGallopSound(SoundType group) {
-        this.playSound(BGSoundEvents.BIGBEAK_GALLOP_ADDITIONS_EVENT, group.getVolume() * 0.15F, group.getPitch());
+        this.playSound(BGSoundEvents.BIGBEAK_GALLOP_ADDITIONS_EVENT.get(), group.getVolume() * 0.15F, group.getPitch());
     }
 
     private boolean isWoodSoundType(SoundType soundGroup) {
@@ -284,12 +284,12 @@ public class BigBeakEntity  extends AbstractHorse implements VariantHolder<BigBe
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return BGSoundEvents.BIGBEAK_AMBIENT_ADDITIONS_EVENT;
+        return BGSoundEvents.BIGBEAK_AMBIENT_ADDITIONS_EVENT.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return BGSoundEvents.BIGBEAK_DEATH_ADDITIONS_EVENT;
+        return BGSoundEvents.BIGBEAK_DEATH_ADDITIONS_EVENT.get();
     }
 
     @Override
@@ -300,11 +300,11 @@ public class BigBeakEntity  extends AbstractHorse implements VariantHolder<BigBe
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return BGSoundEvents.BIGBEAK_HURT_ADDITIONS_EVENT;
+        return BGSoundEvents.BIGBEAK_HURT_ADDITIONS_EVENT.get();
     }
     @Override
     protected void playJumpSound() {
-        this.playSound(BGSoundEvents.BIGBEAK_JUMP_ADDITIONS_EVENT, 0.4F, 1.0F);
+        this.playSound(BGSoundEvents.BIGBEAK_JUMP_ADDITIONS_EVENT.get(), 0.4F, 1.0F);
     }
 
 

@@ -53,7 +53,7 @@ public class HookItem extends Item
     }
 
     private static void retrieve(Level level, Player player, HookEntity hook) {
-        level.playSound(null, player.getX(), player.getY(), player.getZ(), BGSoundEvents.HOOK_RETRIEVE_ADDITIONS_EVENT, SoundSource.NEUTRAL, 1.0F, 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
+        level.playSound(null, player.getX(), player.getY(), player.getZ(), BGSoundEvents.HOOK_RETRIEVE_ADDITIONS_EVENT.get(), SoundSource.NEUTRAL, 1.0F, 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
         if (!level.isClientSide()) {
             hook.discard();
             ((PlayerWithHook)player).bygone$setHook(null);
@@ -69,7 +69,7 @@ public class HookItem extends Item
             HookEntity hook = ((PlayerWithHook) player).bygone$getHook();
             if (hook != null) {
                 if(remainingUseTicks % 5 == 0){
-                    world.playSound(null, user.getX(), user.getY(), user.getZ(), BGSoundEvents.HOOK_RETRIEVE_ADDITIONS_EVENT, SoundSource.NEUTRAL, 1.0F, 0.4F / (world.getRandom().nextFloat() * 0.4F + 0.8F));
+                    world.playSound(null, user.getX(), user.getY(), user.getZ(), BGSoundEvents.HOOK_RETRIEVE_ADDITIONS_EVENT.get(), SoundSource.NEUTRAL, 1.0F, 0.4F / (world.getRandom().nextFloat() * 0.4F + 0.8F));
                 }
 
                 if (hook.isInWall())
@@ -130,7 +130,7 @@ public class HookItem extends Item
                     }
                     player.awardStat(Stats.ITEM_USED.get(this));
                 }
-                world.playSound(null, user.getX(), user.getY(), user.getZ(), BGSoundEvents.HOOK_THROW_ADDITIONS_EVENT, SoundSource.NEUTRAL, 1.0F, 0.4F / (world.getRandom().nextFloat() * 0.4F + 0.8F));
+                world.playSound(null, user.getX(), user.getY(), user.getZ(), BGSoundEvents.HOOK_THROW_ADDITIONS_EVENT.get(), SoundSource.NEUTRAL, 1.0F, 0.4F / (world.getRandom().nextFloat() * 0.4F + 0.8F));
             }
         }
     }

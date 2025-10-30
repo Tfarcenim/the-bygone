@@ -31,14 +31,14 @@ public class NectaurRangeAttack<E extends Mob & RangedAttackMob, T extends Livin
         super(ImmutableMap.of(
                 MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED,
                 MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT,
-                BGMemoryModuleTypes.GROUP_LEADER, MemoryStatus.VALUE_PRESENT,
-                BGMemoryModuleTypes.IS_STALKING, MemoryStatus.REGISTERED,
-                BGMemoryModuleTypes.NECTAUR_RANGED_COOLDOWN, MemoryStatus.VALUE_ABSENT),
+                BGMemoryModuleTypes.GROUP_LEADER.get(), MemoryStatus.VALUE_PRESENT,
+                BGMemoryModuleTypes.IS_STALKING.get(), MemoryStatus.REGISTERED,
+                BGMemoryModuleTypes.NECTAUR_RANGED_COOLDOWN.get(), MemoryStatus.VALUE_ABSENT),
                 DURATION);
     }
 
     protected boolean checkExtraStartConditions(ServerLevel level, E owner) {
-        if (owner.getBrain().getMemory(BGMemoryModuleTypes.IS_STALKING).orElse(false)) {
+        if (owner.getBrain().getMemory(BGMemoryModuleTypes.IS_STALKING.get()).orElse(false)) {
             return false;
         }
 
@@ -58,11 +58,11 @@ public class NectaurRangeAttack<E extends Mob & RangedAttackMob, T extends Livin
         if (owner.distanceTo(livingentity) < 4.0F) {
             owner.getNavigation().stop();
         }
-        if (owner.getBrain().checkMemory(BGMemoryModuleTypes.NECTAUR_RANGED_COOLDOWN, MemoryStatus.VALUE_ABSENT)) {
+        if (owner.getBrain().checkMemory(BGMemoryModuleTypes.NECTAUR_RANGED_COOLDOWN.get(), MemoryStatus.VALUE_ABSENT)) {
             owner.performRangedAttack(livingentity, 1.0F);
             owner.playSound(SoundEvents.LINGERING_POTION_THROW, 1.0F, 1.0F);
         }
-        owner.getBrain().setMemoryWithExpiry(BGMemoryModuleTypes.NECTAUR_RANGED_COOLDOWN, Unit.INSTANCE, (long)COOLDOWN_TICKS);
+        owner.getBrain().setMemoryWithExpiry(BGMemoryModuleTypes.NECTAUR_RANGED_COOLDOWN.get(), Unit.INSTANCE, (long)COOLDOWN_TICKS);
     }
 
     private void lookAtTarget(Mob shooter, LivingEntity target) {
@@ -80,6 +80,6 @@ public class NectaurRangeAttack<E extends Mob & RangedAttackMob, T extends Livin
     }
 
     public static void setCooldown(LivingEntity entity, int cooldown) {
-        entity.getBrain().setMemoryWithExpiry(BGMemoryModuleTypes.NECTAUR_RANGED_COOLDOWN, Unit.INSTANCE, (long)cooldown);
+        entity.getBrain().setMemoryWithExpiry(BGMemoryModuleTypes.NECTAUR_RANGED_COOLDOWN.get(), Unit.INSTANCE, (long)cooldown);
     }
 }

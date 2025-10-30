@@ -1,5 +1,6 @@
 package com.jamiedev.bygone.platform;
 
+import com.jamiedev.bygone.Bygone;
 import com.jamiedev.bygone.platform.services.IPlatformHelper;
 
 import java.util.ServiceLoader;
@@ -23,7 +24,7 @@ public class Services {
         final T loadedService = ServiceLoader.load(clazz)
                 .findFirst()
                 .orElseThrow(() -> new NullPointerException("Failed to load service for " + clazz.getName()));
-        Constants.LOG.debug("Loaded {} for service {}", loadedService, clazz);
+        Bygone.LOGGER.debug("Loaded {} for service {}", loadedService, clazz);
         return loadedService;
     }
 }

@@ -16,7 +16,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -40,7 +39,7 @@ public class Bygone {
         BGBlocks.init();
         BGBlockEntities.init();
         BGItems.init();
-        BGEntityTypes.postInit();
+        BGEntityTypes.init();
         BGBiomes.init();
         BGItemGroups.register();
     }
@@ -143,11 +142,6 @@ public class Bygone {
     }
 
     private static int timeInBygone;
-    private static Level level;
-
-    public static Level level() {
-        return level;
-    }
 
     public static void tickCow(Cow cow) {
 

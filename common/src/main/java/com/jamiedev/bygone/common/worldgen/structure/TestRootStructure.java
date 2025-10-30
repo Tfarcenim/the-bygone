@@ -141,6 +141,6 @@ public class TestRootStructure  extends Structure {
 
     @Override
     public StructureType<?> type() {
-        return BGStructures.TEST_ROOTS; // Helps the game know how to turn this structure back to json to save to chunks
+        return BGStructures.TEST_ROOTS.get(); // Helps the game know how to turn this structure back to json to save to chunks
     }
 }

@@ -111,6 +111,6 @@ public class RuinStructure extends Structure {
 
     @Override
     public StructureType<?> type() {
-        return BGStructures.BLEMISH_RUINS;
+        return BGStructures.BLEMISH_RUINS.get();
     }
 }

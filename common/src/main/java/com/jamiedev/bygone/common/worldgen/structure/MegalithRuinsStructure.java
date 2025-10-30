@@ -110,6 +110,6 @@ public class MegalithRuinsStructure extends Structure
 
     @Override
     public StructureType<?> type() {
-        return BGStructures.MEGALITH_RUINS;
+        return BGStructures.MEGALITH_RUINS.get();
     }
 }

@@ -8,8 +8,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.projectile.SmallFireball;
-import net.minecraft.world.level.block.Blocks;
 
 import java.util.function.Supplier;
 
@@ -160,13 +158,7 @@ public class BGEntityTypes {
                     .build("")
     );*/
 
-    public static void postInit() {
-        initSpawnRestrictions();
-    }
-
-    public static void initSpawnRestrictions() {
-
-
+    public static void init() {
     }
 
     private static <T extends EntityType<?>> Supplier<T> registerEntityType(String name, Supplier<T> entityTypeSupplier) {

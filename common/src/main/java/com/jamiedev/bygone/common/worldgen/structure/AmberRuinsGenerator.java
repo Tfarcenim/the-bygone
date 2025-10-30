@@ -39,17 +39,17 @@ public class AmberRuinsGenerator
 
     public static class Piece extends TemplateStructurePiece {
         public Piece(StructureTemplateManager manager, ResourceLocation template, BlockPos pos, Rotation rotation) {
-            super(BGStructures.AMBER_RUIN_PIECES, 0, manager, template, template.toString(), createPlacementData(rotation), pos);
+            super(BGStructures.AMBER_RUIN_PIECES.get(), 0, manager, template, template.toString(), createPlacementData(rotation), pos);
         }
 
         public Piece(StructureTemplateManager manager, CompoundTag nbt) {
-            super(BGStructures.AMBER_RUIN_PIECES, nbt, manager, (id) -> {
+            super(BGStructures.AMBER_RUIN_PIECES.get(), nbt, manager, (id) -> {
                 return createPlacementData(Rotation.valueOf(nbt.getString("Rot")));
             });
         }
 
         public Piece(StructurePieceSerializationContext structureContext, CompoundTag nbt) {
-            super(BGStructures.AMBER_RUIN_PIECES, nbt, structureContext.structureTemplateManager(), (id) -> {
+            super(BGStructures.AMBER_RUIN_PIECES.get(), nbt, structureContext.structureTemplateManager(), (id) -> {
                 return createPlacementData(Rotation.valueOf(nbt.getString("Rot")));
             });
         }

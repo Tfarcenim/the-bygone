@@ -292,17 +292,17 @@ public class LithyEntity extends PathfinderMob {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return BGSoundEvents.LITHY_AMBIENT_ADDITIONS_EVENT;
+        return BGSoundEvents.LITHY_AMBIENT_ADDITIONS_EVENT.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return BGSoundEvents.LITHY_HURT_ADDITIONS_EVENT;
+        return BGSoundEvents.LITHY_HURT_ADDITIONS_EVENT.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return BGSoundEvents.LITHY_DEATH_ADDITIONS_EVENT;
+        return BGSoundEvents.LITHY_DEATH_ADDITIONS_EVENT.get();
     }
 
 
@@ -323,7 +323,7 @@ public class LithyEntity extends PathfinderMob {
     }
 
     private void playTripEffects() {
-        this.playSound(BGSoundEvents.LITHY_TRIP_ADDITIONS_EVENT, 0.7F, 1.2F + this.random.nextFloat() * 0.2F);
+        this.playSound(BGSoundEvents.LITHY_TRIP_ADDITIONS_EVENT.get(), 0.7F, 1.2F + this.random.nextFloat() * 0.2F);
 
         if (this.level().isClientSide()) {
             double x = this.getX();

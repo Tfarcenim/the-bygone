@@ -1,4 +1,4 @@
-package com.jamiedev.bygone.core;
+package com.jamiedev.bygone.core.registry;
 
 public class BGRegistries
 {

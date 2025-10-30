@@ -12,12 +12,12 @@ import java.util.UUID;
 
 public class NectaurFollowLeader extends Behavior<NectaurEntity> {
     public NectaurFollowLeader() {
-        super(Map.of(BGMemoryModuleTypes.GROUP_LEADER, MemoryStatus.VALUE_PRESENT));
+        super(Map.of(BGMemoryModuleTypes.GROUP_LEADER.get(), MemoryStatus.VALUE_PRESENT));
     }
 
     @Override
     protected void tick(ServerLevel level, NectaurEntity entity, long gameTime) {
-        UUID leaderId = entity.getBrain().getMemory(BGMemoryModuleTypes.GROUP_LEADER).get();
+        UUID leaderId = entity.getBrain().getMemory(BGMemoryModuleTypes.GROUP_LEADER.get()).get();
         Entity leaderEntity = ((ServerLevel) entity.level()).getEntity(leaderId);
 
         if (leaderEntity instanceof NectaurEntity leader && !entity.getUUID().equals(leaderId)) {
@@ -31,8 +31,8 @@ public class NectaurFollowLeader extends Behavior<NectaurEntity> {
 
     @Override
     protected boolean canStillUse(ServerLevel level, NectaurEntity entity, long gameTime) {
-        return entity.getBrain().hasMemoryValue(BGMemoryModuleTypes.GROUP_LEADER) &&
-                level.getEntity(entity.getBrain().getMemory(BGMemoryModuleTypes.GROUP_LEADER).get()) != null;
+        return entity.getBrain().hasMemoryValue(BGMemoryModuleTypes.GROUP_LEADER.get()) &&
+                level.getEntity(entity.getBrain().getMemory(BGMemoryModuleTypes.GROUP_LEADER.get()).get()) != null;
     }
 
 

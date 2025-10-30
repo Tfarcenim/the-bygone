@@ -26,13 +26,13 @@ public class BGItems
             .effect(new MobEffectInstance(MobEffects.HEAL, 1, 0), 1.0F).alwaysEat().build();
 
     public static final Supplier<Item> VERDIGRIS_BLADE = registerItem("verdigris_blade", () -> new VerdigrisBladeItem(JamiesModToolMaterials.VERDIGRIS, new Item.Properties().stacksTo(1)));
-    public static final Supplier<Item> VERDIGRIS_BOW = registerItem("verdigris_bow", () -> new VerdigrisBowItem(new Item.Properties().durability(100).stacksTo(1)));
+    public static final Supplier<Item> VERDIGRIS_BOW = registerItem("verdigris_bow", () -> new VerdigrisBowItem(new Item.Properties().durability(100)));
 
-    public static final Supplier<Item> HOOK = registerItem("ancient_hook", () -> new HookItem(new Item.Properties().stacksTo(1).durability(100)));
+    public static final Supplier<Item> HOOK = registerItem("ancient_hook", () -> new HookItem(new Item.Properties().durability(100)));
     
     public static final Supplier<Item> WHIRLIWEED_BUNDLE = registerItem("whirliweed_bundle", () -> new WhirliweedBundleItem(new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON)));
     
-    public static final Supplier<Item> MALICIOUS_WAR_HORN = registerItem("malicious_war_horn", () -> new MaliciousWarHornItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).durability(100)));
+    public static final Supplier<Item> MALICIOUS_WAR_HORN = registerItem("malicious_war_horn", () -> new MaliciousWarHornItem(new Item.Properties().rarity(Rarity.EPIC).durability(100)));
     
     public static final Supplier<Item> ECHO_GONG = registerItem("echo_gong", () -> new EchoGongItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
 
@@ -84,21 +84,21 @@ public class BGItems
     public static final Supplier<Item> GOLD_BIG_BEAK_ARMOR = registerItem("gold_beak_armor", () -> new CustomAnimalArmorItem(ArmorMaterials.GOLD, CustomAnimalArmorItem.BodyType.BIG_BEAK, false, (new Item.Properties()).stacksTo(1)));
     public static final Supplier<Item> IRON_BIG_BEAK_ARMOR = registerItem("iron_beak_armor", () -> new CustomAnimalArmorItem(ArmorMaterials.IRON, CustomAnimalArmorItem.BodyType.BIG_BEAK, false, (new Item.Properties()).stacksTo(1)));
     public static final Supplier<Item> DIAMOND_BIG_BEAK_ARMOR = registerItem("diamond_beak_armor", () -> new CustomAnimalArmorItem(ArmorMaterials.DIAMOND, CustomAnimalArmorItem.BodyType.BIG_BEAK, false, (new Item.Properties()).stacksTo(1)));
-    public static final Supplier<Item> BIG_BEAK_SPAWN_EGG = registerItem("big_beak_spawn_egg", () -> new SpawnEggItem(BGEntityTypes.BIG_BEAK.get(), 0x85c70a, 0xffae00, new Item.Properties()));
-    public static final Supplier<Item> COELACANTH_SPAWN_EGG = registerItem("coelacanth_spawn_egg", () -> new SpawnEggItem(BGEntityTypes.COELACANTH.get(), 0x266a78, 0x238349, new Item.Properties()));
-    public static final Supplier<Item> COPPERBUG_SPAWN_EGG = registerItem("copperbug_spawn_egg", () -> new SpawnEggItem(BGEntityTypes.COPPERBUG.get(), 0x28e658, 0x25cba1, new Item.Properties()));
+    public static final Supplier<Item> BIG_BEAK_SPAWN_EGG = registerItem("big_beak_spawn_egg", () -> new SupplierSpawnEggItem(BGEntityTypes.BIG_BEAK, 0x85c70a, 0xffae00, new Item.Properties()));
+    public static final Supplier<Item> COELACANTH_SPAWN_EGG = registerItem("coelacanth_spawn_egg", () -> new SupplierSpawnEggItem(BGEntityTypes.COELACANTH, 0x266a78, 0x238349, new Item.Properties()));
+    public static final Supplier<Item> COPPERBUG_SPAWN_EGG = registerItem("copperbug_spawn_egg", () -> new SupplierSpawnEggItem(BGEntityTypes.COPPERBUG, 0x28e658, 0x25cba1, new Item.Properties()));
 
-    public static final Supplier<Item> FUNGALPARENT_SPAWN_EGG = registerItem("fungal_parent_spawn_egg", () -> new SpawnEggItem(BGEntityTypes.FUNGAL_PARENT.get(), 0xf5f7e3, 0x3ed8fe, new Item.Properties()));
+    public static final Supplier<Item> FUNGALPARENT_SPAWN_EGG = registerItem("fungal_parent_spawn_egg", () -> new SupplierSpawnEggItem(BGEntityTypes.FUNGAL_PARENT, 0xf5f7e3, 0x3ed8fe, new Item.Properties()));
 
-    public static final Supplier<Item> LITHY_SPAWN_EGG = registerItem("lithy_spawn_egg", () -> new SpawnEggItem(BGEntityTypes.LITHY.get(), 0x5C5B5A, 0x323232, new Item.Properties()));
-    public static final Supplier<Item> MOOBOO_SPAWN_EGG = registerItem("mooboo_spawn_egg", () -> new SpawnEggItem(BGEntityTypes.MOOBOO.get(), 0x5be3e8, 0xb2c7c8, new Item.Properties()));
-    public static final Supplier<Item> PESKY_SPAWN_EGG = registerItem("pesky_spawn_egg", () -> new SpawnEggItem(BGEntityTypes.PESKY.get(), 0x846B3C, 0xC66C11, new Item.Properties()));
-    public static final Supplier<Item> PEST_SPAWN_EGG = registerItem("pest_spawn_egg", () -> new SpawnEggItem(BGEntityTypes.PEST.get(), 0x846B3C, 0x6C8031, new Item.Properties()));
-    public static final Supplier<Item> SCUTTLE_SPAWN_EGG = registerItem("scuttle_spawn_egg", () -> new SpawnEggItem(BGEntityTypes.SCUTTLE.get(), 0x274772, 0xeab033, new Item.Properties()));
-    public static final Supplier<Item> TRILOBITE_SPAWN_EGG = registerItem("trilobite_spawn_egg", () -> new SpawnEggItem(BGEntityTypes.TRILOBITE.get(), 0x233c56, 0x14a4aa, new Item.Properties()));
-    public static final Supplier<Item> WHISKBILL_SPAWN_EGG = registerItem("whiskbill_spawn_egg", () -> new SpawnEggItem(BGEntityTypes.WHISKBILL.get(), 0x50692C, 0x70922D, new Item.Properties()));
-    public static final Supplier<Item> NECTAUR_SPAWN_EGG = registerItem("nectaur_spawn_egg", () -> new SpawnEggItem(BGEntityTypes.NECTAUR.get(), 0x50692C, 0x94262B, new Item.Properties()));
-    public static final Supplier<Item> WRAITH_SPAWN_EGG = registerItem("wraith_spawn_egg", () -> new SpawnEggItem(BGEntityTypes.WRAITH.get(), 0x22244A, 0xBAEFED, new Item.Properties()));
+    public static final Supplier<Item> LITHY_SPAWN_EGG = registerItem("lithy_spawn_egg", () -> new SupplierSpawnEggItem(BGEntityTypes.LITHY, 0x5C5B5A, 0x323232, new Item.Properties()));
+    public static final Supplier<Item> MOOBOO_SPAWN_EGG = registerItem("mooboo_spawn_egg", () -> new SupplierSpawnEggItem(BGEntityTypes.MOOBOO, 0x5be3e8, 0xb2c7c8, new Item.Properties()));
+    public static final Supplier<Item> PESKY_SPAWN_EGG = registerItem("pesky_spawn_egg", () -> new SupplierSpawnEggItem(BGEntityTypes.PESKY, 0x846B3C, 0xC66C11, new Item.Properties()));
+    public static final Supplier<Item> PEST_SPAWN_EGG = registerItem("pest_spawn_egg", () -> new SupplierSpawnEggItem(BGEntityTypes.PEST, 0x846B3C, 0x6C8031, new Item.Properties()));
+    public static final Supplier<Item> SCUTTLE_SPAWN_EGG = registerItem("scuttle_spawn_egg", () -> new SupplierSpawnEggItem(BGEntityTypes.SCUTTLE, 0x274772, 0xeab033, new Item.Properties()));
+    public static final Supplier<Item> TRILOBITE_SPAWN_EGG = registerItem("trilobite_spawn_egg", () -> new SupplierSpawnEggItem(BGEntityTypes.TRILOBITE, 0x233c56, 0x14a4aa, new Item.Properties()));
+    public static final Supplier<Item> WHISKBILL_SPAWN_EGG = registerItem("whiskbill_spawn_egg", () -> new SupplierSpawnEggItem(BGEntityTypes.WHISKBILL, 0x50692C, 0x70922D, new Item.Properties()));
+    public static final Supplier<Item> NECTAUR_SPAWN_EGG = registerItem("nectaur_spawn_egg", () -> new SupplierSpawnEggItem(BGEntityTypes.NECTAUR, 0x50692C, 0x94262B, new Item.Properties()));
+    public static final Supplier<Item> WRAITH_SPAWN_EGG = registerItem("wraith_spawn_egg", () -> new SupplierSpawnEggItem(BGEntityTypes.WRAITH, 0x22244A, 0xBAEFED, new Item.Properties()));
 
 
 
@@ -132,7 +132,7 @@ public class BGItems
     public static final Supplier<Item> LITHOPLASM = registerItem("lithoplasm", () -> new Item(new Item.Properties().fireResistant()));
 
 
-    public static final Supplier<Item> MUSIC_DISC_SHUFFLE = registerItem("music_disc_shuffle",  () -> new RecordItem(1,BGSoundEvents.MUSIC_DISC_SHUFFLE.value(),new Item.Properties().stacksTo(1).rarity(Rarity.RARE),178));
+    public static final Supplier<Item> MUSIC_DISC_SHUFFLE = registerItem("music_disc_shuffle",  () -> new SupplierRecordItem(1,BGSoundEvents.MUSIC_DISC_SHUFFLE,new Item.Properties().stacksTo(1).rarity(Rarity.RARE),178));
     //ublic static final Supplier<Item> MUSIC_DISC_SHUFFLE = registerItem("music_disc_shuffle",  () -> new Item((new Item.Properties()).stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(ResourceKey.create(Registries.JUKEBOX_SONG, ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID, "shuffle")))));
 
 

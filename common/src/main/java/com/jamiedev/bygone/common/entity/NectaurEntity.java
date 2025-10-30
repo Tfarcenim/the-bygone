@@ -1,5 +1,6 @@
 package com.jamiedev.bygone.common.entity;
 
+import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableList;
 import com.jamiedev.bygone.common.entity.ai.NectaurBrain;
 import com.jamiedev.bygone.common.entity.projectile.NectaurPetalEntity;
@@ -12,6 +13,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.LazyLoadedValue;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.DifficultyInstance;
@@ -39,6 +41,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
+import java.util.function.Supplier;
 
 public class NectaurEntity extends Animal implements NeutralMob, RangedAttackMob {
 
@@ -58,13 +61,13 @@ public class NectaurEntity extends Animal implements NeutralMob, RangedAttackMob
             SensorType.NEAREST_PLAYERS,
             SensorType.HURT_BY
     );
-    protected static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(
-            BGMemoryModuleTypes.NEAREST_NECTAUR_ALLY,
-            BGMemoryModuleTypes.IS_LEADER,
-            BGMemoryModuleTypes.IS_STALKING,
-            BGMemoryModuleTypes.IS_IN_GROUP,
-            BGMemoryModuleTypes.GROUP_LEADER,
-            BGMemoryModuleTypes.NECTAUR_RANGED_COOLDOWN,
+    protected static final Supplier<ImmutableList<MemoryModuleType<?>>> MEMORY_TYPES = Suppliers.memoize(() ->ImmutableList.of(
+            BGMemoryModuleTypes.NEAREST_NECTAUR_ALLY.get(),
+            BGMemoryModuleTypes.IS_LEADER.get(),
+            BGMemoryModuleTypes.IS_STALKING.get(),
+            BGMemoryModuleTypes.IS_IN_GROUP.get(),
+            BGMemoryModuleTypes.GROUP_LEADER.get(),
+            BGMemoryModuleTypes.NECTAUR_RANGED_COOLDOWN.get(),
             MemoryModuleType.PATH,
             MemoryModuleType.SONIC_BOOM_COOLDOWN,
             MemoryModuleType.TOUCH_COOLDOWN,
@@ -84,7 +87,7 @@ public class NectaurEntity extends Animal implements NeutralMob, RangedAttackMob
             MemoryModuleType.ANGRY_AT,
             MemoryModuleType.UNIVERSAL_ANGER,
             MemoryModuleType.NEAREST_ATTACKABLE
-    );
+    ));
 
     public NectaurEntity(EntityType<? extends Animal> entityType, Level level) {
         super(entityType, level);
@@ -100,7 +103,7 @@ public class NectaurEntity extends Animal implements NeutralMob, RangedAttackMob
 
     @Override
     protected Brain.Provider<NectaurEntity> brainProvider() {
-        return Brain.provider(MEMORY_TYPES, SENSOR_TYPES);
+        return Brain.provider(MEMORY_TYPES.get(), SENSOR_TYPES);
     }
 
     @Override
@@ -227,17 +230,17 @@ public class NectaurEntity extends Animal implements NeutralMob, RangedAttackMob
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return this.isAngry() ? BGSoundEvents.NECTAUR_SCREECH_ADDITIONS_EVENT:BGSoundEvents.NECTAUR_AMBIENT_ADDITIONS_EVENT;
+        return this.isAngry() ? BGSoundEvents.NECTAUR_SCREECH_ADDITIONS_EVENT.get():BGSoundEvents.NECTAUR_AMBIENT_ADDITIONS_EVENT.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return BGSoundEvents.NECTAUR_HURT_ADDITIONS_EVENT;
+        return BGSoundEvents.NECTAUR_HURT_ADDITIONS_EVENT.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return BGSoundEvents.NECTAUR_DEATH_ADDITIONS_EVENT;
+        return BGSoundEvents.NECTAUR_DEATH_ADDITIONS_EVENT.get();
     }
 
     @Override
@@ -246,7 +249,7 @@ public class NectaurEntity extends Animal implements NeutralMob, RangedAttackMob
     }
 
     private void playAngerSound() {
-        this.playSound(BGSoundEvents.NECTAUR_BELLOW_ADDITIONS_EVENT, this.getSoundVolume() * 2.0F, this.getVoicePitch() * 1.8F);
+        this.playSound(BGSoundEvents.NECTAUR_BELLOW_ADDITIONS_EVENT.get(), this.getSoundVolume() * 2.0F, this.getVoicePitch() * 1.8F);
     }
 
     private void maybePlayFirstAngerSound() {

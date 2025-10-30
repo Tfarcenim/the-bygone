@@ -160,17 +160,17 @@ public class FungalParentEntity  extends Animal implements NeutralMob {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return this.isBaby() ? BGSoundEvents.FUNGUSPARENT_AMBIENT_BABY_ADDITIONS_EVENT : BGSoundEvents.FUNGUSPARENT_AMBIENT_ADDITIONS_EVENT;
+        return this.isBaby() ? BGSoundEvents.FUNGUSPARENT_AMBIENT_BABY_ADDITIONS_EVENT.get() : BGSoundEvents.FUNGUSPARENT_AMBIENT_ADDITIONS_EVENT.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return BGSoundEvents.FUNGUSPARENT_HURT_ADDITIONS_EVENT;
+        return BGSoundEvents.FUNGUSPARENT_HURT_ADDITIONS_EVENT.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return BGSoundEvents.FUNGUSPARENT_DEATH_ADDITIONS_EVENT;
+        return BGSoundEvents.FUNGUSPARENT_DEATH_ADDITIONS_EVENT.get();
     }
 
     @Override

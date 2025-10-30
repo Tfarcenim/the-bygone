@@ -32,30 +32,30 @@ public class NectaurStalk {
                                 inst.registered(MemoryModuleType.LOOK_TARGET),
                                 inst.present(MemoryModuleType.ATTACK_TARGET),
                                 inst.registered(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES),
-                                inst.registered(BGMemoryModuleTypes.IS_IN_GROUP),
-                                inst.registered(BGMemoryModuleTypes.GROUP_LEADER),
-                                inst.registered(BGMemoryModuleTypes.IS_STALKING)
+                                inst.registered(BGMemoryModuleTypes.IS_IN_GROUP.get()),
+                                inst.registered(BGMemoryModuleTypes.GROUP_LEADER.get()),
+                                inst.registered(BGMemoryModuleTypes.IS_STALKING.get())
                         )
                         .apply(inst, (stalk_cooldown, touch, walk_target, look_target, attack_target, nearest_visible_living_entities, is_in_group, group_leader, is_stalking) ->
                                 (level, self, gameTime) -> {
                                     LivingEntity target = inst.get(attack_target);
-                                    UUID leaderUUID = self.getBrain().getMemory(BGMemoryModuleTypes.GROUP_LEADER).orElse(null);
+                                    UUID leaderUUID = self.getBrain().getMemory(BGMemoryModuleTypes.GROUP_LEADER.get()).orElse(null);
 
                                     if (leaderUUID == null || !self.getUUID().equals(leaderUUID))
                                         return true;
 
                                     double distanceSq = self.distanceToSqr(target);
-                                    boolean isAlreadyStalking = self.getBrain().getMemory(BGMemoryModuleTypes.IS_STALKING).orElse(false);
+                                    boolean isAlreadyStalking = self.getBrain().getMemory(BGMemoryModuleTypes.IS_STALKING.get()).orElse(false);
 
                                     if (!isAlreadyStalking) {
-                                        self.getBrain().setMemory(BGMemoryModuleTypes.IS_STALKING, true);
+                                        self.getBrain().setMemory(BGMemoryModuleTypes.IS_STALKING.get(), true);
                                         self.getBrain().setMemoryWithExpiry(MemoryModuleType.WALK_TARGET, null, 1);
                                         self.getBrain().eraseMemory(MemoryModuleType.WALK_TARGET);
 
                                         lookAtTarget(self, target);
                                         self.getBrain().setMemoryWithExpiry(MemoryModuleType.TOUCH_COOLDOWN, Unit.INSTANCE, (long)STALK_DURATION_TICKS);
 
-                                        signalNearbyAllies(level, self, BGMemoryModuleTypes.IS_STALKING, true, 8);
+                                        signalNearbyAllies(level, self, BGMemoryModuleTypes.IS_STALKING.get(), true, 8);
                                     }
 
                                     if (isAlreadyStalking) {
@@ -101,11 +101,11 @@ public class NectaurStalk {
         level.getEntitiesOfClass(leader.getClass(), leader.getBoundingBox().inflate(radius), e -> e != leader)
                 .forEach(entity -> {
                     entity.getBrain().setMemory(MemoryModuleType.ATTACK_TARGET, target);
-                    entity.getBrain().setMemory(BGMemoryModuleTypes.IS_STALKING, false);
+                    entity.getBrain().setMemory(BGMemoryModuleTypes.IS_STALKING.get(), false);
                 });
 
         leader.getBrain().setMemory(MemoryModuleType.ATTACK_TARGET, target);
-        leader.getBrain().setMemory(BGMemoryModuleTypes.IS_STALKING, false);
+        leader.getBrain().setMemory(BGMemoryModuleTypes.IS_STALKING.get(), false);
     }
 
     public static void setCooldown(LivingEntity entity, int cooldown) {

@@ -64,6 +64,6 @@ public class MinilithStructure extends Structure
 
     @Override
     public StructureType<?> type() {
-        return BGStructures.MINILITHS;
+        return BGStructures.MINILITHS.get();
     }
 }

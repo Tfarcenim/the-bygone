@@ -71,7 +71,7 @@ public class MaliciousWarHornItem extends Item {
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity user) {
         if (!level.isClientSide && user instanceof Player player) {
             level.playSound(null, player.getX(), player.getY(), player.getZ(),
-                BGSoundEvents.WAR_HORN_USE.get(), SoundSource.RECORDS, 1.5F, 1.0F);
+                BGSoundEvents.WAR_HORN_USE_EVENT.get(), SoundSource.RECORDS, 1.5F, 1.0F);
             level.gameEvent(GameEvent.INSTRUMENT_PLAY, player.position(), GameEvent.Context.of(player));
             
             spawnHornParticles(level, player);
