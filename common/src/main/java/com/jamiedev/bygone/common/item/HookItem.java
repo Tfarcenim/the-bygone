@@ -122,7 +122,7 @@ public class HookItem extends Item
             float powerForTime = getPullProgress(useTime);
             if (powerForTime >= 0.1D) {
                 if (!world.isClientSide) {
-                    stack.hurtAndBreak(1, player, LivingEntity.getEquipmentSlotForItem(user.getUsedItemHand()));
+                    stack.hurtAndBreak(1, player,player1 -> player1.broadcastBreakEvent(player1.getUsedItemHand()));
                     HookEntity hook = new HookEntity(world, player);
                     this.shoot(user, hook, powerForTime *  15.0F);
                     if(world.addFreshEntity(hook)){

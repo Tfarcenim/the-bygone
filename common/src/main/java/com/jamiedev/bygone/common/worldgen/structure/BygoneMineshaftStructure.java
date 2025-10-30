@@ -22,7 +22,7 @@ import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 
 public class BygoneMineshaftStructure extends Structure {
-    public static final MapCodec<BygoneMineshaftStructure> CODEC = RecordCodecBuilder.mapCodec((instance) -> {
+    public static final Codec<BygoneMineshaftStructure> CODEC = RecordCodecBuilder.create((instance) -> {
         return instance.group(settingsCodec(instance), BygoneMineshaftStructure.Type.CODEC.fieldOf("mineshaft_type").forGetter((mineshaftStructure) -> {
             return mineshaftStructure.type;
         })).apply(instance, BygoneMineshaftStructure::new);

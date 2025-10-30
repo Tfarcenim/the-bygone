@@ -95,7 +95,6 @@ public class BlemishCatalystBlockEntity extends BlockEntity implements GameEvent
                         int i = livingEntity.getExperienceReward();
                         if (livingEntity.shouldDropExperience() && i > 0) {
                             this.spreadManager.spread(BlockPos.containing(emitterPos.relative(Direction.UP, 0.5)), i);
-                            this.triggerCriteria(world, livingEntity);
                         }
 
                         livingEntity.skipDropExperience();
@@ -121,15 +120,6 @@ public class BlemishCatalystBlockEntity extends BlockEntity implements GameEvent
             world.scheduleTick(pos, state.getBlock(), 8);
             world.sendParticles(ParticleTypes.WITCH, (double)pos.getX() + 0.5, (double)pos.getY() + 1.15, (double)pos.getZ() + 0.5, 2, 0.2, 0.0, 0.2, 0.0);
             world.playSound(null, pos, SoundEvents.SCULK_CATALYST_BLOOM, SoundSource.BLOCKS, 2.0F, 0.6F + random.nextFloat() * 0.4F);
-        }
-
-        private void triggerCriteria(Level world, LivingEntity deadEntity) {
-            LivingEntity livingEntity = deadEntity.getLastHurtByMob();
-            if (livingEntity instanceof ServerPlayer serverPlayerEntity) {
-                DamageSource damageSource = deadEntity.getLastDamageSource() == null ? world.damageSources().playerAttack(serverPlayerEntity) : deadEntity.getLastDamageSource();
-                BGCriteria.KILLED_BY_BLEMISH_CRITERION.trigger(serverPlayerEntity, deadEntity, damageSource);
-            }
-
         }
     }
 }

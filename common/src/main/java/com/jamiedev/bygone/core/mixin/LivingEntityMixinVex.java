@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public class LivingEntityMixinVex {
-    
+
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
     private void preventWarHornVexHurtingPlayer(DamageSource damageSource, float amount, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity entity = (LivingEntity)(Object)this;
@@ -43,7 +43,7 @@ public class LivingEntityMixinVex {
         for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
             ItemStack stack = player.getInventory().getItem(i);
             if (stack.getItem() == BGItems.MALICIOUS_WAR_HORN.get()) {
-                MaliciousWarHornItem.WarHornData data = stack.getOrDefault(BGDataComponents.WAR_HORN_DATA.value(), MaliciousWarHornItem.WarHornData.EMPTY);
+                MaliciousWarHornItem.WarHornData data = BGDataComponents.getWarHornData(stack,true);
                 if (data.activeVexes().contains(vex.getUUID())) {
                     return true;
                 }

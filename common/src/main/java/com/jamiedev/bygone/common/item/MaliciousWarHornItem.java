@@ -2,7 +2,10 @@ package com.jamiedev.bygone.common.item;
 
 import com.jamiedev.bygone.core.registry.BGDataComponents;
 import com.jamiedev.bygone.core.registry.BGSoundEvents;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -229,6 +232,12 @@ public class MaliciousWarHornItem extends Item {
     }
     
     public record WarHornData(List<UUID> activeVexes, int cooldownSeconds, int vexTimeLeft) {
+        public static final Codec<WarHornData> CODEC = RecordCodecBuilder.create(warHornDataInstance -> warHornDataInstance.group(
+                UUIDUtil.CODEC.listOf().fieldOf("active_vexes").forGetter(WarHornData::activeVexes),
+                Codec.INT.fieldOf("cooldown_seconds").forGetter(WarHornData::cooldownSeconds),
+                Codec.INT.fieldOf("vex_time_left").forGetter(WarHornData::vexTimeLeft)
+        ).apply(warHornDataInstance,WarHornData::new));
+
         public static final WarHornData EMPTY = new WarHornData(new ArrayList<>(), 0, 0);
     }
 

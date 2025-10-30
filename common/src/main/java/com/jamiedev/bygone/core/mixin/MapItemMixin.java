@@ -1,5 +1,6 @@
 package com.jamiedev.bygone.core.mixin;
 
+import com.jamiedev.bygone.core.registry.BGDataComponents;
 import com.jamiedev.bygone.core.registry.BGDimensions;
 import com.jamiedev.bygone.core.util.HeightGetter;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -18,8 +19,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import static com.jamiedev.bygone.core.registry.BGDataComponents.MAP_HEIGHT;
 
 @Mixin(MapItem.class)
 /*
@@ -43,7 +42,7 @@ public class MapItemMixin {
             heightGetter.set(null);
         else
             if(viewer instanceof LivingEntity e)
-                heightGetter.set(()-> the_bygone$getMapHandItem(e).get(MAP_HEIGHT.get()));
+                heightGetter.set(()-> BGDataComponents.getMapHeight(the_bygone$getMapHandItem(e)));
     }
 
     @Unique

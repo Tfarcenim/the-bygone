@@ -4,6 +4,7 @@ import com.jamiedev.bygone.Bygone;
 import com.jamiedev.bygone.common.entity.*;
 import com.jamiedev.bygone.common.entity.projectile.*;
 import com.kekecreations.jinxedlib.core.util.JinxedRegistryHelper;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -169,6 +170,6 @@ public class BGEntityTypes {
     }
 
     private static <T extends EntityType<?>> Supplier<T> registerEntityType(String name, Supplier<T> entityTypeSupplier) {
-        return JinxedRegistryHelper.register(BuiltInRegistries.ENTITY_TYPE, Bygone.MOD_ID, name, entityTypeSupplier);
+        return JinxedRegistryHelper.register((Registry<T>) BuiltInRegistries.ENTITY_TYPE, Bygone.MOD_ID, name, entityTypeSupplier);
     }
 }

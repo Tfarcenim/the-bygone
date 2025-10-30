@@ -373,7 +373,7 @@ public class LithyEntity extends PathfinderMob {
     }
 
     public static boolean checkAnimalSpawnRules(EntityType<? extends Animal> animal, LevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
-        boolean flag = MobSpawnType.ignoresLightRequirements(spawnType) || isBrightEnoughToSpawn(level, pos);
+        boolean flag = isBrightEnoughToSpawn(level, pos);
         return level.getBlockState(pos.below()).is(BlockTags.ANIMALS_SPAWNABLE_ON) && flag;
     }
 

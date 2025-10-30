@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -46,8 +47,15 @@ public class AncientCaveVinesBodyBlock  extends GrowingPlantBodyBlock implements
     }
 
     @Override
-    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
-        return AncientCaveVines.pickBerries(player, state, world, pos);
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        ItemStack stack = player.getItemInHand(hand);
+
+        if (stack.isEmpty()) {
+            return AncientCaveVines.pickBerries(player, state, level, pos);
+        }
+
+
+        return super.use(state, level, pos, player, hand, hit);
     }
 
     @Override

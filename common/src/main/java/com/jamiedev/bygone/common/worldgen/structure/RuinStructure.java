@@ -24,7 +24,7 @@ import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 public class RuinStructure extends Structure {
 
 
-    public static final MapCodec<RuinStructure> CODEC = RecordCodecBuilder.mapCodec(instance ->
+    public static final Codec<RuinStructure> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(RuinStructure.settingsCodec(instance),
                     StructureTemplatePool.CODEC.fieldOf("start_pool").forGetter(structure -> structure.startPool),
                     ResourceLocation.CODEC.optionalFieldOf("start_jigsaw_name").forGetter(structure -> structure.startJigsawName),

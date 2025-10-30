@@ -23,7 +23,7 @@ import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 
 public class AmberRuinsStructure extends Structure {
 
-    public static final MapCodec<AmberRuinsStructure> CODEC = RecordCodecBuilder.mapCodec(instance ->
+    public static final Codec<AmberRuinsStructure> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(AmberRuinsStructure.settingsCodec(instance),
                     StructureTemplatePool.CODEC.fieldOf("start_pool").forGetter(structure -> structure.startPool),
                     ResourceLocation.CODEC.optionalFieldOf("start_jigsaw_name").forGetter(structure -> structure.startJigsawName),

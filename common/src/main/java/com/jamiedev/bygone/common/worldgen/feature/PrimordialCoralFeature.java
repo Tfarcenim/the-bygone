@@ -6,7 +6,9 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
@@ -32,8 +34,15 @@ public abstract class PrimordialCoralFeature extends Feature<NoneFeatureConfigur
         RandomSource random = context.random();
         WorldGenLevel structureWorldAccess = context.level();
         BlockPos blockPos = context.origin();
-        Optional<Block> optional = BuiltInRegistries.BLOCK.getRandomElementOf(JamiesModTag.CORAL_BLOCKS, random).map(Holder::value);
+        Optional<Block> optional = getRandomElementOf(BuiltInRegistries.BLOCK,JamiesModTag.CORAL_BLOCKS, random).map(Holder::value);
         return optional.filter(block -> this.generateCoral(structureWorldAccess, random, blockPos, block.defaultBlockState())).isPresent();
+    }
+
+
+    static  <T> Optional<Holder<T>> getRandomElementOf(Registry<T> registry,TagKey<T> key, RandomSource random) {
+        return registry.getTag(key).flatMap((p_319421_) -> {
+            return p_319421_.getRandomElement(random);
+        });
     }
 
     protected abstract boolean generateCoral(LevelAccessor world, @NotNull RandomSource random, BlockPos pos, BlockState state);
@@ -44,7 +53,7 @@ public abstract class PrimordialCoralFeature extends Feature<NoneFeatureConfigur
         if ((blockState.is(Blocks.WATER) || blockState.is(JamiesModTag.CORALS)) && world.getBlockState(blockPos).is(Blocks.WATER)) {
             world.setBlock(pos, state, 3);
             if (random.nextFloat() < 0.25F) {
-                BuiltInRegistries.BLOCK.getRandomElementOf(JamiesModTag.CORALS, random).map(Holder::value).ifPresent((block) -> {
+                getRandomElementOf(BuiltInRegistries.BLOCK,JamiesModTag.CORALS, random).map(Holder::value).ifPresent((block) -> {
                     world.setBlock(blockPos, block.defaultBlockState(), 2);
                 });
             } else if (random.nextFloat() < 0.05F) {
@@ -55,7 +64,7 @@ public abstract class PrimordialCoralFeature extends Feature<NoneFeatureConfigur
                 if (random.nextFloat() < 0.2F) {
                     BlockPos blockPos2 = pos.relative(direction);
                     if (world.getBlockState(blockPos2).is(Blocks.WATER)) {
-                        BuiltInRegistries.BLOCK.getRandomElementOf(JamiesModTag.WALL_CORALS, random).map(Holder::value).ifPresent((block) -> {
+                        getRandomElementOf(BuiltInRegistries.BLOCK,JamiesModTag.WALL_CORALS, random).map(Holder::value).ifPresent((block) -> {
                             BlockState blockState2 = block.defaultBlockState();
                             if (blockState2.hasProperty(BaseCoralWallFanBlock.FACING)) {
                                 blockState2 = blockState2.setValue(BaseCoralWallFanBlock.FACING, direction);

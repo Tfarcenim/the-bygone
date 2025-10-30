@@ -12,11 +12,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.*;
+import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
@@ -60,28 +63,39 @@ public class CasterBlock extends BaseEntityBlock implements BlockEntityTicker<Ca
     }
 
     @Override
-    public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean moved) {
-        Containers.dropContentsOnDestroy(state, newState, world, pos);
-        super.onRemove(state, world, pos, newState, moved);
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moved) {
+        /*if (!state.is(newState.getBlock())) {
+            BlockEntity blockentity = level.getBlockEntity(pos);
+            if (blockentity instanceof Container) {
+                Containers.dropContents(level, pos, (Container)blockentity);
+                level.updateNeighbourForOutputSignal(pos, this);
+            }*/
+
+            super.onRemove(state, level, pos, newState,moved);
+        //}
     }
 
     @Override
-    public InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
-        if (world.isClientSide) {
-            return InteractionResult.SUCCESS;
-        } else {
-            Item item = player.getMainHandItem().getItem();
-            if (item == Items.BLAZE_ROD) {
-                world.setBlockAndUpdate(pos, state.setValue(TYPE, CasterType.BLAZE));
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        ItemStack stack = player.getItemInHand(hand);
+        if (!stack.isEmpty()) {
+            if (level.isClientSide) {
+                return InteractionResult.SUCCESS;
+            } else {
+                Item item = player.getMainHandItem().getItem();
+                if (item == Items.BLAZE_ROD) {
+                    level.setBlockAndUpdate(pos, state.setValue(TYPE, CasterType.BLAZE));
+                }
+              //  else if (item == Items.BREEZE_ROD) {
+              //      level.setBlockAndUpdate(pos, state.setValue(TYPE, CasterType.BREEZE));
+              //  }
+                else if (item == BGItems.SCUTTLE_SPIKE) {
+                    level.setBlockAndUpdate(pos, state.setValue(TYPE, CasterType.GUARDIAN));
+                }
             }
-            else if (item == Items.BREEZE_ROD) {
-                world.setBlockAndUpdate(pos, state.setValue(TYPE, CasterType.BREEZE));
-            }
-            else if (item == BGItems.SCUTTLE_SPIKE) {
-                world.setBlockAndUpdate(pos, state.setValue(TYPE, CasterType.GUARDIAN));
-            }
-            return super.useWithoutItem(state, world, pos, player, hit);
         }
+
+        return super.use(state, level, pos, player, hand, hit);
     }
 
     @Nullable
@@ -179,7 +193,7 @@ public class CasterBlock extends BaseEntityBlock implements BlockEntityTicker<Ca
                 case BLAZE -> {
                     List<Entity> entities = world.getEntities(EntityTypeTest.forClass(Entity.class), box, Predicates.alwaysTrue());
                     for (Entity entity : entities) {
-                        entity.igniteForSeconds(15);
+                        entity.setSecondsOnFire(15);
                     }
                     Vec3 blockPos = pos.relative(direction).getCenter();
                     for (int i = 0; i < 5; i++) {

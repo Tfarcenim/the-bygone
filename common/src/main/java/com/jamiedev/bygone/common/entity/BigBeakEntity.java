@@ -68,7 +68,7 @@ import java.util.function.IntUnaryOperator;
 
 public class BigBeakEntity  extends AbstractHorse implements VariantHolder<BigBeakVariants>
 {
-    Rabbit ref;
+    /** @see Rabbit ref;*/
     private static final EntityDataAccessor<Integer> DATA_ID_TYPE_VARIANT;
 
     public final AnimationState idleAnimationState = new AnimationState();

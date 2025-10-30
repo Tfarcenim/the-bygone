@@ -43,7 +43,7 @@ public class WraithEntity extends Monster implements RangedAttackMob, FlyingAnim
     private static final EntityDataAccessor<Byte> DATA_SPELL_CASTING_ID;
     private static final EntityDataAccessor<Boolean> DATA_PREPARE_TELEPORT;
 
-    Stray ref;
+    /** @see Stray ref;*/
 
     protected int withinRangeToTeleportTick = 0;
     protected int spellCastingTickCount;
@@ -242,8 +242,8 @@ public class WraithEntity extends Monster implements RangedAttackMob, FlyingAnim
             float f5 = Mth.sin(f3);
             double d0 = 0.6 * (double)this.getScale();
             double d1 = 1.8 * (double)this.getScale();
-            this.level().addParticle(ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, f, f1, f2), this.getX() + (double)f4 * d0, this.getY() + d1, this.getZ() + (double)f5 * d0, (double)0.0F, (double)0.0F, (double)0.0F);
-            this.level().addParticle(ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, f, f1, f2), this.getX() - (double)f4 * d0, this.getY() + d1, this.getZ() - (double)f5 * d0, (double)0.0F, (double)0.0F, (double)0.0F);
+            this.level().addParticle(ParticleTypes.ENTITY_EFFECT, this.getX() + (double)f4 * d0, this.getY() + d1, this.getZ() + (double)f5 * d0, (double)0.0F, (double)0.0F, (double)0.0F);
+            this.level().addParticle(ParticleTypes.ENTITY_EFFECT, this.getX() - (double)f4 * d0, this.getY() + d1, this.getZ() - (double)f5 * d0, (double)0.0F, (double)0.0F, (double)0.0F);
         }
 
         if (this.getTarget() != null) {

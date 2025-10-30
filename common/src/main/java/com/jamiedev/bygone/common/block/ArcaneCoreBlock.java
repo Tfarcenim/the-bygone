@@ -1,7 +1,5 @@
 package com.jamiedev.bygone.common.block;
 
-import com.mojang.serialization.MapCodec;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -23,7 +21,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class ArcaneCoreBlock extends Block implements SimpleWaterloggedBlock {
     private static final VoxelShape OUTLINE_SHAPE = Block.box(4.0, 0.0, 4.0, 12.0, 8.0, 12.0);
 
-    SkullBlock ref;
+    /** @see SkullBlock ref;*/
 
     public ArcaneCoreBlock(BlockBehaviour.Properties settings) {
         super(settings);
@@ -61,7 +59,7 @@ public class ArcaneCoreBlock extends Block implements SimpleWaterloggedBlock {
     }
 
     @Override
-    protected boolean isPathfindable(BlockState state, PathComputationType type) {
+    public boolean isPathfindable(BlockState state, BlockGetter level, BlockPos pos, PathComputationType type) {
         return false;
     }
 }

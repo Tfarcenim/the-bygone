@@ -70,7 +70,7 @@ public class ShelfFungiFeature extends Feature<NoneFeatureConfiguration> {
                 if (random.nextFloat() < 0.2F) {
                     BlockPos blockPos2 = pos.relative(direction);
                     if (world.getBlockState(blockPos2).is(Blocks.AIR)) {
-                        BuiltInRegistries.BLOCK.getRandomElementOf(JamiesModTag.SHELF_FUNGI, random).map(Holder::value).ifPresent((block) -> {
+                        PrimordialCoralFeature.getRandomElementOf(BuiltInRegistries.BLOCK,JamiesModTag.SHELF_FUNGI, random).map(Holder::value).ifPresent((block) -> {
                             BlockState blockState1 = block.defaultBlockState();
                             if (blockState1.hasProperty(ShelfFungiWallFanBlock.FACING)) {
                                 blockState1 = blockState1.setValue(ShelfFungiWallFanBlock.FACING, direction);

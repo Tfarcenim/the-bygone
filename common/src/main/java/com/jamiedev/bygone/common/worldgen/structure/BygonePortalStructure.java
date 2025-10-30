@@ -1,6 +1,7 @@
 package com.jamiedev.bygone.common.worldgen.structure;
 
 import com.jamiedev.bygone.core.registry.BGStructures;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.Optional;
@@ -18,7 +19,7 @@ import net.minecraft.world.level.levelgen.structure.StructureType;
 
 public class BygonePortalStructure extends Structure
 {
-    public static final MapCodec<BygonePortalStructure> CODEC = RecordCodecBuilder.mapCodec((instance) -> {
+    public static final Codec<BygonePortalStructure> CODEC = RecordCodecBuilder.create((instance) -> {
         return instance.group(settingsCodec(instance), HeightProvider.CODEC.fieldOf("height").forGetter((structure) -> {
             return structure.height;
         })).apply(instance, BygonePortalStructure::new);

@@ -15,6 +15,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
@@ -40,6 +41,7 @@ import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -430,7 +432,7 @@ public class BygoneMineshaftGenerator {
         }
 
         @Override
-        protected boolean createChest(WorldGenLevel world, BoundingBox boundingBox, @NotNull RandomSource random, int x, int y, int z, ResourceKey<LootTable> lootTable) {
+        protected boolean createChest(WorldGenLevel world, BoundingBox boundingBox, @NotNull RandomSource random, int x, int y, int z, ResourceLocation lootTable) {
             BlockPos blockPos = this.getWorldPos(x, y, z);
             if (boundingBox.isInside(blockPos) && world.getBlockState(blockPos).isAir() && !world.getBlockState(blockPos.below()).isAir()) {
                 BlockState blockState = Blocks.RAIL.defaultBlockState().setValue(RailBlock.SHAPE, random.nextBoolean() ? RailShape.NORTH_SOUTH : RailShape.EAST_WEST);
@@ -470,11 +472,11 @@ public class BygoneMineshaftGenerator {
                     this.addCobwebsUnderground(world, chunkBox, random, 0.05F, 0, 2, o + 2);
                     this.addCobwebsUnderground(world, chunkBox, random, 0.05F, 2, 2, o + 2);
                     if (random.nextInt(100) == 0) {
-                        this.createChest(world, chunkBox, random, 2, 0, o - 1, JamiesModLootTables.ABANDONED_MINESHAFT_CHEST);
+                        this.createChest(world, chunkBox, random, 2, 0, o - 1, BuiltInLootTables.ABANDONED_MINESHAFT);
                     }
 
                     if (random.nextInt(100) == 0) {
-                        this.createChest(world, chunkBox, random, 0, 0, o + 1, JamiesModLootTables.ABANDONED_MINESHAFT_CHEST);
+                        this.createChest(world, chunkBox, random, 0, 0, o + 1, BuiltInLootTables.ABANDONED_MINESHAFT);
                     }
 
                     if (this.hasCobwebs && !this.hasSpawner) {

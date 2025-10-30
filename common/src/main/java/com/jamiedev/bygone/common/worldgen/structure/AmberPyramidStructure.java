@@ -23,7 +23,7 @@ import java.util.Optional;
 
 public class AmberPyramidStructure extends Structure {
 
-    public static final MapCodec<AmberPyramidStructure> CODEC = RecordCodecBuilder.mapCodec(instance ->
+    public static final Codec<AmberPyramidStructure> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(AmberPyramidStructure.settingsCodec(instance),
                     StructureTemplatePool.CODEC.fieldOf("start_pool").forGetter(structure -> structure.startPool),
                     ResourceLocation.CODEC.optionalFieldOf("start_jigsaw_name").forGetter(structure -> structure.startJigsawName),

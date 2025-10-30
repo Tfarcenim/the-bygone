@@ -1,20 +1,16 @@
 package com.jamiedev.bygone.common.block;
 
 import com.jamiedev.bygone.common.block.entity.AmphoraBlockEntity;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
@@ -23,6 +19,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -40,15 +37,14 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 
 public class AmphoraBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
     public static final ResourceLocation SHERDS_DYNAMIC_DROP_ID = new ResourceLocation("minecraft", "sherds");
     private static final VoxelShape BOUNDING_BOX = Block.box(5.0, 0.0, 5.0, 11.0, 27.0, 11.0);
 
-    public static final BooleanProperty CRACKED;
-    private static final BooleanProperty WATERLOGGED;
+    public static final BooleanProperty CRACKED = BlockStateProperties.CRACKED;
+    private static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final IntegerProperty WATER_LEVEL = IntegerProperty.create("water_level", 0, 8);
 
     public static final DirectionProperty FACING = DirectionProperty.create("facing", Direction.Plane.HORIZONTAL);
@@ -171,7 +167,6 @@ public class AmphoraBlock extends BaseEntityBlock implements SimpleWaterloggedBl
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        int i = state.getValue(WATER_LEVEL);
         return BOUNDING_BOX;
     }
 
@@ -194,12 +189,10 @@ public class AmphoraBlock extends BaseEntityBlock implements SimpleWaterloggedBl
 
     @Override
     public List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
-        BlockEntity blockEntity = params.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
-        if (blockEntity instanceof AmphoraBlockEntity amphoraBlockEntity) {
-            params.withDynamicDrop(SHERDS_DYNAMIC_DROP_ID, (consumer) -> {
-                for (Item item : amphoraBlockEntity.getDecorations().ordered()) {
-                    consumer.accept(item.getDefaultInstance());
-                }
+        BlockEntity blockentity = params.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
+        if (blockentity instanceof DecoratedPotBlockEntity decoratedpotblockentity) {
+            params.withDynamicDrop(SHERDS_DYNAMIC_DROP_ID, (p_284876_) -> {
+                decoratedpotblockentity.getDecorations().sorted().map(Item::getDefaultInstance).forEach(p_284876_);
             });
         }
 
@@ -210,7 +203,7 @@ public class AmphoraBlock extends BaseEntityBlock implements SimpleWaterloggedBl
     public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         ItemStack itemStack = player.getMainHandItem();
         BlockState blockState = state;
-        if (itemStack.is(ItemTags.BREAKS_DECORATED_POTS) && !EnchantmentHelper.hasTag(itemStack, EnchantmentTags.PREVENTS_DECORATED_POT_SHATTERING)) {
+        if (itemStack.is(ItemTags.BREAKS_DECORATED_POTS) && !EnchantmentHelper.hasSilkTouch(itemStack)) {
             blockState = state.setValue(CRACKED, true);
             level.setBlock(pos, blockState, 4);
         }
@@ -230,15 +223,6 @@ public class AmphoraBlock extends BaseEntityBlock implements SimpleWaterloggedBl
     @Override
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
-    }
-
-    @Override
-    public void onProjectileHit(Level level, BlockState state, BlockHitResult hit, Projectile projectile) {
-        BlockPos blockPos = hit.getBlockPos();
-        if (!level.isClientSide && projectile.mayInteract(level, blockPos) && projectile.mayBreak(level)) {
-            level.setBlock(blockPos, state.setValue(CRACKED, true), 4);
-            level.destroyBlock(blockPos, true, projectile);
-        }
     }
 
     @Override
@@ -263,8 +247,4 @@ public class AmphoraBlock extends BaseEntityBlock implements SimpleWaterloggedBl
         return true;
     }
 
-    static {
-        CRACKED = BlockStateProperties.CRACKED;
-        WATERLOGGED = BlockStateProperties.WATERLOGGED;
-    }
 }

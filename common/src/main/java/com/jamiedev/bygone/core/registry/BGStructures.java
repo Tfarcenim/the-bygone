@@ -5,9 +5,11 @@ import com.jamiedev.bygone.Bygone;
 import java.util.Locale;
 
 import com.jamiedev.bygone.common.worldgen.structure.*;
+import com.mojang.serialization.Codec;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.storage.loot.predicates.WeatherCheck;
@@ -74,19 +76,25 @@ public class BGStructures
 
     public static void init()
     {
-        ABANDONED_FARM = Registry.register(BuiltInRegistries.STRUCTURE_TYPE, ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID, "abandoned_farm"),
-                () -> AncientRootStructure.CODEC);
-        ANCIENT_ROOTS = Registry.register(BuiltInRegistries.STRUCTURE_TYPE, ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID, "ancient_roots"), () -> AncientRootStructure.CODEC);
-        BYGONE_FOSSIL = Registry.register(BuiltInRegistries.STRUCTURE_TYPE, ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID , "bygone_fossil"), () -> BygoneFossilStructure.CODEC);
-        BYGONE_PORTAL = Registry.register(BuiltInRegistries.STRUCTURE_TYPE, ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID , "bygone_portal"), () -> BygonePortalStructure.CODEC);
-        TEST_ROOTS = Registry.register(BuiltInRegistries.STRUCTURE_TYPE, ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID, "test_roots"), () -> TestRootStructure.CODEC);
-        BLEMISH_RUINS = Registry.register(BuiltInRegistries.STRUCTURE_TYPE, ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID, "ruin"), () -> RuinStructure.CODEC);
-        AMBER_RUINS = Registry.register(BuiltInRegistries.STRUCTURE_TYPE, ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID, "amber_ruins"), () -> AmberRuinsStructure.CODEC);
-        AMBER_PYRAMID = Registry.register(BuiltInRegistries.STRUCTURE_TYPE, ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID, "amber_pyramid"), () -> AmberPyramidStructure.CODEC);
-        BYGONE_MINESHAFT = Registry.register(BuiltInRegistries.STRUCTURE_TYPE, ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID, "bygone_mineshaft"), () -> BygoneMineshaftStructure.CODEC);
+        ABANDONED_FARM = register("abandoned_farm", AncientRootStructure.CODEC);
+        ANCIENT_ROOTS = register("ancient_roots", AncientRootStructure.CODEC);
+        BYGONE_FOSSIL = register( "bygone_fossil", BygoneFossilStructure.CODEC);
+        BYGONE_PORTAL = register( "bygone_portal", BygonePortalStructure.CODEC);
+        TEST_ROOTS = register( "test_roots", TestRootStructure.CODEC);
+        BLEMISH_RUINS = register( "ruin", RuinStructure.CODEC);
+        AMBER_RUINS = register( "amber_ruins", AmberRuinsStructure.CODEC);
+        AMBER_PYRAMID = register( "amber_pyramid", AmberPyramidStructure.CODEC);
+        BYGONE_MINESHAFT = register( "bygone_mineshaft", BygoneMineshaftStructure.CODEC);
 
-        MEGALITH_RUINS = Registry.register(BuiltInRegistries.STRUCTURE_TYPE, ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID, "megalith_ruins"), () -> MegalithRuinsStructure.CODEC);
-        MINILITHS = Registry.register(BuiltInRegistries.STRUCTURE_TYPE, ResourceLocation.fromNamespaceAndPath(Bygone.MOD_ID, "miniliths"), () -> MinilithStructure.CODEC);
+        MEGALITH_RUINS = register( "megalith_ruins", MegalithRuinsStructure.CODEC);
+        MINILITHS = register( "miniliths", MinilithStructure.CODEC);
 
     }
+
+    private static <S extends Structure> StructureType<S> register(String name, Codec<S> codec) {
+        return Registry.register(BuiltInRegistries.STRUCTURE_TYPE, name, () -> {
+            return codec;
+        });
+    }
+
 }

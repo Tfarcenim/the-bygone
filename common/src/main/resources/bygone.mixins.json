@@ -1,0 +1,29 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.jamiedev.bygone.core.mixin",
+  "refmap": "${mod_id}.refmap.json",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "AxeItemAccess",
+    "EmptyMapMixin",
+    "FarmlandBlockMixin",
+    "LivingEntityMixin",
+    "LivingEntityMixinVex",
+    "MapItemMixin",
+    "MobMixin",
+    "PlayerMixin",
+    "ServerLevelMixin",
+    "VexMixin"
+  ],
+  "client": [
+    "client.BipedEntityModelMixin",
+    "client.MixinHeldItemRenderer",
+    "client.MixinItemRenderer",
+    "client.MixinPlayerEntityRenderer"
+  ],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

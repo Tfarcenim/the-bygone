@@ -2,6 +2,7 @@ package com.jamiedev.bygone.common.worldgen.structure;
 
 import com.jamiedev.bygone.core.registry.BGBlocks;
 import com.jamiedev.bygone.core.registry.BGStructures;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
@@ -19,7 +20,7 @@ import java.util.Optional;
 
 public class MinilithStructure extends Structure
 {
-    public static final MapCodec<MinilithStructure> CODEC = RecordCodecBuilder.mapCodec((instance) -> {
+    public static final Codec<MinilithStructure> CODEC = RecordCodecBuilder.create((instance) -> {
         return instance.group(settingsCodec(instance), HeightProvider.CODEC.fieldOf("height").forGetter((structure) -> {
             return structure.height;
         })).apply(instance, MinilithStructure::new);

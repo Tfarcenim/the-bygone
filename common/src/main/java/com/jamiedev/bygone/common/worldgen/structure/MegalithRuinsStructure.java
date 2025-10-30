@@ -23,7 +23,7 @@ import java.util.Optional;
 
 public class MegalithRuinsStructure extends Structure
 {
-    public static final MapCodec<MegalithRuinsStructure> CODEC = RecordCodecBuilder.mapCodec(instance ->
+    public static final Codec<MegalithRuinsStructure> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(MegalithRuinsStructure.settingsCodec(instance),
                     StructureTemplatePool.CODEC.fieldOf("start_pool").forGetter(structure -> structure.startPool),
                     ResourceLocation.CODEC.optionalFieldOf("start_jigsaw_name").forGetter(structure -> structure.startJigsawName),

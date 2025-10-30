@@ -54,7 +54,8 @@ public class HookRenderer extends EntityRenderer<HookEntity>
             PoseStack.Pose lineEntry = matrixStack.last();
 
             for(int o = 0; o <= 16; ++o) {
-                renderFishingLine(xDiff, yDiff, zDiff, lineStripBuffer, lineEntry, percentage(o, 16), percentage(o + 1, 16), DyeColor.BROWN.getTextureDiffuseColor());
+                renderFishingLine(xDiff, yDiff, zDiff, lineStripBuffer, lineEntry, percentage(o, 16), percentage(o + 1, 16),
+                        DyeColor.BROWN.getFireworkColor());
             }
 
             matrixStack.popPose();
@@ -90,12 +91,12 @@ public class HookRenderer extends EntityRenderer<HookEntity>
     }
 
     private static void vertex(VertexConsumer buffer, PoseStack.Pose matrix, int light, float x, int y, int u, int v) {
-        buffer.addVertex(matrix, x - 0.5F, (float)y - 0.5F, 0.0F)
-                .setColor(-1)
-                .setUv((float)u, (float)v)
-                .setOverlay(OverlayTexture.NO_OVERLAY)
-                .setLight(light)
-                .setNormal(matrix, 0.0F, 1.0F, 0.0F);
+        buffer.vertex(matrix.pose(), x - 0.5F, (float)y - 0.5F, 0.0F)
+                .color(-1)
+                .uv((float)u, (float)v)
+                .overlayCoords(OverlayTexture.NO_OVERLAY)
+                .uv2(light)
+                .normal(matrix.normal(), 0.0F, 1.0F, 0.0F).endVertex();
     }
 
     private static void renderFishingLine(float xDist, float yDist, float zDist, VertexConsumer buffer, PoseStack.Pose matrices, float segmentStart, float segmentEnd, int lineARGBColor) {
@@ -109,7 +110,7 @@ public class HookRenderer extends EntityRenderer<HookEntity>
         xStep /= step;
         yStep /= step;
         zStep /= step;
-        buffer.addVertex(matrices, xStart, yStart, zStart).setColor(lineARGBColor).setNormal(matrices, xStep, yStep, zStep);
+        buffer.vertex(matrices.pose(), xStart, yStart, zStart).color(lineARGBColor).normal(matrices.normal(), xStep, yStep, zStep).endVertex();
     }
 
 

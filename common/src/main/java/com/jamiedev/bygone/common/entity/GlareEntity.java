@@ -247,7 +247,6 @@ public class GlareEntity extends Animal implements FlyingAnimal
         return SoundEvents.AZALEA_LEAVES_BREAK;
     }
 
-    @Override
     public void stopInPlace() {
         this.getBrain().eraseMemory(MemoryModuleType.AVOID_TARGET);
         this.getBrain().eraseMemory(MemoryModuleType.WALK_TARGET);
@@ -268,6 +267,8 @@ public class GlareEntity extends Animal implements FlyingAnimal
         this.xxa = 0.0F;
         this.yya = 0.0F;
     }
+
+
 
     @Override
     public boolean isFood(ItemStack stack) {
@@ -361,7 +362,7 @@ public class GlareEntity extends Animal implements FlyingAnimal
     }
 
     public static boolean checkAnimalSpawnRules(EntityType<? extends Animal> type, LevelAccessor serverWorldAccess, MobSpawnType spawnReason, BlockPos blockPos, @NotNull RandomSource random) {
-        boolean bl = MobSpawnType.ignoresLightRequirements(spawnReason) || isBrightEnoughToSpawn(serverWorldAccess, blockPos);
+        boolean bl = isBrightEnoughToSpawn(serverWorldAccess, blockPos);
         return serverWorldAccess.getBlockState(blockPos.below()).is(Blocks.MOSS_BLOCK)
                 || serverWorldAccess.getBlockState(blockPos.below()).is(BGBlocks.MOSSY_CLAYSTONE.get())
                 && bl;
