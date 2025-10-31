@@ -3,13 +3,17 @@
   "config": {
     "floor_level": {
       "type": "minecraft:uniform",
-      "max_exclusive": -0.4,
-      "min_inclusive": -1
+      "value" : {
+        "max_exclusive": -0.4,
+        "min_inclusive": -1
+      }
     },
     "horizontal_radius_multiplier": {
       "type": "minecraft:uniform",
-      "max_exclusive": 2.8,
-      "min_inclusive": 1.4
+      "value" : {
+        "max_exclusive": 2.8,
+        "min_inclusive": 1.4
+      }
     },
     "lava_level": {
       "above_bottom": 0
@@ -18,8 +22,10 @@
     "replaceable": "#bygone:bygone_carver_replaceables",
     "vertical_radius_multiplier": {
       "type": "minecraft:uniform",
-      "max_exclusive": 2.6,
-      "min_inclusive": 0.8
+      "value" : {
+        "max_exclusive": 2.6,
+        "min_inclusive": 0.8
+      }
     },
     "y": {
       "type": "minecraft:uniform",
@@ -32,8 +38,10 @@
     },
     "yScale": {
       "type": "minecraft:uniform",
-      "max_exclusive": 1.8,
-      "min_inclusive": 0.4
+      "value" : {
+        "max_exclusive": 1.8,
+        "min_inclusive": 0.4
+      }
     }
   }
 }
