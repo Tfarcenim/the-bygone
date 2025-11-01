@@ -1,5 +1,13 @@
 package com.jamiedev.bygone.platform.services;
 
+import com.jamiedev.bygone.core.network.C2SModPacket;
+import com.jamiedev.bygone.core.network.S2CModPacket;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+
+import java.util.function.Function;
+
 public interface IPlatformHelper {
 
     /**
@@ -33,4 +41,14 @@ public interface IPlatformHelper {
 
         return isDevelopmentEnvironment() ? "development" : "production";
     }
+
+    <MSG extends S2CModPacket> void registerClientPlayPacket(Class<MSG> packetLocation, Function<FriendlyByteBuf,MSG> reader);
+    <MSG extends C2SModPacket> void registerServerPlayPacket(Class<MSG> packetLocation, Function<FriendlyByteBuf,MSG> reader);
+
+    void sendToClient(S2CModPacket msg, ServerPlayer player);
+    void sendToServer(C2SModPacket msg);
+    void sendToTracking(S2CModPacket msg, Entity entity, boolean includeSelf);
+
+    int getTimeInBygone(Entity entity);
+    void setTimeInBygone(Entity entity,int time);
 }

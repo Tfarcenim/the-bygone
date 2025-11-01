@@ -21,12 +21,15 @@ dependencies {
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     implementation project(":common")
 
-    modImplementation "curse.maven:jinxedlib-1203401:6268910"
+    modImplementation "curse.maven:jinxedlib-1203401:6627520"
+
+    modImplementation 'net.kyrptonaught:customportalapi:0.0.1-beta65-1.20'
+    include 'net.kyrptonaught:customportalapi:0.0.1-beta65-1.20'
 }
 
 loom {
-    if (project(":common").file("src/main/resources/${mod_id}.accesswidener").exists()) {
-        accessWidenerPath.set(project(":common").file("src/main/resources/${mod_id}.accesswidener"))
+    if (file("src/main/resources/${mod_id}.accesswidener").exists()) {
+        accessWidenerPath.set(file("src/main/resources/${mod_id}.accesswidener"))
     }
     mixin {
         defaultRefmapName.set("${mod_id}.refmap.json")

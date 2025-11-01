@@ -1,6 +1,6 @@
 {
     "schemaVersion": 1,
-    "id": "mod_id",
+    "id": "${mod_id}",
     "version": "${version}",
     "name": "${mod_name}",
     "description": "${description}",
@@ -11,13 +11,15 @@
         "homepage": "https://fabricmc.net/",
         "sources": "https://github.com/FabricMC/fabric-example-mod"
     },
+    "accessWidener": "bygone.accesswidener",
     "license": "${license}",
     "icon": "assets/modid/${mod_id}.png",
     "environment": "*",
     "entrypoints": {
         "main": [
           "com.jamiedev.bygone.BygoneFabric"
-        ]
+        ],
+        "client": ["com.jamiedev.bygone.BygoneFabricClient"]
     },
     "mixins": [
         "${mod_id}.mixins.json",

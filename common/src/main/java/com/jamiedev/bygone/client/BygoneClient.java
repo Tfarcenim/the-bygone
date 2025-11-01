@@ -243,14 +243,14 @@ public class BygoneClient {
 
     @SuppressWarnings("unchecked")
     public static <T extends ParticleOptions> void registerParticleFactories(BiConsumer<ParticleType<T>, ParticleEngine.SpriteParticleRegistration<T>> consumer) {
-        consumer.accept((ParticleType<T>) BGParticleTypes.BLEMISH, p_107611_ -> (ParticleProvider<T>) new BlemishParticle.BlemishBlockProvider(p_107611_));
-        consumer.accept((ParticleType<T>) BGParticleTypes.RAFFLESIA_SPORES, spriteProvider -> (ParticleProvider<T>) new RafflesiaSporeParticle.Factory(spriteProvider));
-        consumer.accept((ParticleType<T>) BGParticleTypes.ALGAE_BLOOM, sprite -> (ParticleProvider<T>) new SoulParticle.EmissiveProvider(sprite));
-        consumer.accept((ParticleType<T>) BGParticleTypes.SHELF, spriteProvider -> (ParticleProvider<T>) new ShelfParticle.Factory(spriteProvider));
+        consumer.accept((ParticleType<T>) BGParticleTypes.BLEMISH.get(), p_107611_ -> (ParticleProvider<T>) new BlemishParticle.BlemishBlockProvider(p_107611_));
+        consumer.accept((ParticleType<T>) BGParticleTypes.RAFFLESIA_SPORES.get(), spriteProvider -> (ParticleProvider<T>) new RafflesiaSporeParticle.Factory(spriteProvider));
+        consumer.accept((ParticleType<T>) BGParticleTypes.ALGAE_BLOOM.get(), sprite -> (ParticleProvider<T>) new SoulParticle.EmissiveProvider(sprite));
+        consumer.accept((ParticleType<T>) BGParticleTypes.SHELF.get(), spriteProvider -> (ParticleProvider<T>) new ShelfParticle.Factory(spriteProvider));
 
-        consumer.accept((ParticleType<T>) BGParticleTypes.AMBER_DUST, spriteProvider -> (ParticleProvider<T>) new AmberDustParticle.Factory(spriteProvider));
-        consumer.accept((ParticleType<T>) BGParticleTypes.ANCIENT_LEAVES, spriteProvider -> (ParticleProvider<T>) new AncientLeavesParticle.Factory(spriteProvider));
-        consumer.accept((ParticleType<T>) BGParticleTypes.UPSIDEDOWN, spriteProvider -> (ParticleProvider<T>) new UpsidedownDropParticle.Provider(spriteProvider));
+        consumer.accept((ParticleType<T>) BGParticleTypes.AMBER_DUST.get(), spriteProvider -> (ParticleProvider<T>) new AmberDustParticle.Factory(spriteProvider));
+        consumer.accept((ParticleType<T>) BGParticleTypes.ANCIENT_LEAVES.get(), spriteProvider -> (ParticleProvider<T>) new AncientLeavesParticle.Factory(spriteProvider));
+        consumer.accept((ParticleType<T>) BGParticleTypes.UPSIDEDOWN.get(), spriteProvider -> (ParticleProvider<T>) new UpsidedownDropParticle.Provider(spriteProvider));
 
     }
 

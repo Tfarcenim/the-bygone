@@ -6,6 +6,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.NeutralMob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.util.AirAndWaterRandomPos;
@@ -24,8 +26,8 @@ import java.util.UUID;
 
 public class CopperflyEntity extends Animal implements NeutralMob, FlyingAnimal
 {
-    Tadpole ref;
-    Bee ref2;
+    /** @see Tadpole
+    @see Bee */
 
     public static final float FLAP_DEGREES_PER_TICK = 120.32113F;
     public static final int TICKS_PER_FLAP = Mth.ceil(1.4959966F);
@@ -33,6 +35,11 @@ public class CopperflyEntity extends Animal implements NeutralMob, FlyingAnimal
     protected CopperflyEntity(EntityType<? extends Animal> entityType, Level level) {
         super(entityType, level);
         this.moveControl = new FlyingMoveControl(this, 20, true);
+    }
+
+
+    public static AttributeSupplier.Builder createCopperflyAttributes() {
+        return createMobAttributes().add(Attributes.MAX_HEALTH, 10.0).add(Attributes.FOLLOW_RANGE, 20.0).add(Attributes.MOVEMENT_SPEED, 0.25).add(Attributes.ATTACK_DAMAGE, 3.0);
     }
 
     @Override

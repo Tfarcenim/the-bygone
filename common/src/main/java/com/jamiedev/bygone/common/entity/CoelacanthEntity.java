@@ -35,7 +35,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class CoelacanthEntity extends AbstractSchoolingFish
 {
-    Salmon ref;
+    /** @see Salmon*/
 
     public CoelacanthEntity(EntityType<? extends CoelacanthEntity> entityType, Level world) {
         super(entityType, world);

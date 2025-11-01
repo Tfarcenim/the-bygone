@@ -42,6 +42,7 @@ public class Bygone {
         BGEntityTypes.init();
         BGBiomes.init();
         BGItemGroups.register();
+        registerBuiltIn();
     }
 
     public static void registerStrippables() {
@@ -77,6 +78,7 @@ public class Bygone {
         consumer.accept(BGEntityTypes.TRILOBITE.get(), TrilobiteEntity.createAttributes().build());
         consumer.accept(BGEntityTypes.MOOBOO.get(), MoobooEntity.createAttributes().build());
         consumer.accept(BGEntityTypes.COPPERBUG.get(), CopperbugEntity.createCopperbugAttributes().build());
+        consumer.accept(BGEntityTypes.COPPERFLY.get(), CopperflyEntity.createCopperflyAttributes().build());
         consumer.accept(BGEntityTypes.FUNGAL_PARENT.get(), FungalParentEntity.createFungieAttributes().build());
         consumer.accept(BGEntityTypes.PESKY.get(), PeskyEntity.createAttributes().build());
         consumer.accept(BGEntityTypes.PEST.get(), PestEntity.createAttributes().build());

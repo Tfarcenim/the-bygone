@@ -3,7 +3,7 @@ package com.jamiedev.bygone.core.mixin;
 import com.jamiedev.bygone.common.entity.projectile.HookEntity;
 import com.jamiedev.bygone.core.network.SyncPlayerHookS2C;
 import com.jamiedev.bygone.common.util.PlayerWithHook;
-import com.jamiedev.bygone.core.platform.Services;
+import com.jamiedev.bygone.platform.Services;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;

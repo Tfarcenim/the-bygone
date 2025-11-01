@@ -1,7 +1,7 @@
 package com.jamiedev.bygone.core.network;
 
 import com.jamiedev.bygone.Bygone;
-import com.jamiedev.bygone.core.platform.Services;
+import com.jamiedev.bygone.platform.Services;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;

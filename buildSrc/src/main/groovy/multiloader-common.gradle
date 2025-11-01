@@ -52,6 +52,7 @@ repositories {
         name = "AzureDoom Mods"
         url = "https://maven.azuredoom.com/mods"
     }
+    maven {url = "https://maven.kyrptonaught.dev"}
 
 }
 

@@ -1,12 +1,10 @@
 package com.jamiedev.bygone;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 import com.jamiedev.bygone.common.item.SupplierSpawnEggItem;
-import com.jamiedev.bygone.core.registry.BGBlocks;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntityType;
+import com.jamiedev.bygone.common.util.ServerTickHandler;
+import com.jamiedev.bygone.core.network.PacketHandler;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -14,8 +12,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-
-import java.util.Set;
 
 @Mod(Bygone.MOD_ID)
 public class BygoneForge {
@@ -28,14 +24,17 @@ public class BygoneForge {
         if (FMLEnvironment.dist.isClient()) {
             BygoneClientForge.init(bus);
         }
+        MinecraftForge.EVENT_BUS.addListener(this::serverTick);
         // This method is invoked by the Forge mod loader when it is ready
         // to load your mod. You can access Forge and Common code in this
         // project.
     
         // Use Forge to bootstrap the Common mod.
         Bygone.init();
-        Bygone.registerBuiltIn();
-        
+    }
+
+    void serverTick(TickEvent.ServerTickEvent event) {
+        ServerTickHandler.onServerTick(event.getServer());
     }
 
     void createAttributes(EntityAttributeCreationEvent event) {
@@ -54,6 +53,7 @@ public class BygoneForge {
 
     void setup(FMLCommonSetupEvent event) {
         SupplierSpawnEggItem.registerDispenserBehaviors();
+        PacketHandler.registerPackets();
         event.enqueueWork(() -> {
 
          //   Set<Block> validBlocks = Sets.newHashSet(BlockEntityType.BRUSHABLE_BLOCK.validBlocks);

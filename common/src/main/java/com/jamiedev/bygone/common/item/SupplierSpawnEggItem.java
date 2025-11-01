@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.block.DispenserBlock;
@@ -41,6 +42,11 @@ public class SupplierSpawnEggItem extends SpawnEggItem {
     {
         EntityType<?> type = super.getType(tag);
         return type != null ? type : typeSupplier.get();
+    }
+
+    @Override
+    public FeatureFlagSet requiredFeatures() {
+        return typeSupplier.get().requiredFeatures();
     }
 
     private static final DispenseItemBehavior DEFAULT_DISPENSE_BEHAVIOR = (source, stack) ->
